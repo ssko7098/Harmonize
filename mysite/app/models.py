@@ -11,3 +11,12 @@ class User(models.Model):
 
     def __str__(self):
         return self.username
+
+class Profile(models.Model):
+    profile_id = models.AutoField(primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    bio = models.TextField(null=True, blank=True)
+    avatar_url = models.CharField(max_length=50, null=True, blank=True)
+
+    def __str__(self):
+        return self.user.username
