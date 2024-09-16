@@ -1,0 +1,14 @@
+*.pyc
+__pycache__/
+*.sqlite3
+.env
+.DS_Store
+
+# Ignore the virtual environment folder
+venv/
+env/
+
+# Ignore Django migration files (until stable)
+*/migrations/
+
+test_script.py
