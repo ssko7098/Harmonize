@@ -9,6 +9,6 @@ venv/
 env/
 
 # Ignore Django migration files (until stable)
-*/migrations/*.py
+mysite/*/migrations
 
 test_script.py
