@@ -1,8 +1,10 @@
-from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
+from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from .forms import CustomUserCreationForm
+from allauth.account.models import EmailAddress
+from allauth.account.utils import send_email_confirmation
 
 # Create your views here.
 def home(request):
@@ -13,11 +15,21 @@ def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save()  # save the new user into the database
-            login(request, user)  # Log the user in after successful registration
-            messages.success(request, f"Account created successfully for {user.username}")
+            user = form.save()
+            user.save()
 
-            return redirect('home')  # Redirect to home page after registration
+            email_address = EmailAddress.objects.create(
+                user=user, 
+                email=user.email, 
+                verified=False, 
+                primary=True
+            )
+            send_email_confirmation(request, user, signup=True)
+
+            messages.success(request, 'We have sent a verification email to your email address. Please check your inbox and click the confirmation link.')
+
+            # Instead of redirecting, stay on the register page
+            return render(request, 'users/register.html', {'form': form})
     else:
         form = CustomUserCreationForm()
     

@@ -111,3 +111,12 @@ p {
     margin-right: 10px;
     transform: translateY(-2px);
 }
+
+.confirmation-message {
+    background-color: #f0f8ff;
+    padding: 15px;
+    border: 1px solid #ccc;
+    margin-top: 20px;
+    color: #333;
+}
+

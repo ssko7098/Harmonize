@@ -9,6 +9,7 @@ class User(AbstractUser):
     email = models.EmailField(max_length=30)
     password = models.CharField(max_length=30)
     is_admin = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.username

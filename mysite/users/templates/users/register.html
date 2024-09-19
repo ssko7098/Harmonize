@@ -59,5 +59,15 @@
             
             <button type="submit" class="btn">Register</button>
         </form>
+
+        <!-- Display email confirmation message if it exists -->
+        {% if messages %}
+            <div class="confirmation-message">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
     </div>
 {% endblock %}
