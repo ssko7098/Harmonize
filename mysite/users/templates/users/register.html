@@ -1,9 +1,73 @@
 {% extends "users/home.html" %}
 {% block content %}
-  <h2>Register</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Register</button>
-  </form>
+    <div class="auth-form">
+        <h2>Register</h2>
+        <form method="post">
+            {% csrf_token %}
+
+            <!-- Full name field -->
+            <div class="form-group {% if form.full_name.errors %}error-border{% endif %}">
+                <label for="full_name">Full Name</label>
+                {{ form.full_name }}
+                {% if form.full_name.errors %}
+                    <p class="error">{{ form.full_name.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Username field -->
+            <div class="form-group {% if form.username.errors %}error-border{% endif %}">
+                <label for="username">Username</label>
+                {{ form.username }}
+                {% if form.username.errors %}
+                    <p class="error">{{ form.username.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+
+            <!-- Email field -->
+            <div class="form-group {% if form.email.errors %}error-border{% endif %}">
+                <label for="email">Email</label>
+                {{ form.email }}
+                {% if form.email.errors %}
+                    <p class="error">{{ form.email.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Password field with potential error -->
+            <div class="form-group">
+                <label for="password">Password</label>
+                {{ form.password1 }}  <!-- Render password input from form -->
+                {% if form.password1.errors %}
+                    <p class="error">{{ form.password1.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Password confirmation field with potential error -->
+            <div class="form-group">
+                <label for="password2">Confirm Password</label>
+                {{ form.password2 }}  <!-- Render password confirmation input from form -->
+                {% if form.password2.errors %}
+                    <p class="error">{{ form.password2.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+
+            <div class="form-group checkbox-group">
+                <input type="checkbox" name="terms" required>
+                <label for="terms">I agree to Harmonize's <a href="#">terms and conditions</a></label>
+            </div>
+            
+            <button type="submit" class="btn">Register</button>
+        </form>
+
+        <!-- Display email confirmation message if it exists -->
+        {% if messages %}
+            <div class="confirmation-message">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+    </div>
 {% endblock %}

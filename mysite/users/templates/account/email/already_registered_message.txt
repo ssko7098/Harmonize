@@ -1,0 +1,12 @@
+Hello from {{ current_site.name }}!
+
+You are receiving this email because someone tried to sign up using the email address: {{ email }}.
+
+However, an account with this email address already exists.
+
+If you have forgotten your password, please reset it using the following link:
+{{ password_reset_url }}
+
+Thank you for using {{ current_site.name }}!
+
+-- The {{ current_site.name }} Team

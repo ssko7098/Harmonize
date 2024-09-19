@@ -1,0 +1,13 @@
+Hello from {{ current_site.name }}!
+
+Thank you for signing up at {{ current_site.name }}.
+
+Please confirm your email address by clicking the link below:
+{{ activate_url }}
+
+If you did not sign up for an account, please ignore this email.
+
+Thank you for using {{ current_site.name }}!
+
+Best regards,
+The {{ current_site.name }} Team
