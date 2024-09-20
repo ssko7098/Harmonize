@@ -1,0 +1,2 @@
+Django==5.0.7
+django-allauth==64.2.1
