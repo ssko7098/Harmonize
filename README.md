@@ -8,7 +8,7 @@ Before running the application, you need to ensure that all the data located in 
 
 ### 2.1 Run migrations to create the SQLite database
  Before loading data, you need to run migrations on each app to create the necessary database schema. This can be done with the command: 
- * `python3 manage.py makemigrations comments music users` and then 
+ * `python3 manage.py makemigrations` and then 
  * `python3 manage.py migrate`
 
 ### 2.2 Load the data from the dump file
