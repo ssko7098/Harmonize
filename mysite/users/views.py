@@ -23,16 +23,18 @@ def admin_dashboard(request):
 
 @user_passes_test(is_admin)
 def delete_user(request, user_id):
-    user = get_object_or_404(User, id=user_id)
+    if request.method == 'POST':
+        user = get_object_or_404(User, id=user_id)
     
-    # Prevent the admin from deleting their own account
-    if user == request.user:
-        messages.error(request, "You cannot delete your own account.")
+        user.is_active = False
+        user.username = f"deactivated_user_{user_id}" # Anonymize the username
+        user.set_unusable_password()
+        user.email = f"deactivated_user_{user.email}"
+        user.save()
         return redirect('admin_dashboard')
-    
-    user.is_active = False
-    messages.success(request, f"User {user.username} deleted successfully.")
-    return redirect('admin_dashboard')
+    else:
+        messages.error(request, "Invalid request.")
+        return redirect('admin_dashboard')
 
 # Registration
 def register(request):
