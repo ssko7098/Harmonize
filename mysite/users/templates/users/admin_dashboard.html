@@ -1,44 +1,64 @@
-{% extends 'users/home.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{% static 'users/style.css' %}">
+</head>
+<body>
 
-{% block head_title %}
-    Admin Dashboard
-{% endblock head_title %}
+    <!-- Static navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <img src="{% static 'images/logo.png' %}" alt="Logo">
+        </div>
+        <div class="nav-links">
+            <a href="#">Harmonize</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+            <a href="{% url 'logout' %}">Logout</a>
+        </div>
+    </nav>
 
-{% block content %}
-<div class="container">
-    <div class="admin-header">
-        <h2 class="page-title">Admin Dashboard</h2>
-        <h3>All Active Users</h3>
+    <!-- Sidebar and main content container -->
+    <div class="main-content">
+        <div class="admin-sidebar">
+            <ul>
+                <li><a href="#">Manage Users</a></li>
+                <li><a href="#">Manage Comments</a></li>
+                <li><a href="#">Manage Songs</a></li>
+                <li><a href="#">Manage Playlists</a></li>
+            </ul>
+        </div>
+
+        <!-- Admin content -->
+        <div class="admin-content">
+            <div class="admin-dashboard">
+                <div class="admin-header">
+                    <h2 class="page-title">Admin Dashboard</h2>
+                    <h3>All Active Users</h3>
+                </div>
+
+                <!-- User table -->
+                <table class="user-table">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="3">No active users found.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
-    <div class="admin-options">
-        <table class="user-table">
-            <thead>
-                <tr>
-                    <th>Username</th>
-                    <th>Email</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for user in users %}
-                    <tr>
-                        <td>{{ user.username }}</td>
-                        <td>{{ user.email }}</td>
-                        <td>
-                            <form method="post" action="{% url 'delete_user' user.id %}">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-delete">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="3">No active users found.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</div>
-{% endblock content %}
+</body>
+</html>

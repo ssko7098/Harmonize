@@ -1,3 +1,11 @@
+/* Apply box-sizing globally to include padding and border in element's total width */
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+}
+
+/* Body and global styling */
 body {
     font-family: Arial, sans-serif;
     background-color: #f9f9f9;
@@ -5,6 +13,7 @@ body {
     padding: 0;
 }
 
+/* Navbar styling */
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -24,80 +33,91 @@ body {
     font-weight: bold;
 }
 
+/* Container styling */
 .container {
-    max-width: 600px;
+    max-width: 600px; /* Limit the form width to a more reasonable size */
     margin: 50px auto;
     padding: 20px;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    text-align: left;
 }
 
+/* Auth form styling */
 .auth-form {
-    width: 100%;
+    width: 100%; /* Ensure full width of the form inside container */
     text-align: left;
 }
 
+/* Full-width input fields */
+.auth-form input[type="text"],
+.auth-form input[type="password"],
+.auth-form input[type="email"] {
+    width: 100% !important;  /* Ensure inputs take full width */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    display: block;  /* Ensure block display */
+}
+
+/* Full-width button */
+.auth-form .btn {
+    width: 100% !important; /* Force full width for the button */
+    padding: 12px;
+    background-color: #555;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+/* Hover effect for button */
+.auth-form .btn:hover {
+    background-color: #555;
+}
+
+/* Center the heading */
 .auth-form h2 {
     text-align: center;
     margin-bottom: 20px;
     color: #333;
 }
 
+/* Form group margin */
 .auth-form .form-group {
     margin-bottom: 20px;
 }
 
+/* Label styling */
 .auth-form label {
     font-weight: normal;
     margin-bottom: 5px;
     display: block;
 }
 
-.auth-form input[type="text"],
-.auth-form input[type="email"],
-.auth-form input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-
-.auth-form .btn {
-    padding: 10px 20px;
-    background-color: #333;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    border-radius: 4px;
-    width: 100%;
-    margin-top: 10px;
-}
-
-.auth-form .btn:hover {
-    background-color: #555;
-}
-
-.register-link {
-    margin-top: 10px;
-    text-align: center;
-}
-
+/* Error message styling */
 .error {
     color: red;
     font-size: 0.875em;
     margin-top: 5px;
 }
 
+.error-border input {
+    border-color: red;
+}
+
+/* Register link styling */
+.register-link {
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* Adjust margins and center text in paragraphs */
 p {
     margin: 10px 0;
     text-align: center;
-}
-
-.error-border input {
-    border-color: red;
 }
 
 /* Styling the checkbox with label */
@@ -112,14 +132,71 @@ p {
     transform: translateY(-2px);
 }
 
-.confirmation-message {
-    background-color: #f0f8ff;
-    padding: 15px;
-    border: 1px solid #ccc;
-    margin-top: 20px;
-    color: #333;
+/* Admin Dashboard Layout */
+.main-content {
+    display: flex;
 }
 
+/* Sidebar styling */
+.admin-sidebar {
+    width: 250px;
+    background-color: #f8f8f8;
+    padding: 20px;
+    border-right: 1px solid #eaeaea;
+    height: 100vh; /* Full height fixed sidebar */
+    position: fixed;
+    top: 65px; /* Start below the navbar */
+    left: 0;
+}
+
+.admin-sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.admin-sidebar li {
+    margin-bottom: 20px;
+}
+
+.admin-sidebar a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    display: block;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+.admin-sidebar a:hover {
+    background-color: #f0f0f0;
+}
+
+/* Admin content next to sidebar */
+.admin-content {
+    margin-left: 250px; /* Space for sidebar */
+    padding: 40px;
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+/* Center admin dashboard */
+.admin-dashboard {
+    max-width: 800px;
+    width: 100%;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+/* Admin header */
 .admin-header {
     margin-bottom: 20px;
 }
@@ -128,20 +205,19 @@ p {
     font-size: 2em;
     margin-bottom: 10px;
     color: #333;
+    text-align: left;
 }
 
-.admin-options {
-    margin-top: 20px;
-}
-
+/* Table styling for user management */
 .user-table {
-    width: 100%;  /* Ensure table takes full width of container */
+    width: 100%; /* Ensure table takes full width */
     border-collapse: collapse;
     margin-top: 20px;
+    text-align: left;
 }
 
 .user-table th, .user-table td {
-    padding: 12px 15px;  /* More padding for clarity */
+    padding: 12px 15px;
     border: 1px solid #eaeaea;
     text-align: left;
 }
@@ -151,19 +227,20 @@ p {
     font-weight: bold;
 }
 
-.user-table td {
-    width: 33%;  /* Ensure even distribution of columns */
-}
-
 .user-table tr:nth-child(even) {
     background-color: #f9f9f9;
 }
 
+.user-table td {
+    width: 33%;
+}
+
+/* Full-width buttons */
 .btn-delete {
     background-color: #ff4d4d;
     color: white;
     border: none;
-    padding: 8px 20px;  /* Increase button padding */
+    padding: 8px 20px;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
@@ -173,8 +250,18 @@ p {
     background-color: #e60000;
 }
 
-form {
-    margin: 0;
-    display: inline-block;
-}
+/* For mobile responsiveness */
+@media (max-width: 768px) {
+    .admin-sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        top: 0;
+        border-right: none;
+    }
 
+    .admin-content {
+        margin-left: 0;
+        padding: 20px;
+    }
+}

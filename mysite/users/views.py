@@ -21,6 +21,7 @@ def admin_dashboard(request):
     users = User.objects.filter(is_active=True, is_admin=False)  # Only fetch active users
     return render(request, 'users/admin_dashboard.html', {'users': users})
 
+
 @user_passes_test(is_admin)
 def delete_user(request, user_id):
     if request.method == 'POST':
