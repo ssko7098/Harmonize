@@ -120,3 +120,61 @@ p {
     color: #333;
 }
 
+.admin-header {
+    margin-bottom: 20px;
+}
+
+.page-title {
+    font-size: 2em;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.admin-options {
+    margin-top: 20px;
+}
+
+.user-table {
+    width: 100%;  /* Ensure table takes full width of container */
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.user-table th, .user-table td {
+    padding: 12px 15px;  /* More padding for clarity */
+    border: 1px solid #eaeaea;
+    text-align: left;
+}
+
+.user-table th {
+    background-color: #f8f8f8;
+    font-weight: bold;
+}
+
+.user-table td {
+    width: 33%;  /* Ensure even distribution of columns */
+}
+
+.user-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.btn-delete {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 8px 20px;  /* Increase button padding */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-delete:hover {
+    background-color: #e60000;
+}
+
+form {
+    margin: 0;
+    display: inline-block;
+}
+
