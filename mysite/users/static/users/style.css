@@ -75,7 +75,7 @@ body {
 
 /* Hover effect for button */
 .auth-form .btn:hover {
-    background-color: #555;
+    background-color: #000000;
 }
 
 /* Center the heading */
@@ -265,3 +265,12 @@ p {
         padding: 20px;
     }
 }
+
+.confirmation-message {
+    background-color: #f0f8ff;
+    padding: 15px;
+    border: 1px solid #ccc;
+    margin-top: 20px;
+    color: #333;
+}
+

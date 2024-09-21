@@ -30,7 +30,12 @@ def delete_user(request, user_id):
         user.is_active = False
         user.username = f"deactivated_user_{user_id}" # Anonymize the username
         user.set_unusable_password()
-        user.email = f"deactivated_user_{user.email}"
+        email_address = EmailAddress.objects.filter(user=user).first()
+        if email_address:
+            email_address.verified = False
+            email_address.save()
+
+        user.email = f"deactivated_user_{user_id}_{user.email}"
         user.save()
         return redirect('admin_dashboard')
     else:
@@ -99,3 +104,5 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('home')  # Redirect to the home page after logging out
+
+

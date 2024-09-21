@@ -51,9 +51,22 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {% for user in users %}
+                            <tr>
+                                <td>{{ user.username }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>
+                                    <form method="post" action="{% url 'delete_user' user.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-delete">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% empty %}
                         <tr>
                             <td colspan="3">No active users found.</td>
                         </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
