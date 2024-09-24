@@ -4,10 +4,12 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from allauth.account.models import EmailAddress
 from allauth.account.utils import send_email_confirmation
-from .models import User
+from .models import User, Profile
 
-from .forms import RegisterForm
-from django.contrib.auth.decorators import user_passes_test
+from .forms import RegisterForm, ProfileForm
+from django.contrib.auth.decorators import user_passes_test, login_required
+
+
 
 # Create your views here.
 def home(request):
@@ -52,6 +54,9 @@ def register(request):
             user = form.save()  # Save the user to the database
 
             if user is not None:  # Check if authentication was successful
+
+
+
                 email_address = EmailAddress.objects.create(
                 user=user, 
                 email=user.email, 
@@ -79,6 +84,9 @@ def login_view(request):
             user = authenticate(username=username, password=password)
             
             if user is not None:
+
+                Profile.objects.create(user=user)
+                
                 # Check if the email address is verified
                 email_address = EmailAddress.objects.filter(user=user, verified=True).first()
                 
@@ -99,7 +107,21 @@ def login_view(request):
     form = AuthenticationForm()
     return render(request, 'users/login.html', {'form': form})
 
+@login_required
+def profile_view(request):
+    profile = request.user.profile  # Get the profile of the logged-in user
+    
+    # if the user wants to change the profile, check if this is valid and save 
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, instance=profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your profile has been updated.')
+            return redirect('profile')  # Redirect back to the profile page
+    else:
+        form = ProfileForm(instance=profile)
 
+    return render(request, 'users/profile.html', {'form': form})
 
 def logout_view(request):
     logout(request)
