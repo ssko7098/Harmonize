@@ -12,3 +12,5 @@ env/
 mysite/*/migrations
 
 test_script.py
+
+*.mp3
