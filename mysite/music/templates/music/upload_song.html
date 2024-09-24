@@ -1,0 +1,15 @@
+<!-- upload_song.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Song</title>
+</head>
+<body>
+    <h1>Upload a New Song</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Upload</button>
+    </form>
+</body>
+</html>

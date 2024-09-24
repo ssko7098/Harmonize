@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import os 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -161,3 +162,7 @@ ACCOUNT_USERNAME_REQUIRED = False
 LOGIN_URL = "/users/login"
 LOGIN_REDIRECT_URL = "/users"
 LOGOUT_REDIRECT_URL = "/users"
+
+## directory to store media files (songs and profile pics)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
