@@ -55,7 +55,7 @@ def register(request):
 
             if user is not None:  # Check if authentication was successful
 
-
+                Profile.objects.create(user=user)
 
                 email_address = EmailAddress.objects.create(
                 user=user, 
@@ -85,8 +85,6 @@ def login_view(request):
             
             if user is not None:
 
-                Profile.objects.create(user=user)
-                
                 # Check if the email address is verified
                 email_address = EmailAddress.objects.filter(user=user, verified=True).first()
                 
@@ -110,7 +108,8 @@ def login_view(request):
 @login_required
 def profile_view(request):
     profile = request.user.profile  # Get the profile of the logged-in user
-    
+    user = request.user  # Get the current logged-in user
+
     # if the user wants to change the profile, check if this is valid and save 
     if request.method == 'POST':
         form = ProfileForm(request.POST, instance=profile)
@@ -121,7 +120,13 @@ def profile_view(request):
     else:
         form = ProfileForm(instance=profile)
 
-    return render(request, 'users/profile.html', {'form': form})
+    # send the user details and form details to be viewed in profile.html
+    context = {
+        'form': form,
+        'user': user, 
+    }
+
+    return render(request, 'users/profile.html', context)
 
 def logout_view(request):
     logout(request)
