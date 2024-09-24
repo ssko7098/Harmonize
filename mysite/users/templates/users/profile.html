@@ -4,7 +4,7 @@
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Harmonize{% endblock %}</title>
+    <title>Profile</title>
     <link rel="stylesheet" href="{% static 'users/style.css' %}">
 </head>
 <body>
@@ -28,9 +28,17 @@
         </div>
     </nav>
     
-    <div class="container">
-        {% block content %}
-        {% endblock %}
+    <h1>{{ user.username }}'s Profile</h1>
+    <div class="profile-info">
+        <p><strong>Username:</strong> {{ user.username }}</p>
+        <p><strong>Full Name:</strong> {{ user.full_name }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Update Profile</button>
+        </form>
     </div>
 </body>
 </html>

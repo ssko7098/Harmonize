@@ -1,7 +1,7 @@
 import re
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import User
+from .models import User, Profile
 
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(max_length=255, help_text="Required add a valid email address.")
@@ -44,3 +44,13 @@ class RegisterForm(UserCreationForm):
             raise forms.ValidationError(("The two password fields didn't match."))
         return password2
 
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['bio', 'avatar_url']  # Fields to allow editing
+
+    def save(self, commit=True):
+        profile = super(ProfileForm, self).save(commit=False)
+        if commit:
+            profile.save()
+        return profile
