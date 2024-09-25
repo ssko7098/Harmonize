@@ -33,6 +33,16 @@ body {
     font-weight: bold;
 }
 
+.search-form {
+    display: inline-flex;
+    align-items: center;
+}
+
+.search-form input {
+    padding: 5px;
+    margin-right: 5px; /* Space between input and button */
+}
+
 /* Container styling */
 .container {
     max-width: 600px; /* Limit the form width to a more reasonable size */
