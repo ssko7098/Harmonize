@@ -274,3 +274,102 @@ p {
     color: #333;
 }
 
+/* Upload Section */
+#upload-page .upload-container {
+    background-color: #fff;
+    margin: 50px auto;
+    padding: 30px;
+    max-width: 600px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+#upload-page .upload-options {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+#upload-page .upload-button {
+    padding: 10px 20px;
+    background-color: #f5f5f5;
+    border: none;
+    margin: 0 5px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#upload-page .upload-button.active {
+    background-color: #007BFF;
+    color: #fff;
+}
+
+#upload-page .upload-button:hover {
+    background-color: #007BFF;
+    color: #fff;
+}
+
+#upload-page .upload-form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Cover Image Upload Section */
+#upload-page .cover-preview {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+#upload-page .cover-preview img {
+    max-width: 100px;
+    height: auto;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+#upload-page .form-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+#upload-page .form-group label {
+    width: 30%;
+    font-weight: bold;
+    color: #333;
+    margin-right: 10px;
+    text-align: right;
+}
+
+#upload-page .form-group input,
+#upload-page .form-group textarea,
+#upload-page .form-group select {
+    width: 65%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: #fff;
+    color: #333;
+}
+
+#upload-page .submit-button {
+    padding: 12px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    text-align: center;
+}
+
+#upload-page .submit-button:hover {
+    background-color: #0056b3;
+}
+

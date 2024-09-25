@@ -166,3 +166,9 @@ LOGOUT_REDIRECT_URL = "/users"
 ## directory to store media files (songs and profile pics)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+## directory which contains all static frontend files
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
