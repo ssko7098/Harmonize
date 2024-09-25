@@ -1,61 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload Single</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-</head>
-<body id="upload-page">
-    <nav>
-        <div class="navbar">
-            <div class="logo">
-                <img src="{% static 'images/logo.png' %}" alt="Harmonize Logo">
-            </div>
-            <div class="nav-links">
-                <a href="{% url 'home' %}">Harmonize</a>
-                <a href="#">About</a>
-                <a href="#">Contact</a>
-                <a href="{% url 'profile' %}">My Profile</a>
-                <a href="{% url 'logout' %}">Logout</a>
-            </div>
-        </div>
-    </nav>
-    
-    <main>
-        <div class="upload-container">
-            <h1>Upload a New Song</h1>
-            
-            <div class="upload-options">
-                <button class="upload-button active">Upload Single</button>
-                <button class="upload-button">Upload Album</button>
-            </div>
+{% extends '../base.html' %}
 
-            <form method="post" enctype="multipart/form-data" class="upload-form">
-                {% csrf_token %}
+{% block title %}Song List{% endblock %}
+{% load static %}
+
+{% block content %}
+    <body id="upload-page">
+        <main>
+            <div class="upload-container">
+                <h1>Upload a New Song</h1>
                 
-                <div class="form-group">
-                    <label for="title">Single Name</label>
-                    {{ form.title }}
+                <div class="upload-options">
+                    <button class="upload-button active">Upload Single</button>
+                    <button class="upload-button">Upload Album</button>
                 </div>
 
-                <div class="form-group">
-                    <label for="mp3_file">Upload MP3 Audio</label>
-                    {{ form.mp3_file }}
-                </div>
-
-                <div class="form-group">
-                    <label for="cover_image">Choose Single Cover</label>
-                    {{ form.cover_image }}
-                    <div class="cover-preview">
-                        <img src="{% static 'images/default_cover.png' %}" alt="Single Cover" id="cover-preview">
+                <form method="post" enctype="multipart/form-data" class="upload-form">
+                    {% csrf_token %}
+                    
+                    <div class="form-group">
+                        <label for="title">Single Name</label>
+                        {{ form.title }}
                     </div>
-                </div>
 
-                <button type="submit" class="submit-button">Upload</button>
-            </form>
-        </div>
-    </main>
-</body>
-</html>
+                    <div class="form-group">
+                        <label for="mp3_file">Upload MP3 Audio</label>
+                        {{ form.mp3_file }}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cover_image">Choose Single Cover</label>
+                        {{ form.cover_image }}
+                        <div class="cover-preview">
+                            <img src="{% static 'images/default_cover.png' %}" alt="Single Cover" id="cover-preview">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-button">Upload</button>
+                </form>
+            </div>
+        </main>
+    </body>
+{% endblock %}
+
