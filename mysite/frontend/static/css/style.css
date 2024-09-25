@@ -63,7 +63,7 @@ body {
 .auth-form input[type="text"],
 .auth-form input[type="password"],
 .auth-form input[type="email"] {
-    width: 100% !important;  /* Ensure inputs take full width */
+    width: 100%;  /* Ensure inputs take full width */
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -73,7 +73,7 @@ body {
 
 /* Full-width button */
 .auth-form .btn {
-    width: 100% !important; /* Force full width for the button */
+    width: 100%; /* Force full width for the button */
     padding: 12px;
     background-color: #555;
     color: white;

@@ -14,7 +14,7 @@ from django.contrib.auth.decorators import user_passes_test, login_required
 
 # Create your views here.
 def home(request):
-    return render(request, 'users/home.html')
+    return render(request, 'base.html')
 
 def is_admin(user):
     return user.is_superuser
