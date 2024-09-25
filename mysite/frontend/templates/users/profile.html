@@ -6,11 +6,11 @@
 {% block content %}
     <body>
         <div class="container">
-            <h1>{{ user.username }}'s Profile </h1>
+            <h1>{{ user_profile.user.username }}'s Profile</h1>
             <img src="{% static 'images/default_cover.png' %}" alt="Single Cover" id="cover-preview">
             <div class="profile-info">
-                <p><strong>Full Name:</strong> {{ user.full_name }}</p>
-                <p><strong> Biography:</strong> {{ profile.bio }}</p>
+                <p><strong>Full Name:</strong> {{ user_profile.user.full_name }}</p>
+                <p><strong>Bio:</strong> {{ user_profile.bio }}</p>
                 
                 <h2>Singles</h2>
 

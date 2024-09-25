@@ -119,16 +119,12 @@ def search_view(request):
 
 
 @login_required
-def profile_view(request):
-    profile = request.user.profile
-    user = request.user
+def profile_view(request, username):
+    # Get the user and profile by username
+    user = get_object_or_404(User, username=username)
+    profile = Profile.objects.get(user=user)
 
-    context = {
-        'profile': profile,
-        'user': user, 
-    }
-
-    return render(request, 'users/profile.html', context)
+    return render(request, 'users/profile.html', {'user_profile': profile})
 
 
 

@@ -23,7 +23,7 @@
                     </form>
 
                     {% if not user.is_admin %}
-                        <a href="{% url 'profile' %}">My Profile</a>
+                        <a href="{% url 'profile' user.username %}">My Profile</a>
                         <a href="{% url 'profile_settings' %}">Profile Settings</a>
                     {% endif %}
 
