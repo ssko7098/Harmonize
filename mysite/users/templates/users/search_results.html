@@ -34,16 +34,15 @@
         
         
         <div class="container">
-            <h1>Search Results</h1>
-            <p>Search query: "{{ query }}"</p>
+            <h1>Search Results for "{{ query }}"</h1>
             
             <ul>
             {% if users.exists %}
                 {% for user in users %}
-                    <li>{{ user.username }}</li>
+                    <p><strong>{{ user.username }}</strong> - {{ user.full_name }} </p>
                 {% endfor %}
             {% else %}
-                <p>No users found matching the query.</p>
+                <p>No results found matching the query.</p>
             {% endif %}
             </ul>
         </div>
