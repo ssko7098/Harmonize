@@ -111,7 +111,9 @@ def login_view(request):
 # function which allows users to search
 def search_view(request):
     query = request.GET.get('query', '')  # Get the query string from the GET parameters
-    users = User.objects.filter(Q(username__icontains=query))  # Search for users by username
+    
+    users = User.objects.filter(Q(username__icontains=query) 
+                                & Q(is_active=True))  # Search for active users by username
 
     return render(request, 'users/search_results.html', {'users': users, 'query': query})
 
