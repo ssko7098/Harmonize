@@ -10,7 +10,7 @@
             <ul>
             {% if users.exists %}
                 {% for user in users %}
-                    <p><strong>{{ user.username }}</strong> - {{ user.full_name }} </p>
+                    <li><a href="{% url 'profile' user.username %}">{{ user.username }}</a></li>
                 {% endfor %}
             {% else %}
                 <p>No results found matching the query.</p>
