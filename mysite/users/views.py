@@ -119,7 +119,17 @@ def search_view(request):
 
 
 @login_required
-def profile_view(request):
+def profile_view(request, username):
+    # Get the user and profile by username
+    user = get_object_or_404(User, username=username)
+    profile = Profile.objects.get(user=user)
+
+    return render(request, 'users/profile.html', {'user_profile': profile})
+
+
+
+@login_required
+def profile_settings_view(request):
     profile = request.user.profile  # Get the profile of the logged-in user
     user = request.user  # Get the current logged-in user
 
@@ -129,7 +139,7 @@ def profile_view(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Your profile has been updated.')
-            return redirect('profile')  # Redirect back to the profile page
+            return redirect('profile_settings')  # Redirect back to the profile page
     else:
         form = ProfileForm(instance=profile)
 
@@ -139,7 +149,7 @@ def profile_view(request):
         'user': user, 
     }
 
-    return render(request, 'users/profile.html', context)
+    return render(request, 'users/profile_settings.html', context)
 
 def logout_view(request):
     logout(request)
