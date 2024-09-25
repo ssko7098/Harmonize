@@ -4,26 +4,28 @@
 
 {% block content %}
     <body>
-        <h1>{{ user.username }}'s Profile</h1>
-        <div class="profile-info">
-            <p><strong>Username:</strong> {{ user.username }}</p>
-            <p><strong>Full Name:</strong> {{ user.full_name }}</p>
-            <p><strong>Email:</strong> {{ user.email }}</p>
+        <div class="container">
+            <h1>{{ user.username }}'s Profile</h1>
+            <div class="profile-info">
+                <p><strong>Username:</strong> {{ user.username }}</p>
+                <p><strong>Full Name:</strong> {{ user.full_name }}</p>
+                <p><strong>Email:</strong> {{ user.email }}</p>
 
-            <form method="POST">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit">Update Profile</button>
-            </form>
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit">Update Profile</button>
+                </form>
 
-            <ul class="messages">
-                {% for message in messages %}
-                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
-                        {{ message }}
-                    </li>
-                {% endfor %}
-            </ul>
-            
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                            {{ message }}
+                        </li>
+                    {% endfor %}
+                </ul>
+                
+            </div>
         </div>
     </body>
 {% endblock %}

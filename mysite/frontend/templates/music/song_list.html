@@ -4,12 +4,14 @@
 
 {% block content %}
     <body>
-        <h1>Song List</h1>
-        <ul>
-            {% for song in songs %}
-                <li>{{ song.title }} by {{ song.artist }} - <a href="{{ song.mp3_file.url }}">Listen</a></li>
-            {% endfor %}
-        </ul>
+        <div class="container">
+            <h1>Song List</h1>
+            <ul>
+                {% for song in songs %}
+                    <li>{{ song.title }} by {{ song.artist }} - <a href="{{ song.mp3_file.url }}">Listen</a></li>
+                {% endfor %}
+            </ul>
+        </div>
     </body>
 {% endblock %}
 
