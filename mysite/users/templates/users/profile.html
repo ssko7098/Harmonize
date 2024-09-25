@@ -18,6 +18,10 @@
                 <a>About</a>
                 <a>Contact</a>
                 {% if user.is_authenticated %}
+                    <form action="{% url 'search' %}" method="GET" class="search-form">
+                        <input type="text" name="query" placeholder="Search..." required>
+                        <button type="submit">Search</button>
+                    </form>
                     <a href="{% url 'profile' %}">My Profile</a>
                     <a href="{% url 'logout' %}">Logout</a>
                 {% else %}
@@ -39,6 +43,15 @@
             {{ form.as_p }}
             <button type="submit">Update Profile</button>
         </form>
+
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                    {{ message }}
+                </li>
+            {% endfor %}
+        </ul>
+        
     </div>
 </body>
 </html>

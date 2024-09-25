@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        {% load static %}
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}Harmonize{% endblock %}</title>
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    </head>
+    <body>
+        <nav>
+            <div class="navbar">
+                <div class="logo">
+                    <img src="{% static 'images/logo.png' %}" alt="Harmonize Logo">
+                </div>
+                <div class="nav-links">
+                    <a href="{% url 'home' %}">Harmonize</a>
+                    <a>About</a>
+                    <a>Contact</a>
+                    {% if user.is_authenticated %}
+                        <form action="{% url 'search' %}" method="GET" class="search-form">
+                            <input type="text" name="query" placeholder="Search..." required>
+                            <button type="submit">Search</button>
+                        </form>
+                        <a href="{% url 'profile' %}">My Profile</a>
+                        <a href="{% url 'logout' %}">Logout</a>
+                    {% else %}
+                        <a href="{% url 'login' %}">Login</a>
+                        <a href="{% url 'register' %}">Register</a>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+        
+        
+        <div class="container">
+            <h1>Search Results for "{{ query }}"</h1>
+            
+            <ul>
+            {% if users.exists %}
+                {% for user in users %}
+                    <p><strong>{{ user.username }}</strong> - {{ user.full_name }} </p>
+                {% endfor %}
+            {% else %}
+                <p>No results found matching the query.</p>
+            {% endif %}
+            </ul>
+        </div>
+    </body>
+</html>
