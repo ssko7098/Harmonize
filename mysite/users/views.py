@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
+from django.db.models import Q
 from allauth.account.models import EmailAddress
 from allauth.account.utils import send_email_confirmation
 from .models import User, Profile
@@ -104,6 +105,16 @@ def login_view(request):
     
     form = AuthenticationForm()
     return render(request, 'users/login.html', {'form': form})
+
+
+
+# function which allows users to search
+def search_view(request):
+    query = request.GET.get('query', '')  # Get the query string from the GET parameters
+    users = User.objects.filter(Q(username__icontains=query))  # Search for users by username
+
+    return render(request, 'users/search_results.html', {'users': users, 'query': query})
+
 
 @login_required
 def profile_view(request):
