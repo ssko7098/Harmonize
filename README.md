@@ -1,5 +1,13 @@
 # Lab-03-Group-01
 
+## Development Usernames and Passwords
+* admin user
+    * username: admin
+    * password: admin
+* test end user:
+    * username: test
+    * password: elec3609
+
 ## 1. Instructions for Installing Django
 Run the command `pip install -r requirements.txt` to install all the relevant modules for this assignment.
 
