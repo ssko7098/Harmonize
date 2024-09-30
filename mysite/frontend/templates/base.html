@@ -12,6 +12,8 @@
     <nav>
         <div class="navbar">
             <div class="logo">
+                <!-- Hamburger icon -->
+                <span class="hamburger-icon" onclick="toggleSidebar()">&#9776;</span>
                 <img src="{% static 'images/logo.png' %}" alt="Harmonize Logo">
             </div>
             <div class="nav-links">
@@ -35,14 +37,20 @@
                     <a href="{% url 'register' %}">Register</a>
                 {% endif %}
             </div>
+
         </div>
     </nav>
+
+    {% include 'sidebar.html' %}
 
     <!-- Content Section (Only this part will be updated dynamically) -->
     <div id="content-container" class="content">
         {% block content %}
         {% endblock %}
     </div>
+
+    <!-- Hidden element to pass the username using a data- attribute -->
+    <div id="user-data" data-username="{% if user.is_authenticated %}{{ user.username }}{% else %}null{% endif %}"></div>
 
     {% if user.is_authenticated and not user.is_admin %}
         <!-- Persistent Audio Player (only loaded once) -->
@@ -56,6 +64,9 @@
 
     <!-- Link to the external JavaScript file -->
     <script src="{% static 'js/audio_player.js' %}"></script>
+
+    <!-- JavaScript for toggling sidebar -->
+    <script src="{% static 'js/sidebar.js' %}"></script>
 
 </body>
 </html>

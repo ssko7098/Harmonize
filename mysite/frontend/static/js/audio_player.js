@@ -1,4 +1,4 @@
-
+// Function to play audio
 function playAudio(url) {
     const audioPlayer = document.getElementById('audio-player');
     const audioSource = document.getElementById('audio-source');
@@ -21,7 +21,6 @@ function loadPageContent(url) {
     fetch(url)
         .then(response => response.text())
         .then(data => {
-            // Use a DOM parser to extract only the content inside the #content-container from the fetched HTML
             const parser = new DOMParser();
             const doc = parser.parseFromString(data, 'text/html');
             const newContent = doc.querySelector('#content-container').innerHTML;
@@ -30,7 +29,7 @@ function loadPageContent(url) {
             document.getElementById('content-container').innerHTML = newContent;
 
             // Attach event listeners for any dynamic content if necessary
-            attachEventListeners(); // Ensure event listeners are re-attached if needed
+            attachEventListeners();
         })
         .catch(error => console.log('Error loading content:', error));
 }
@@ -38,9 +37,16 @@ function loadPageContent(url) {
 // Attach dynamic content loading to navigation links (with the class nav-link)
 function attachEventListeners() {
     document.querySelectorAll('a.nav-link').forEach(link => {
-        link.removeEventListener('click', handleLinkClick); // Remove any existing listeners to avoid duplication
+        link.removeEventListener('click', handleLinkClick); // Remove existing listeners to avoid duplication
         link.addEventListener('click', handleLinkClick);    // Add new event listener
     });
+
+    // If the search form exists, attach its event listener
+    const searchForm = document.getElementById('search-form');
+    if (searchForm) {
+        searchForm.removeEventListener('submit', handleSearchSubmit); // Avoid duplication
+        searchForm.addEventListener('submit', handleSearchSubmit);
+    }
 }
 
 // Handle link click to load new page dynamically
@@ -51,17 +57,51 @@ function handleLinkClick(e) {
     window.history.pushState({}, '', url);  // Update browser URL without full page reload
 }
 
+// Handle search form submission
+function handleSearchSubmit(e) {
+    e.preventDefault(); // Prevent the default form submission
+
+    // Get the search query from the form
+    const formData = new FormData(this);
+    const query = formData.get('query');
+    const url = this.action + '?query=' + encodeURIComponent(query);
+
+    // Fetch the search results via AJAX
+    fetch(url)
+        .then(response => response.text())
+        .then(data => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(data, 'text/html');
+            const newContent = doc.querySelector('#content-container').innerHTML;
+
+            // Replace only the content inside #content-container
+            document.getElementById('content-container').innerHTML = newContent;
+
+            // Optionally, reinitialize any event listeners to the new content
+            attachEventListeners();
+        })
+        .catch(error => console.error('Error during search:', error));
+}
+
 // Initialize everything when the DOM is ready
 document.addEventListener('DOMContentLoaded', function () {
-    // Attach event listeners for navigation links
+    // Attach event listeners for navigation links and search form
     attachEventListeners();
 
     const audioPlayer = document.getElementById('audio-player');
     const audioSource = document.getElementById('audio-source');
 
+    // Get the logged-in user's username from the data- attribute
+    const userDataElement = document.getElementById('user-data');
+    const username = userDataElement ? userDataElement.getAttribute('data-username') : 'guest';
+
+    // Unique storage keys for the current user
+    const timeKey = `${username}_currentTrackTime`;
+    const srcKey = `${username}_currentTrackSrc`;
+
     // Restore the audio player state on page load
-    const savedTime = localStorage.getItem('currentTrackTime');
-    const savedTrackSrc = localStorage.getItem('currentTrackSrc');
+    const savedTime = localStorage.getItem(timeKey);
+    const savedTrackSrc = localStorage.getItem(srcKey);
 
     if (savedTrackSrc) {
         audioSource.src = savedTrackSrc;
@@ -77,39 +117,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const currentTime = audioPlayer.currentTime;
         const trackSrc = audioSource.src;
 
-        // Save the current track and time to localStorage
-        localStorage.setItem('currentTrackTime', currentTime);
-        localStorage.setItem('currentTrackSrc', trackSrc);
-    });
-});
-
-document.addEventListener('DOMContentLoaded', function () {
-    const searchForm = document.getElementById('search-form');
-
-    // Intercept the form submission
-    searchForm.addEventListener('submit', function (e) {
-        e.preventDefault(); // Prevent the default form submission
-
-        // Get the search query from the form
-        const formData = new FormData(this);
-        const query = formData.get('query');
-        const url = this.action + '?query=' + encodeURIComponent(query);
-
-        // Fetch the search results via AJAX
-        fetch(url)
-            .then(response => response.text())
-            .then(data => {
-                // Use a DOM parser to extract the content from the response
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(data, 'text/html');
-                const newContent = doc.querySelector('#content-container').innerHTML;
-
-                // Replace only the content inside #content-container
-                document.getElementById('content-container').innerHTML = newContent;
-
-                // Optionally, reinitialize any event listeners or components here if needed
-                attachEventListeners(); // Reattach any event listeners to the new content
-            })
-            .catch(error => console.error('Error during search:', error));
+        // Save the current track and time to localStorage, specific to the current user
+        localStorage.setItem(timeKey, currentTime);
+        localStorage.setItem(srcKey, trackSrc);
     });
 });
