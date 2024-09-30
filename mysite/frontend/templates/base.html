@@ -12,6 +12,8 @@
     <nav>
         <div class="navbar">
             <div class="logo">
+                <!-- Hamburger icon -->
+                <span class="hamburger-icon" onclick="toggleSidebar()">&#9776;</span>
                 <img src="{% static 'images/logo.png' %}" alt="Harmonize Logo">
             </div>
             <div class="nav-links">
@@ -35,8 +37,11 @@
                     <a href="{% url 'register' %}">Register</a>
                 {% endif %}
             </div>
+
         </div>
     </nav>
+
+    {% include 'sidebar.html' %}
 
     <!-- Content Section (Only this part will be updated dynamically) -->
     <div id="content-container" class="content">
@@ -56,6 +61,9 @@
 
     <!-- Link to the external JavaScript file -->
     <script src="{% static 'js/audio_player.js' %}"></script>
+
+    <!-- JavaScript for toggling sidebar -->
+    <script src="{% static 'js/sidebar.js' %}"></script>
 
 </body>
 </html>

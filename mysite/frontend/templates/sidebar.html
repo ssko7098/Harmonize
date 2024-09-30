@@ -1,0 +1,17 @@
+<!-- Sidebar for mobile -->
+<div id="sidebar" class="sidebar closed">
+    <a href="javascript:void(0)" class="closebtn" onclick="toggleSidebar()">&times;</a>
+    
+    <!-- Store URLs using data-href -->
+    <a href="javascript:void(0)" data-href="{% url 'home' %}" onclick="navigateAndClose(this)" class="nav-link">Harmonize</a>
+
+    {% if user.is_authenticated %}
+        <a href="javascript:void(0)" data-href="{% url 'upload_song' %}" onclick="navigateAndClose(this)" class="nav-link">Manage Music</a>
+        <a href="javascript:void(0)" data-href="{% url 'profile' user.username %}" onclick="navigateAndClose(this)" class="nav-link">My Profile</a>
+        <a href="javascript:void(0)" data-href="{% url 'profile_settings' %}" onclick="navigateAndClose(this)" class="nav-link">Profile Settings</a>
+        <a href="javascript:void(0)" data-href="{% url 'logout' %}" onclick="navigateAndClose(this)" class="nav-link">Logout</a>
+    {% else %}
+        <a href="javascript:void(0)" data-href="{% url 'login' %}" onclick="navigateAndClose(this)" class="nav-link">Login</a>
+        <a href="javascript:void(0)" data-href="{% url 'register' %}" onclick="navigateAndClose(this)" class="nav-link">Register</a>
+    {% endif %}
+</div>
