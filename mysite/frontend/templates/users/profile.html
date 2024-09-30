@@ -13,9 +13,12 @@
                 <p><strong>Bio:</strong> {{ user_profile.bio }}</p>
                 
                 <h2>Singles</h2>
-                    {% for single in singles %}
-                    <a href="#" onclick="playAudio('{{ single.mp3_file.url }}'); return false;">Listen</a>
-                    {% endfor %}
+                    <ul>
+                        {% for single in singles %}
+                            <li> <a href="#" onclick="playAudio('{{ single.mp3_file.url }}'); return false;">{{single.title}}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
 
                 <h2>Albums</h2>
                     {% for album in albums %}

@@ -1,3 +1,21 @@
+
+function playAudio(url) {
+    const audioPlayer = document.getElementById('audio-player');
+    const audioSource = document.getElementById('audio-source');
+
+    // Check if the song clicked is already playing
+    if (audioSource.src === url) {
+        // If it's the same song, restart it from the beginning
+        audioPlayer.currentTime = 0;
+        audioPlayer.play();
+    } else {
+        // If it's a new song, set the new URL and play the audio
+        audioSource.src = url;
+        audioPlayer.load();
+        audioPlayer.play();
+    }
+}
+
 // Function to load content dynamically without affecting the audio player
 function loadPageContent(url) {
     fetch(url)

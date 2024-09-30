@@ -77,6 +77,11 @@ from django.contrib import messages
 from allauth.account.models import EmailAddress  # Required to check email verification status
 
 def login_view(request):
+
+    if request.user.is_authenticated:
+        # If the user is already logged in, redirect to the home page
+        return redirect('home')
+
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
