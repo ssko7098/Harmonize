@@ -23,8 +23,15 @@ body {
     align-items: center;
 }
 
-.navbar .logo img {
-    height: 40px;
+/* Align logo and hamburger in the same container */
+.navbar .logo {
+    display: inline-flex;
+    align-items: center;
+}
+
+.logo img {
+    height: 40px; /* Adjust as needed */
+    margin-right: 20px; /* Space between logo and hamburger */
 }
 
 .navbar .nav-links a {
@@ -261,22 +268,6 @@ p {
     background-color: #e60000;
 }
 
-/* For mobile responsiveness */
-@media (max-width: 768px) {
-    .admin-sidebar {
-        width: 100%;
-        height: auto;
-        position: relative;
-        top: 0;
-        border-right: none;
-    }
-
-    .admin-content {
-        margin-left: 0;
-        padding: 20px;
-    }
-}
-
 .confirmation-message {
     background-color: #f0f8ff;
     padding: 15px;
@@ -384,3 +375,92 @@ p {
     background-color: #0056b3;
 }
 
+
+/* Ensure the audio player stays fixed at the bottom of the viewport */
+.audio-player-container {
+    position: fixed;
+    bottom: 10px; /* Stick to the bottom of the viewport */
+    left: 0;
+    width: 100%; /* Make it span the full width of the page */
+    background-color: #f1f1f1; /* Optional: background color for the player */
+    padding: 10px; /* Optional: padding around the player */
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); /* Optional: shadow for visual effect */
+    z-index: 1000; /* Make sure the player stays on top of other elements */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Make sure the audio player takes up the full width of its container */
+.audio-player-container audio {
+    width: 100%;
+    max-width: 600px; /* Optional: max width to limit how wide the player can stretch */
+}
+
+/* Hamburger icon for small screens */
+.hamburger-icon {
+    font-size: 30px;
+    color: rgb(0, 0, 0);
+    display: none;
+    cursor: pointer;
+    margin-left: auto;
+    margin-right: 20px;
+    top: 10px;  /* Spacing from the top */
+    z-index: 1100; /* Ensure it's above the sidebar */
+}
+
+/* Sidebar styles */
+.sidebar {
+    height: 100%; /* Full height */
+    width: 0; /* Initially hidden */
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: width 0.5s ease;
+    padding-top: 60px; /* Push content down */
+}
+
+.sidebar a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: white;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidebar a:hover {
+    color: #f1f1f1;
+}
+
+.sidebar .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+/* Ensure the sidebar opens and closes with a smooth curtain effect */
+.sidebar.open {
+    width: 250px; /* Full size when open */
+}
+
+.sidebar.closed {
+    width: 0; /* Hidden when closed */
+    overflow-x: hidden;
+}
+
+/* Media queries for smaller screens */
+@media screen and (max-width: 768px) {
+    .nav-links {
+        display: none;
+    }
+
+    .hamburger-icon {
+        display: block; /* Show hamburger icon on small screens */
+    }
+}

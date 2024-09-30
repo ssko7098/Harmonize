@@ -1,10 +1,10 @@
-{% extends '../base.html' %}
+{% extends 'base.html' %}
 
-{% block title %}Song List{% endblock %}
+{% block title %}Upload Song{% endblock %}
 {% load static %}
 
 {% block content %}
-    <body id="upload-page">
+    <div id="upload-page">
         <main>
             <div class="upload-container">
                 <h1>Upload a New Song</h1>
@@ -39,6 +39,5 @@
                 </form>
             </div>
         </main>
-    </body>
+    </div>
 {% endblock %}
-

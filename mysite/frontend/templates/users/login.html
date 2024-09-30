@@ -3,50 +3,48 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-    <body>
-        <div class="container">
-            <div class="auth-form">
-                <h2>Login</h2>
-                <form method="post">
-                    {% csrf_token %}
+    <div class="container">
+        <div class="auth-form">
+            <h2>Login</h2>
+            <form method="post">
+                {% csrf_token %}
 
-                    <!-- Username field with potential error -->
-                    <div class="form-group {% if form.username.errors %}error-border{% endif %}">
-                        <label for="username">Username</label>
-                        {{ form.username }}
-                        {% if form.username.errors %}
-                            <p class="error">{{ form.username.errors.0 }}</p>
-                        {% endif %}
-                    </div>
-
-                    <!-- Password field with potential error -->
-                    <div class="form-group {% if form.password.errors %}error-border{% endif %}">
-                        <label for="password">Password</label>
-                        {{ form.password }}  <!-- Render password input from form -->
-                        {% if form.password.errors %}
-                            <p class="error">{{ form.password.errors.0 }}</p>
-                        {% endif %}
-                    </div>
-
-                    <!-- General non-field errors (e.g., invalid login credentials) -->
-                    {% if form.non_field_errors %}
-                        <p class="error">{{ form.non_field_errors.0 }}</p>
+                <!-- Username field with potential error -->
+                <div class="form-group {% if form.username.errors %}error-border{% endif %}">
+                    <label for="username">Username</label>
+                    {{ form.username }}
+                    {% if form.username.errors %}
+                        <p class="error">{{ form.username.errors.0 }}</p>
                     {% endif %}
-
-                    <!-- Error message for invalid login -->
-                    {% if messages %}
-                        {% for message in messages %}
-                            <p class="error">{{ message }}</p>
-                        {% endfor %}
-                    {% endif %}
-
-                    <button type="submit" class="btn">Sign In</button>
-                    <p><a>Forgot Password?</a></p>
-                </form>
-                <div class="register-link">
-                    <p>Don't have an account? <a href="{% url 'register' %}">Register here</a></p>
                 </div>
+
+                <!-- Password field with potential error -->
+                <div class="form-group {% if form.password.errors %}error-border{% endif %}">
+                    <label for="password">Password</label>
+                    {{ form.password }}  <!-- Render password input from form -->
+                    {% if form.password.errors %}
+                        <p class="error">{{ form.password.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- General non-field errors (e.g., invalid login credentials) -->
+                {% if form.non_field_errors %}
+                    <p class="error">{{ form.non_field_errors.0 }}</p>
+                {% endif %}
+
+                <!-- Error message for invalid login -->
+                {% if messages %}
+                    {% for message in messages %}
+                        <p class="error">{{ message }}</p>
+                    {% endfor %}
+                {% endif %}
+
+                <button type="submit" class="btn">Sign In</button>
+                <p><a>Forgot Password?</a></p>
+            </form>
+            <div class="register-link">
+                <p>Don't have an account? <a href="{% url 'register' %}">Register here</a></p>
             </div>
         </div>
-    </body>
+    </div>
 {% endblock %}
