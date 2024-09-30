@@ -1,4 +1,3 @@
-
 function playAudio(url) {
     const audioPlayer = document.getElementById('audio-player');
     const audioSource = document.getElementById('audio-source');
@@ -59,9 +58,17 @@ document.addEventListener('DOMContentLoaded', function () {
     const audioPlayer = document.getElementById('audio-player');
     const audioSource = document.getElementById('audio-source');
 
+    // Get the logged-in user's username from the Django template
+    const userDataElement = document.getElementById('user-data');
+    const username = userDataElement.getAttribute('data-username');
+
+    // Unique storage keys for the current user
+    const timeKey = `${username}_currentTrackTime`;
+    const srcKey = `${username}_currentTrackSrc`;
+
     // Restore the audio player state on page load
-    const savedTime = localStorage.getItem('currentTrackTime');
-    const savedTrackSrc = localStorage.getItem('currentTrackSrc');
+    const savedTime = localStorage.getItem(timeKey);
+    const savedTrackSrc = localStorage.getItem(srcKey);
 
     if (savedTrackSrc) {
         audioSource.src = savedTrackSrc;
@@ -77,9 +84,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const currentTime = audioPlayer.currentTime;
         const trackSrc = audioSource.src;
 
-        // Save the current track and time to localStorage
-        localStorage.setItem('currentTrackTime', currentTime);
-        localStorage.setItem('currentTrackSrc', trackSrc);
+        // Save the current track and time to localStorage, specific to the current user
+        localStorage.setItem(timeKey, currentTime);
+        localStorage.setItem(srcKey, trackSrc);
     });
 });
 

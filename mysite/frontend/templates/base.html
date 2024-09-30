@@ -49,6 +49,9 @@
         {% endblock %}
     </div>
 
+    <!-- Hidden element to pass the username using a data- attribute -->
+    <div id="user-data" data-username="{% if user.is_authenticated %}{{ user.username }}{% else %}null{% endif %}"></div>
+
     {% if user.is_authenticated and not user.is_admin %}
         <!-- Persistent Audio Player (only loaded once) -->
         <div class="audio-player-container">
