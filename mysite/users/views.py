@@ -10,7 +10,7 @@ from .models import User, Profile
 from .forms import RegisterForm, ProfileForm
 from django.contrib.auth.decorators import user_passes_test, login_required
 
-
+from music.models import Song, Album
 
 # Create your views here.
 def home(request):
@@ -123,8 +123,12 @@ def profile_view(request, username):
     # Get the user and profile by username
     user = get_object_or_404(User, username=username)
     profile = Profile.objects.get(user=user)
+    singles = Song.objects.filter(user=user)
+    albums = Album.objects.filter(user=user)
 
-    return render(request, 'users/profile.html', {'user_profile': profile})
+    return render(request, 'users/profile.html', {'user_profile': profile,
+                                                  'singles': singles,
+                                                  'albums': albums})
 
 
 

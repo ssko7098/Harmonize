@@ -8,23 +8,25 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
+    <!-- Static Navigation Bar -->
     <nav>
         <div class="navbar">
             <div class="logo">
                 <img src="{% static 'images/logo.png' %}" alt="Harmonize Logo">
             </div>
             <div class="nav-links">
-                <a href="{% url 'home' %}">Harmonize</a>
+                <a href="{% url 'home' %}" class="nav-link">Harmonize</a>
         
                 {% if user.is_authenticated %}
-                    <form action="{% url 'search' %}" method="GET" class="search-form">
+                    <form id="search-form" action="{% url 'search' %}" method="GET" class="search-form">
                         <input type="text" name="query" placeholder="Search..." required>
                         <button type="submit">Search</button>
                     </form>
 
                     {% if not user.is_admin %}
-                        <a href="{% url 'profile' user.username %}">My Profile</a>
-                        <a href="{% url 'profile_settings' %}">Profile Settings</a>
+                        <a href="{% url 'upload_song' %}" class="nav-link">Manage Music</a>
+                        <a href="{% url 'profile' user.username %}" class="nav-link">My Profile</a>
+                        <a href="{% url 'profile_settings' %}" class="nav-link">Profile Settings</a>
                     {% endif %}
 
                     <a href="{% url 'logout' %}">Logout</a>
@@ -36,11 +38,24 @@
         </div>
     </nav>
 
-    <!-- Content Section -->
-    <div class="content">
+    <!-- Content Section (Only this part will be updated dynamically) -->
+    <div id="content-container" class="content">
         {% block content %}
         {% endblock %}
     </div>
+
+    {% if user.is_authenticated and not user.is_admin %}
+        <!-- Persistent Audio Player (only loaded once) -->
+        <div class="audio-player-container">
+            <audio id="audio-player" controls>
+                <source id="audio-source" src="" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
+    {% endif %}
+
+    <!-- Link to the external JavaScript file -->
+    <script src="{% static 'js/audio_player.js' %}"></script>
 
 </body>
 </html>
