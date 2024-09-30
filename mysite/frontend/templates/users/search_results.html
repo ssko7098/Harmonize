@@ -6,39 +6,33 @@
     <body>        
         <div class="container">
             <h1>Search Results for "{{ query }}"</h1>
-            
+
+                {% if singles.exists %}
                 <h2>Songs</h2>
                     <ul>
-                        {% if singles.exists %}
-                            {% for single in singles %}
-                            <li> <a href="#" onclick="playAudio('{{ single.mp3_file.url }}'); return false;">{{single.title}}</a></li>
-                            {% endfor %}
-                        {% else %}
-                            <p>No songs found matching the query.</p>
-                        {% endif %}
+                        {% for single in singles %}
+                        <li> <a href="#" onclick="playAudio('{{ single.mp3_file.url }}'); return false;">{{single.title}}</a></li>
+                        {% endfor %}
                     </ul>
+                {% endif %}
 
+                {% if users.exists %}
                 <h2>Artists</h2>
                     <ul>
-                        {% if users.exists %}
-                            {% for user in users %}
-                                <li><a href="{% url 'profile' user.username %}" class="nav-link">{{ user.username }}</a></li>
-                            {% endfor %}
-                        {% else %}
-                            <p>No artists found matching the query.</p>
-                        {% endif %}
+                        {% for user in users %}
+                            <li><a href="{% url 'profile' user.username %}" class="nav-link">{{ user.username }}</a></li>
+                        {% endfor %}
                     </ul>
+                {% endif %}
 
+                {% if albums.exists %}
                 <h2>Albums</h2>
-                <ul>
-                    {% if albums.exists %}
+                    <ul>
                         {% for album in albums %}
                             <li><a href="#" class="nav-link">{{ album.title }}</a></li>
                         {% endfor %}
-                    {% else %}
-                        <p>No albums found matching the query.</p>
-                    {% endif %}
-                </ul>
+                    </ul>
+                {% endif %}
         </div>
     </body>
 {% endblock %}
