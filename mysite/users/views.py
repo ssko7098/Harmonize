@@ -138,6 +138,16 @@ def profile_view(request, username):
     singles = Song.objects.filter(user=user)
     albums = Album.objects.filter(user=user)
 
+    if request.method == 'POST':
+        # Handle song deletion
+        if 'delete_song' in request.POST:
+            song_id = request.POST.get('song_id')
+            song = get_object_or_404(Song, song_id=song_id, user=request.user)
+            song.delete()
+            messages.success(request, 'Song deleted successfully.')
+            return redirect('profile', username=username)
+
+
     return render(request, 'users/profile.html', {'user_profile': profile,
                                                   'singles': singles,
                                                   'albums': albums})
