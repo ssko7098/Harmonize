@@ -15,13 +15,22 @@
                 </ul>
             </div>
 
+
             <!-- Admin content -->
             <div class="admin-content">
                 <div class="admin-dashboard">
                     <div class="admin-header">
                         <h2 class="page-title">Admin Dashboard</h2>
+
+                                    <!-- Admin statistics -->
+                                    <div class="admin-stats">
+                                        <p><strong>Total Users:</strong> {{ total_users }}</p>
+                                        <p><strong>Total Songs:</strong> {{ total_songs }}</p>
+                                    </div>
+                                    
                         <h3>All Active Users</h3>
                     </div>
+
 
                     <!-- User table -->
                     <table class="user-table">
