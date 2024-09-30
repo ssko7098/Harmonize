@@ -15,7 +15,16 @@
                 <h2>Singles</h2>
                     <ul>
                         {% for single in singles %}
-                            <li> <a href="#" onclick="playAudio('{{ single.mp3_file.url }}'); return false;">{{single.title}}</a>
+                            <li>
+                                <a href="#" onclick="playAudio('{{ single.mp3_file.url }}'); return false;">{{ single.title }}</a>
+
+                                {% if request.user == user_profile.user %}
+                                    <form method="post" style="display:inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="song_id" value="{{ single.song_id }}">
+                                        <button type="submit" name="delete_song" onclick="return confirm('Are you sure you want to delete this song?');">Delete</button>
+                                    </form>
+                                {% endif %}
                             </li>
                         {% endfor %}
                     </ul>
