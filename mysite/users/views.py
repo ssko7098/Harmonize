@@ -22,8 +22,14 @@ def is_admin(user):
 @user_passes_test(is_admin)
 def admin_dashboard(request):
     users = User.objects.filter(is_active=True, is_admin=False)  # Only fetch active users
-    return render(request, 'users/admin_dashboard.html', {'users': users})
+    total_users = User.objects.count()  # Count total users
+    total_songs = Song.objects.count()  # Count total songs
 
+    return render(request, 'users/admin_dashboard.html', {
+        'users': users,
+        'total_users': total_users,
+        'total_songs': total_songs
+    })
 
 @user_passes_test(is_admin)
 def delete_user(request, user_id):
