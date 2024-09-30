@@ -11,7 +11,9 @@
                 <h2>Songs</h2>
                     <ul>
                         {% for single in singles %}
-                        <li> <a href="#" onclick="playAudio('{{ single.mp3_file.url }}'); return false;">{{single.title}}</a></li>
+                        <li>
+                            <a href="#" onclick="playAudio('{{ single.mp3_file.url }}'); return false;">{{single.title}}</a> - <a href="{% url 'profile' single.user.username %}" class="nav-link">{{ single.user.username }}</a>
+                        </li>
                         {% endfor %}
                     </ul>
                 {% endif %}
@@ -20,7 +22,9 @@
                 <h2>Artists</h2>
                     <ul>
                         {% for user in users %}
-                            <li><a href="{% url 'profile' user.username %}" class="nav-link">{{ user.username }}</a></li>
+                            <li>
+                                <a href="{% url 'profile' user.username %}" class="nav-link">{{ user.username }}</a>
+                            </li>
                         {% endfor %}
                     </ul>
                 {% endif %}
