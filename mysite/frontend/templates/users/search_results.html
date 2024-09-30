@@ -7,15 +7,38 @@
         <div class="container">
             <h1>Search Results for "{{ query }}"</h1>
             
-            <ul>
-            {% if users.exists %}
-                {% for user in users %}
-                    <li><a href="{% url 'profile' user.username %}" class="nav-link">{{ user.username }}</a></li>
-                {% endfor %}
-            {% else %}
-                <p>No results found matching the query.</p>
-            {% endif %}
-            </ul>
+                <h2>Songs</h2>
+                    <ul>
+                        {% if singles.exists %}
+                            {% for single in singles %}
+                            <li> <a href="#" onclick="playAudio('{{ single.mp3_file.url }}'); return false;">{{single.title}}</a></li>
+                            {% endfor %}
+                        {% else %}
+                            <p>No songs found matching the query.</p>
+                        {% endif %}
+                    </ul>
+
+                <h2>Artists</h2>
+                    <ul>
+                        {% if users.exists %}
+                            {% for user in users %}
+                                <li><a href="{% url 'profile' user.username %}" class="nav-link">{{ user.username }}</a></li>
+                            {% endfor %}
+                        {% else %}
+                            <p>No artists found matching the query.</p>
+                        {% endif %}
+                    </ul>
+
+                <h2>Albums</h2>
+                <ul>
+                    {% if albums.exists %}
+                        {% for album in albums %}
+                            <li><a href="#" class="nav-link">{{ album.title }}</a></li>
+                        {% endfor %}
+                    {% else %}
+                        <p>No albums found matching the query.</p>
+                    {% endif %}
+                </ul>
         </div>
     </body>
 {% endblock %}
