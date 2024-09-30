@@ -464,3 +464,9 @@ p {
         display: block; /* Show hamburger icon on small screens */
     }
 }
+
+#cover-preview {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
