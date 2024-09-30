@@ -384,19 +384,25 @@ p {
     background-color: #0056b3;
 }
 
-/* Center the audio player */
+
+/* Ensure the audio player stays fixed at the bottom of the viewport */
 .audio-player-container {
+    position: fixed;
+    bottom: 10px; /* Stick to the bottom of the viewport */
+    left: 0;
+    width: 100%; /* Make it span the full width of the page */
+    background-color: #f1f1f1; /* Optional: background color for the player */
+    padding: 10px; /* Optional: padding around the player */
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); /* Optional: shadow for visual effect */
+    z-index: 1000; /* Make sure the player stays on top of other elements */
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 20px;
 }
 
-/* Customize the default audio player appearance (basic example) */
-audio {
-    width: 80%; /* Adjust the width of the player */
-    height: 50px; /* Adjust the height of the player */
-    background-color: #f1f1f1;
-    border-radius: 10px; /* Rounded corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add some shadow for depth */
+/* Make sure the audio player takes up the full width of its container */
+.audio-player-container audio {
+    width: 100%;
+    max-width: 600px; /* Optional: max width to limit how wide the player can stretch */
 }
+
