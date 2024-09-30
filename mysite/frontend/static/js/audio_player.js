@@ -85,6 +85,8 @@ function handleSearchSubmit(e) {
 
 // Initialize everything when the DOM is ready
 document.addEventListener('DOMContentLoaded', function () {
+    let submittingForm = false;
+
     // Attach event listeners for navigation links and search form
     attachEventListeners();
 
@@ -112,13 +114,131 @@ document.addEventListener('DOMContentLoaded', function () {
         audioPlayer.play();
     }
 
-    // Persist the audio player state when leaving the page
+    // Persist the audio player state when leaving the page (only if not submitting a form)
     window.addEventListener('beforeunload', function () {
-        const currentTime = audioPlayer.currentTime;
-        const trackSrc = audioSource.src;
+        if (!submittingForm) {
+            const currentTime = audioPlayer.currentTime;
+            const trackSrc = audioSource.src;
 
-        // Save the current track and time to localStorage, specific to the current user
-        localStorage.setItem(timeKey, currentTime);
-        localStorage.setItem(srcKey, trackSrc);
+            // Save the current track and time to localStorage, specific to the current user
+            localStorage.setItem(timeKey, currentTime);
+            localStorage.setItem(srcKey, trackSrc);
+        }
     });
+
+    // Attach form submission handlers to all forms on the page
+    function attachFormSubmitListeners() {
+        const forms = document.querySelectorAll('form');
+        forms.forEach(form => handleFormSubmission(form));
+    }
+
+    // Handle AJAX form submission for all forms
+    function handleFormSubmission(form) {
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();  // Prevent default form submission
+            submittingForm = true;  // Set the form submission flag
+
+            // Get form data
+            const formData = new FormData(form);
+            const url = form.action;
+
+            // Submit the form data via AJAX
+            fetch(url, {
+                method: form.method || 'POST',  // Use the form's method or default to POST
+                body: formData,  // Send the form data
+            })
+            .then(response => response.text())
+            .then(data => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(data, 'text/html');
+                const newContent = doc.querySelector('#content-container').innerHTML;
+
+                // Replace only the content inside #content-container
+                document.getElementById('content-container').innerHTML = newContent;
+
+                // Re-attach event listeners after dynamic content loading
+                attachEventListeners();
+
+                submittingForm = false;  // Reset the form submission flag
+            })
+            .catch(error => {
+                console.error('Error during form submission:', error);
+                submittingForm = false;
+            });
+        });
+    }
+
+    // Attach dynamic content loading to navigation links (with the class nav-link)
+    function attachEventListeners() {
+        document.querySelectorAll('a.nav-link').forEach(link => {
+            link.removeEventListener('click', handleLinkClick); // Remove existing listeners to avoid duplication
+            link.addEventListener('click', handleLinkClick);    // Add new event listener
+        });
+
+        // Attach form listeners for AJAX form submission
+        attachFormSubmitListeners();
+
+        // If the search form exists, attach its event listener
+        const searchForm = document.getElementById('search-form');
+        if (searchForm) {
+            searchForm.removeEventListener('submit', handleSearchSubmit); // Avoid duplication
+            searchForm.addEventListener('submit', handleSearchSubmit);
+        }
+    }
+
+    // Handle link click to load new page dynamically
+    function handleLinkClick(e) {
+        e.preventDefault();  // Prevent default navigation
+        const url = this.href;  // Get the target URL
+        loadPageContent(url);  // Load the content dynamically
+        window.history.pushState({}, '', url);  // Update browser URL without full page reload
+    }
+
+    // Function to load content dynamically without affecting the audio player
+    function loadPageContent(url) {
+        fetch(url)
+            .then(response => response.text())
+            .then(data => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(data, 'text/html');
+                const newContent = doc.querySelector('#content-container').innerHTML;
+
+                // Replace only the content inside #content-container
+                document.getElementById('content-container').innerHTML = newContent;
+
+                // Re-attach event listeners for dynamic content
+                attachEventListeners();
+            })
+            .catch(error => console.log('Error loading content:', error));
+    }
+
+    // Handle search form submission
+    function handleSearchSubmit(e) {
+        e.preventDefault(); // Prevent the default form submission
+
+        // Get the search query from the form
+        const formData = new FormData(this);
+        const query = formData.get('query');
+        const url = this.action + '?query=' + encodeURIComponent(query);
+
+        // Fetch the search results via AJAX
+        fetch(url)
+            .then(response => response.text())
+            .then(data => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(data, 'text/html');
+                const newContent = doc.querySelector('#content-container').innerHTML;
+
+                // Replace only the content inside #content-container
+                document.getElementById('content-container').innerHTML = newContent;
+
+                // Optionally, reinitialize any event listeners to the new content
+                attachEventListeners();
+            })
+            .catch(error => console.error('Error during search:', error));
+    }
+
+    // Initialize form listeners on page load
+    attachFormSubmitListeners();
 });
+
