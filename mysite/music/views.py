@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
-from .models import Album, Song, Playlist
+from .models import Album, Song, Playlist, User
 from .forms import SongForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.shortcuts import render, redirect, get_object_or_404
+
 
 # Create your views here.
 def album_list(request):
@@ -13,9 +15,10 @@ def song_list(request):
     songs = Song.objects.all()
     return render(request, 'music/song_list.html', {'songs': songs})
 
-def playlist_list(request):
-    playlists = Playlist.objects.all()
-    return render(request, 'music/playlist_list.html', {'playlists': playlists})
+def view_playlists(request, username):
+    user = get_object_or_404(User, username=username)
+    playlists = Playlist.objects.filter(user=user)
+    return render(request, 'music/view_playlists.html', {'playlists': playlists})
 
 @login_required
 def upload_song(request):
