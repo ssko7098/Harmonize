@@ -10,7 +10,7 @@ from .models import User, Profile
 from .forms import RegisterForm, ProfileForm
 from django.contrib.auth.decorators import user_passes_test, login_required
 
-from music.models import Song, Album
+from music.models import Song, Album, Playlist
 
 # Create your views here.
 def home(request):
@@ -130,10 +130,14 @@ def search_view(request):
     
     albums = Album.objects.filter(Q(title__icontains=query))
 
+    user_playlists = Playlist.objects.filter(user=request.user)
+
+
     return render(request, 'users/search_results.html', {'users': users, 
                                                          'query': query,
                                                          'singles': singles,
-                                                         'albums': albums})
+                                                         'albums': albums,
+                                                         'playlists': user_playlists})
 
 
 @login_required

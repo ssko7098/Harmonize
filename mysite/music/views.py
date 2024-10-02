@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Album, Song, Playlist, User
+from .models import Album, Song, Playlist, User, PlaylistSong
 from .forms import SongForm, PlaylistForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -20,7 +20,18 @@ def song_list(request):
 def view_playlists(request, username):
     user = get_object_or_404(User, username=username)
     playlists = Playlist.objects.filter(user=user)
-    return render(request, 'music/view_playlists.html', {'playlists': playlists, 'user': user})
+
+    if request.method == 'POST':
+        form = PlaylistForm(request.POST)
+        if form.is_valid():
+            playlist = form.save(commit=False)
+            playlist.user = request.user
+            playlist.save()
+            return redirect('view_playlists', username=request.user.username)
+    else:
+        form = PlaylistForm()
+
+    return render(request, 'music/view_playlists.html', {'playlists': playlists, 'user': user, 'form': form})
 
 @login_required
 def create_playlist(request):
@@ -30,7 +41,6 @@ def create_playlist(request):
             playlist = form.save(commit=False)
             playlist.user = request.user
             playlist.save()
-            messages.success(request, 'Playlist created successfully!')
             return redirect('view_playlists', username=request.user.username)
     else:
         form = PlaylistForm()
@@ -47,6 +57,7 @@ def delete_playlist(request, playlist_id):
         return redirect('view_playlists', username=request.user.username)
 
     return render(request, 'music/confirm_delete_playlist.html', {'playlist': playlist})
+
 
 
 @login_required
@@ -78,3 +89,24 @@ def view_playlist_songs(request, username, playlist_id):
 
     # Render the in_playlist.html template with the playlist data
     return render(request, 'music/in_playlist.html', {'playlist': playlist})
+
+
+@login_required
+def add_to_playlist(request):
+    if request.method == 'POST':
+        playlist_id = request.POST.get('playlist')
+        song_id = request.POST.get('song_id')
+
+        # Retrieve the playlist and song
+        playlist = get_object_or_404(Playlist, pk=playlist_id, user=request.user)
+        song = get_object_or_404(Song, pk=song_id)
+
+        # Check if the song is already in the playlist
+        if PlaylistSong.objects.filter(playlist=playlist, song=song).exists():
+            messages.warning(request, 'This song is already in the selected playlist.')
+        else:
+            PlaylistSong.objects.create(playlist=playlist, song=song)
+            messages.success(request, 'Song added to playlist successfully!')
+
+    return redirect('search')
+

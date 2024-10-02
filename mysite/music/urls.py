@@ -9,4 +9,6 @@ urlpatterns = [
     path('create_playlist/', views.create_playlist, name='create_playlist'),
     path('delete_playlist/<int:playlist_id>/', views.delete_playlist, name='delete_playlist'),
     path('playlists/<str:username>/<int:playlist_id>/', views.view_playlist_songs, name='view_playlist_songs'),  # Shows songs in a playlist
+    path('add_to_playlist/', views.add_to_playlist, name='add_to_playlist'),
+
 ]
