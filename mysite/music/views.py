@@ -36,6 +36,17 @@ def create_playlist(request):
 
     return render(request, 'music/create_playlist.html', {'form': form})
 
+@login_required
+def delete_playlist(request, playlist_id):
+    playlist = get_object_or_404(Playlist, pk=playlist_id, user=request.user)
+
+    if request.method == 'POST':
+        playlist.delete()
+        messages.success(request, 'Playlist deleted successfully!')
+        return redirect('view_playlists', username=request.user.username)
+
+    return render(request, 'music/confirm_delete_playlist.html', {'playlist': playlist})
+
 
 @login_required
 def upload_song(request):
