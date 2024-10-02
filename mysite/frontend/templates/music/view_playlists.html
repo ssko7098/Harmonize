@@ -27,41 +27,43 @@
     </div>
 
     {% if playlists %}
-        {% for playlist in playlists %}
-            <div class="playlist">
-                <h2>{{ playlist.name }}</h2>
-                <p>Created on: {{ playlist.created_at|date:"F j, Y" }}</p>
-                
-                {% if playlist.playlistsong_set.exists %}
-                    <h3>Songs in this playlist:</h3>
-                    <ul>
-                        {% for playlist_song in playlist.playlistsong_set.all %}
-                            <li>
-                                {{ playlist_song.song.title }} by {{ playlist_song.song.user.username }}
-                                {% if playlist_song.song.mp3_file %}
-                                    - <a href="#" onclick="playAudio('{{ playlist_song.song.mp3_file.url }}'); return false;">Listen</a>
-                                {% else %}
-                                    - No audio file available
-                                {% endif %}
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    <p>No songs in this playlist yet.</p>
-                {% endif %}
+    {% for playlist in playlists %}
+    <div class="playlist">
+        <h2>{{ playlist.name }}</h2>
+        <p>Created on: {{ playlist.created_at|date:"F j, Y" }}</p>
 
-                <!-- Form to Delete Playlist -->
-                <form method="post" action="{% url 'delete_playlist' playlist.pk %}">
-                    {% csrf_token %}
-                    <button type="submit" class="btn-delete" onclick="return confirm('Are you sure you want to delete this playlist?');">Delete Playlist</button>
-                </form>
-            </div>
-            <hr>
-        {% endfor %}
-    {% else %}
-        <p>No current playlists available.</p>
-    {% endif %}
-</div>
+        <!-- Link to view songs in a playlist -->
+        <a href="{% url 'view_playlist_songs' user.username playlist.pk %}">View Songs</a>
+
+        {% if playlist.playlistsong_set.exists %}
+            <h3>Songs in this playlist:</h3>
+            <ul>
+                {% for playlist_song in playlist.playlistsong_set.all %}
+                    <li>
+                        {{ playlist_song.song.title }} by {{ playlist_song.song.user.username }}
+                        {% if playlist_song.song.mp3_file %}
+                            - <a href="#" onclick="playAudio('{{ playlist_song.song.mp3_file.url }}'); return false;">Listen</a>
+                        {% else %}
+                            - No audio file available
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No songs in this playlist yet.</p>
+        {% endif %}
+
+        <!-- Form to Delete Playlist -->
+        <form method="post" action="{% url 'delete_playlist' playlist.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="btn-delete" onclick="return confirm('Are you sure you want to delete this playlist?');">Delete Playlist</button>
+        </form>
+    </div>
+    <hr>
+    {% endfor %}
+{% else %}
+    <p>No current playlists available.</p>
+{% endif %}
 
 <!-- Modal CSS -->
 <style>

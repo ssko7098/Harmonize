@@ -4,9 +4,10 @@ from .forms import SongForm, PlaylistForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import Http404
 
 
-# Create your views here.
+
 def album_list(request):
     albums = Album.objects.all()
     return render(request, 'music/album_list.html', {'albums': albums})
@@ -15,11 +16,11 @@ def song_list(request):
     songs = Song.objects.all()
     return render(request, 'music/song_list.html', {'songs': songs})
 
+@login_required
 def view_playlists(request, username):
     user = get_object_or_404(User, username=username)
     playlists = Playlist.objects.filter(user=user)
-    return render(request, 'music/view_playlists.html', {'playlists': playlists})
-
+    return render(request, 'music/view_playlists.html', {'playlists': playlists, 'user': user})
 
 @login_required
 def create_playlist(request):
@@ -61,3 +62,19 @@ def upload_song(request):
         form = SongForm()
 
     return render(request, 'music/upload_song.html', {'form': form})
+
+
+@login_required
+def view_playlist_songs(request, username, playlist_id):
+    # Get the user by username
+    user = get_object_or_404(User, username=username)
+
+    # Retrieve the playlist by ID, ensuring it belongs to the correct user
+    playlist = get_object_or_404(Playlist, pk=playlist_id, user=user)
+
+    # Ensure the logged-in user is the owner of the playlist
+    if playlist.user != request.user:
+        raise Http404("You do not have permission to view this playlist.")
+
+    # Render the in_playlist.html template with the playlist data
+    return render(request, 'music/in_playlist.html', {'playlist': playlist})

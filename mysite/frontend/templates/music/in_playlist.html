@@ -1,0 +1,58 @@
+{% extends '../base.html' %}
+
+{% block title %}Songs in "{{ playlist.name }}"{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Back Button -->
+    <a href="{% url 'view_playlists' request.user.username %}" class="btn-back">← Back to My Playlists</a>
+    
+    <h1>Songs in "{{ playlist.name }}"</h1>
+    <p>{{ playlist.description }}</p>
+
+    {% if playlist.playlistsong_set.exists %}
+        <h3>Songs in this playlist:</h3>
+        <ul>
+            {% for playlist_song in playlist.playlistsong_set.all %}
+                <li>
+                    {{ playlist_song.song.title }} by {{ playlist_song.song.user.username }}
+                    {% if playlist_song.song.mp3_file %}
+                        - <a href="#" onclick="playAudio('{{ playlist_song.song.mp3_file.url }}'); return false;">Listen</a>
+                    {% else %}
+                        - No audio file available
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No songs in this playlist yet.</p>
+    {% endif %}
+
+    <!-- Add Song Button (functionality to be added later) -->
+    <button onclick="addSongToPlaylist()">Add Song</button>
+</div>
+
+<!-- JavaScript placeholder for adding a song -->
+<script>
+    function addSongToPlaylist() {
+        alert("This functionality will be implemented soon!");
+    }
+</script>
+
+<!-- Optional Styling for Back Button -->
+<style>
+    .btn-back {
+        display: inline-block;
+        margin-bottom: 20px;
+        padding: 10px 15px;
+        background-color: #f0f0f0;
+        color: #333;
+        text-decoration: none;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+    .btn-back:hover {
+        background-color: #e0e0e0;
+    }
+</style>
+{% endblock %}
