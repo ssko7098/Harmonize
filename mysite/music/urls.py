@@ -10,6 +10,6 @@ urlpatterns = [
     path('delete_playlist/<int:playlist_id>/', views.delete_playlist, name='delete_playlist'),
     path('playlists/<str:username>/<int:playlist_id>/', views.view_playlist_songs, name='view_playlist_songs'),  
     path('add_to_playlist/', views.add_to_playlist, name='add_to_playlist'),
-    path('delete_song_from_playlist/<int:playlist_id>/<int:song_id>/', views.delete_song_from_playlist, name='delete_song_from_playlist'),  # Delete song from playlist
+    path('delete_song_from_playlist/<int:playlist_id>/<int:song_id>/', views.delete_song_from_playlist, name='delete_song_from_playlist'), 
 
 ]

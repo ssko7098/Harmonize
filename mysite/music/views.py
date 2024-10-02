@@ -68,7 +68,7 @@ def upload_song(request):
             song = form.save(commit=False)
             song.user = request.user
             song.save()
-            return redirect('song_list')  # Redirect to a song list page or another view
+            return redirect('song_list')  
     else:
         form = SongForm()
 
@@ -77,20 +77,16 @@ def upload_song(request):
 
 @login_required
 def view_playlist_songs(request, username, playlist_id):
-    # Get the user by username
     user = get_object_or_404(User, username=username)
 
-    # Retrieve the playlist by ID, ensuring it belongs to the correct user
     playlist = get_object_or_404(Playlist, pk=playlist_id, user=user)
 
-    # Ensure the logged-in user is the owner of the playlist
     if playlist.user != request.user:
         raise Http404("You do not have permission to view this playlist.")
-
-    # Render the in_playlist.html template with the playlist data
+    
     return render(request, 'music/in_playlist.html', {'playlist': playlist})
 
-
+@login_required
 @login_required
 def add_to_playlist(request):
     if request.method == 'POST':
@@ -100,13 +96,16 @@ def add_to_playlist(request):
         playlist = get_object_or_404(Playlist, pk=playlist_id, user=request.user)
         song = get_object_or_404(Song, pk=song_id)
 
-        if PlaylistSong.objects.filter(playlist=playlist, song=song).exists():
-            messages.warning(request, 'This song is already in the selected playlist.')
-        else:
+        if not PlaylistSong.objects.filter(playlist=playlist, song=song).exists():
             PlaylistSong.objects.create(playlist=playlist, song=song)
-            messages.success(request, 'Song added to playlist successfully!')
 
-    return redirect('search')
+    # Redirect back to search with the original query
+    query = request.session.get('last_search_query', '')
+    if query:
+        return redirect(f'/search/?query={query}')
+    return redirect('home')
+
+
 
 
 @login_required
@@ -115,7 +114,6 @@ def delete_song_from_playlist(request, playlist_id, song_id):
     song = get_object_or_404(Song, pk=song_id)
 
     if request.method == 'POST':
-        # Delete the song from the playlist
         playlist_song = get_object_or_404(PlaylistSong, playlist=playlist, song=song)
         playlist_song.delete()
     
