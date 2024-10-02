@@ -1,0 +1,56 @@
+{% extends '../base.html' %}
+
+{% block title %}Songs in "{{ playlist.name }}"{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Back Button -->
+    <a href="{% url 'view_playlists' request.user.username %}" class="btn-back">← Back to My Playlists</a>
+    
+    <h1>Songs in "{{ playlist.name }}"</h1>
+    <p>{{ playlist.description }}</p>
+
+    {% if playlist.playlistsong_set.exists %}
+        <h3>Songs in this playlist:</h3>
+        <ul>
+            {% for playlist_song in playlist.playlistsong_set.all %}
+                <li>
+                    {{ playlist_song.song.title }} by {{ playlist_song.song.user.username }}
+                    {% if playlist_song.song.mp3_file %}
+                        - <a href="#" onclick="playAudio('{{ playlist_song.song.mp3_file.url }}'); return false;">Listen</a>
+                    {% else %}
+                        - No audio file available
+                    {% endif %}
+
+                    <!-- Form to Delete Song -->
+                    <form method="post" action="{% url 'delete_song_from_playlist' playlist.pk playlist_song.song.pk %}" class="inline-form">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-delete">Delete Song</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No songs in this playlist yet.</p>
+    {% endif %}
+</div>
+
+<style>
+    .btn-back {
+        display: inline-block;
+        margin-bottom: 20px;
+        padding: 10px 15px;
+        background-color: #f0f0f0;
+        color: #333;
+        text-decoration: none;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+    .btn-back:hover {
+        background-color: #e0e0e0;
+    }
+    .inline-form {
+        display: inline;
+    }
+</style>
+{% endblock %}
