@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Album, Song, Playlist, User
-from .forms import SongForm
+from .forms import SongForm, PlaylistForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
@@ -19,6 +19,23 @@ def view_playlists(request, username):
     user = get_object_or_404(User, username=username)
     playlists = Playlist.objects.filter(user=user)
     return render(request, 'music/view_playlists.html', {'playlists': playlists})
+
+
+@login_required
+def create_playlist(request):
+    if request.method == 'POST':
+        form = PlaylistForm(request.POST)
+        if form.is_valid():
+            playlist = form.save(commit=False)
+            playlist.user = request.user
+            playlist.save()
+            messages.success(request, 'Playlist created successfully!')
+            return redirect('view_playlists', username=request.user.username)
+    else:
+        form = PlaylistForm()
+
+    return render(request, 'music/create_playlist.html', {'form': form})
+
 
 @login_required
 def upload_song(request):

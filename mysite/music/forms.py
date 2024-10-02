@@ -1,5 +1,5 @@
 from django import forms
-from .models import Song
+from .models import Song, Playlist
 
 
 class SongForm(forms.ModelForm):
@@ -20,3 +20,13 @@ class SongForm(forms.ModelForm):
                 raise forms.ValidationError('The file must be in MP3 format.')
 
             return file
+        
+class PlaylistForm(forms.ModelForm):
+    class Meta:
+        model = Playlist
+        fields = ['name', 'description']
+
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control'}),
+        }
