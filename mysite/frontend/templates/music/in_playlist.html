@@ -21,25 +21,20 @@
                     {% else %}
                         - No audio file available
                     {% endif %}
+
+                    <!-- Form to Delete Song -->
+                    <form method="post" action="{% url 'delete_song_from_playlist' playlist.pk playlist_song.song.pk %}" class="inline-form">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-delete">Delete Song</button>
+                    </form>
                 </li>
             {% endfor %}
         </ul>
     {% else %}
         <p>No songs in this playlist yet.</p>
     {% endif %}
-
-    <!-- Add Song Button (functionality to be added later) -->
-    <button onclick="addSongToPlaylist()">Add Song</button>
 </div>
 
-<!-- JavaScript placeholder for adding a song -->
-<script>
-    function addSongToPlaylist() {
-        alert("This functionality will be implemented soon!");
-    }
-</script>
-
-<!-- Optional Styling for Back Button -->
 <style>
     .btn-back {
         display: inline-block;
@@ -53,6 +48,9 @@
     }
     .btn-back:hover {
         background-color: #e0e0e0;
+    }
+    .inline-form {
+        display: inline;
     }
 </style>
 {% endblock %}

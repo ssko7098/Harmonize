@@ -97,11 +97,9 @@ def add_to_playlist(request):
         playlist_id = request.POST.get('playlist')
         song_id = request.POST.get('song_id')
 
-        # Retrieve the playlist and song
         playlist = get_object_or_404(Playlist, pk=playlist_id, user=request.user)
         song = get_object_or_404(Song, pk=song_id)
 
-        # Check if the song is already in the playlist
         if PlaylistSong.objects.filter(playlist=playlist, song=song).exists():
             messages.warning(request, 'This song is already in the selected playlist.')
         else:
@@ -110,3 +108,15 @@ def add_to_playlist(request):
 
     return redirect('search')
 
+
+@login_required
+def delete_song_from_playlist(request, playlist_id, song_id):
+    playlist = get_object_or_404(Playlist, pk=playlist_id, user=request.user)
+    song = get_object_or_404(Song, pk=song_id)
+
+    if request.method == 'POST':
+        # Delete the song from the playlist
+        playlist_song = get_object_or_404(PlaylistSong, playlist=playlist, song=song)
+        playlist_song.delete()
+    
+    return redirect('view_playlist_songs', username=request.user.username, playlist_id=playlist.pk)
