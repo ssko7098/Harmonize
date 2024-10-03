@@ -67,6 +67,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(null=True, blank=True)
     avatar_url = models.CharField(max_length=50, null=True, blank=True)
+    report_count = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.user.username

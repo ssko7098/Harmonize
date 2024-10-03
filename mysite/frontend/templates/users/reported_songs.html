@@ -1,0 +1,49 @@
+{% extends '../base.html' %}
+
+{% block title %}Reported Songs{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Reported Songs</h1>
+
+    {% if reported_songs.exists %}
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Artist</th>
+                <th>Reports</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for song in reported_songs %}
+            <tr>
+                <td>{{ song.title }}</td>
+                <td>{{ song.user.username }}</td>
+                <td>{{ song.report_count }}</td>
+                <td>
+                    <form method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="song_id" value="{{ song.pk }}">
+                        <button type="submit" name="delete_song" onclick="return confirm('Are you sure you want to delete this song?');">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>No reported songs found.</p>
+    {% endif %}
+
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+</div>
+{% endblock %}

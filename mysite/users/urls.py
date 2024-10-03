@@ -12,4 +12,5 @@ urlpatterns = [
     path('profile_settings/', views.profile_settings_view, name='profile_settings'),
     path('admin_dashboard/', views.admin_dashboard, name='admin_dashboard'),
     path('delete_user/<int:user_id>/', views.delete_user, name='delete_user'),
+    path('admin_dashboard/reported_songs/', views.manage_reported_songs, name='reported_songs'),
 ]
