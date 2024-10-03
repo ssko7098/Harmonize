@@ -129,7 +129,6 @@ def delete_song_from_playlist(request, playlist_id, song_id):
     
     return redirect('view_playlist_songs', username=request.user.username, playlist_id=playlist.pk)
 
-
 @login_required
 def view_playlist_songs(request, username, playlist_id):
     user = get_object_or_404(User, username=username)
@@ -148,3 +147,17 @@ def view_playlist_songs(request, username, playlist_id):
 
     # Render the in_playlist.html template with the playlist data
     return render(request, 'music/in_playlist.html', {'playlist': playlist, 'filtered_songs': filtered_songs})
+
+  @login_required
+def report_song(request, song_id):
+    song = get_object_or_404(Song, song_id=song_id)
+    
+    # Increment the report count
+    song.report_count += 1
+    song.save()
+
+    # Redirect back to search with the original query
+    query = request.session.get('last_search_query', '')
+    if query:
+        return redirect(f'/search/?query={query}')
+    return redirect('home')

@@ -51,6 +51,25 @@ def delete_user(request, user_id):
         messages.error(request, "Invalid request.")
         return redirect('admin_dashboard')
 
+@user_passes_test(is_admin)
+def manage_reported_songs(request):
+    reported_songs = Song.objects.filter(report_count__gt=0).order_by('-report_count')  # Fetch songs with reports
+    
+    if request.method == 'POST':
+        # Handle song deletion
+        if 'delete_song' in request.POST:
+            song_id = request.POST.get('song_id')
+            
+            if not song_id:
+                messages.error(request, 'No song selected for deletion.')
+                return redirect('reported_songs')
+            
+            song = get_object_or_404(Song, pk=song_id)
+            song.delete()
+            messages.success(request, 'Song deleted successfully.')
+            return redirect('reported_songs')
+    return render(request, 'users/reported_songs.html', {'reported_songs': reported_songs})
+
 # Registration
 def register(request):
     form = RegisterForm()
@@ -125,7 +144,7 @@ def search_view(request):
     if query:
         request.session['last_search_query'] = query  # Save the query in the session
     users = User.objects.filter(Q(username__icontains=query) 
-                                & Q(is_active=True))  # Search for active users by username
+                                & Q(is_active=True)  & Q(is_admin=False))  # Search for active users by username
     
     singles = Song.objects.filter(Q(title__icontains=query))
     

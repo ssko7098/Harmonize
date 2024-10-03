@@ -12,5 +12,5 @@ urlpatterns = [
     path('add_to_playlist/', views.add_to_playlist, name='add_to_playlist'),
     path('delete_song_from_playlist/<int:playlist_id>/<int:song_id>/', views.delete_song_from_playlist, name='delete_song_from_playlist'), 
     path('playlists/<str:username>/<int:playlist_id>/', views.view_playlist_songs, name='view_playlist_songs'),  # Shows songs in a playlist
-
+    path('report_song/<int:song_id>/', views.report_song, name='report_song'),
 ]
