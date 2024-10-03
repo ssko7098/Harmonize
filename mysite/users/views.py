@@ -125,7 +125,7 @@ def search_view(request):
     if query:
         request.session['last_search_query'] = query  # Save the query in the session
     users = User.objects.filter(Q(username__icontains=query) 
-                                & Q(is_active=True))  # Search for active users by username
+                                & Q(is_active=True)  & Q(is_admin=False))  # Search for active users by username
     
     singles = Song.objects.filter(Q(title__icontains=query))
     
