@@ -6,21 +6,49 @@
 <div class="container">
     <h1>{{ user.username }}'s Playlists</h1>
 
-    <!-- Form for Creating a New Playlist -->
-    <h2>Create a New Playlist</h2>
-    <form method="post" action="{% url 'create_playlist' %}">
+<!-- Search bar for filtering playlists -->
+<form method="get" action="{% url 'view_playlists' user.username %}">
+    <input type="text" name="search_query" placeholder="Search Playlists" value="{{ request.GET.search_query|default:'' }}">
+    <button type="submit">Search</button>
+    <a href="{% url 'view_playlists' user.username %}">
+        <button type="button">Clear</button>
+    </a>
+</form>
+
+
+
+    <!-- Form for creating a new playlist -->
+    <form method="post" action="{% url 'view_playlists' user.username %}">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn-submit">Create Playlist</button>
     </form>
 
-    <!-- Display Existing Playlists -->
     {% if playlists %}
         {% for playlist in playlists %}
             <div class="playlist">
                 <h2>{{ playlist.name }}</h2>
                 <!-- Link to view songs in a playlist -->
                 <a href="{% url 'view_playlist_songs' user.username playlist.pk %}">View Songs</a>
+
+                {% if playlist.playlistsong_set.exists %}
+                    <h3>Songs in this playlist:</h3>
+                    <ul>
+                        {% for playlist_song in playlist.playlistsong_set.all %}
+                            <li>
+                                {{ playlist_song.song.title }} by {{ playlist_song.song.user.username }}
+                                {% if playlist_song.song.mp3_file %}
+                                    - <a href="#" onclick="playAudio('{{ playlist_song.song.mp3_file.url }}'); return false;">Listen</a>
+                                {% else %}
+                                    - No audio file available
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No songs in this playlist yet.</p>
+                {% endif %}
+
                 <!-- Form to Delete Playlist -->
                 <form method="post" action="{% url 'delete_playlist' playlist.pk %}">
                     {% csrf_token %}

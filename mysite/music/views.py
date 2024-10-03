@@ -21,6 +21,12 @@ def view_playlists(request, username):
     user = get_object_or_404(User, username=username)
     playlists = Playlist.objects.filter(user=user)
 
+    # Handle search functionality
+    search_query = request.GET.get('search_query', '')
+    if search_query:
+        playlists = playlists.filter(name__icontains=search_query)
+
+    # Handle creating a new playlist
     if request.method == 'POST':
         form = PlaylistForm(request.POST)
         if form.is_valid():
@@ -31,7 +37,12 @@ def view_playlists(request, username):
     else:
         form = PlaylistForm()
 
-    return render(request, 'music/view_playlists.html', {'playlists': playlists, 'user': user, 'form': form})
+    return render(request, 'music/view_playlists.html', {
+        'playlists': playlists,
+        'user': user,
+        'form': form,
+        'search_query': search_query
+    })
 
 @login_required
 def create_playlist(request):
@@ -87,7 +98,6 @@ def view_playlist_songs(request, username, playlist_id):
     return render(request, 'music/in_playlist.html', {'playlist': playlist})
 
 @login_required
-@login_required
 def add_to_playlist(request):
     if request.method == 'POST':
         playlist_id = request.POST.get('playlist')
@@ -120,6 +130,25 @@ def delete_song_from_playlist(request, playlist_id, song_id):
     return redirect('view_playlist_songs', username=request.user.username, playlist_id=playlist.pk)
 
 @login_required
+def view_playlist_songs(request, username, playlist_id):
+    user = get_object_or_404(User, username=username)
+    playlist = get_object_or_404(Playlist, pk=playlist_id, user=user)
+
+    # Ensure the logged-in user is the owner of the playlist
+    if playlist.user != request.user:
+        raise Http404("You do not have permission to view this playlist.")
+
+    search_query = request.GET.get('search', '')
+
+    if search_query:
+        filtered_songs = PlaylistSong.objects.filter(playlist=playlist, song__title__icontains=search_query)
+    else:
+        filtered_songs = playlist.playlistsong_set.all()
+
+    # Render the in_playlist.html template with the playlist data
+    return render(request, 'music/in_playlist.html', {'playlist': playlist, 'filtered_songs': filtered_songs})
+
+  @login_required
 def report_song(request, song_id):
     song = get_object_or_404(Song, song_id=song_id)
     
