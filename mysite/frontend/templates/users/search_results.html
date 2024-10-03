@@ -11,13 +11,18 @@
     <ul>
         {% for single in singles %}
             <li>
-                <a href="#" onclick="playAudio('{{ single.mp3_file.url }}'); return false;">{{ single.title }}</a> 
-                - <a href="{% url 'profile' single.user.username %}" class="nav-link">{{ single.user.username }}</a>
-
-                <form method="post" action="{% url 'report_song' single.pk %}">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-warning">Report</button>
-                </form>
+                <div class="song-details">
+                    <span>
+                        <a href="#" onclick="playAudio('{{ single.mp3_file.url }}'); return false;">{{ single.title }}</a> 
+                        - <a href="{% url 'profile' single.user.username %}" class="nav-link">{{ single.user.username }}</a>
+                    </span>
+                    <!-- Report Button -->
+                    <form method="post" action="{% url 'report_song' single.pk %}" style="display:inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="song_id" value="{{ single.pk }}">
+                        <button type="submit" class="btn-report">Report</button>
+                    </form>
+                </div>
 
                 <!-- Inline dropdown form to add to playlist -->
                 <form method="post" action="{% url 'add_to_playlist' %}">

@@ -127,4 +127,8 @@ def report_song(request, song_id):
     song.report_count += 1
     song.save()
 
-    return redirect('search') 
+    # Redirect back to search with the original query
+    query = request.session.get('last_search_query', '')
+    if query:
+        return redirect(f'/search/?query={query}')
+    return redirect('home')
