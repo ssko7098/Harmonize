@@ -59,12 +59,15 @@ def manage_reported_songs(request):
         # Handle song deletion
         if 'delete_song' in request.POST:
             song_id = request.POST.get('song_id')
-            song = get_object_or_404(Song, song_id=song_id, user=request.user)
+            
+            if not song_id:
+                messages.error(request, 'No song selected for deletion.')
+                return redirect('reported_songs')
+            
+            song = get_object_or_404(Song, pk=song_id)
             song.delete()
             messages.success(request, 'Song deleted successfully.')
             return redirect('reported_songs')
-
-
     return render(request, 'users/reported_songs.html', {'reported_songs': reported_songs})
 
 # Registration
