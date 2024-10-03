@@ -14,10 +14,14 @@
                 <a href="#" onclick="playAudio('{{ single.mp3_file.url }}'); return false;">{{ single.title }}</a> 
                 - <a href="{% url 'profile' single.user.username %}" class="nav-link">{{ single.user.username }}</a>
 
+                <form method="post" action="{% url 'report_song' single.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-warning">Report</button>
+                </form>
+
                 <!-- Inline dropdown form to add to playlist -->
                 <form method="post" action="{% url 'add_to_playlist' %}">
                     {% csrf_token %}
-                    <label for="playlist-{{ single.pk }}">Select an existing Playlist:</label>
                     <select name="playlist" id="playlist-{{ single.pk }}" required>
                         <option value="" disabled selected>Select a Playlist</option>
                         {% for playlist in playlists %}
