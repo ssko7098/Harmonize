@@ -10,13 +10,17 @@
     <h1>Songs in "{{ playlist.name }}"</h1>
     <p>{{ playlist.description }}</p>
 
-    <!-- Search bar for filtering songs in this playlist -->
-    <form method="get" action="{% url 'view_playlist_songs' user.username playlist.pk %}">
-        <input type="text" name="search" placeholder="Search Songs in Playlist" value="{{ request.GET.search|default:'' }}">
-        <button type="submit">Search</button>
-    </form>
+<!-- Search bar for filtering songs in this playlist -->
+<form method="get" action="{% url 'view_playlist_songs' user.username playlist.pk %}">
+    <input type="text" name="search" placeholder="Search Songs in Playlist" value="{{ request.GET.search|default:'' }}">
+    <button type="submit">Search</button>
+    <a href="{% url 'view_playlist_songs' user.username playlist.pk %}">
+        <button type="button">Clear</button>
+    </a>
+</form>
 
-    {% if playlist.playlistsong_set.exists %}
+
+    {% if filtered_songs.exists %}
         <h3>Songs in this playlist:</h3>
         <ul>
             {% for playlist_song in filtered_songs %}
@@ -27,6 +31,11 @@
                     {% else %}
                         - No audio file available
                     {% endif %}
+                    <!-- Form to Delete Song from Playlist -->
+                    <form method="post" action="{% url 'delete_song_from_playlist' playlist.pk playlist_song.song.pk %}" class="inline-form">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-delete">Remove</button>
+                    </form>
                 </li>
             {% endfor %}
         </ul>

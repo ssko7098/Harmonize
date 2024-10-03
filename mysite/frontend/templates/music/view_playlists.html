@@ -6,11 +6,16 @@
 <div class="container">
     <h1>{{ user.username }}'s Playlists</h1>
 
-    <!-- Search bar for filtering playlists -->
-    <form method="get" action="{% url 'view_playlists' user.username %}">
-        <input type="text" name="search" placeholder="Search Playlists" value="{{ search_query|default:'' }}">
-        <button type="submit">Search</button>
-    </form>
+<!-- Search bar for filtering playlists -->
+<form method="get" action="{% url 'view_playlists' user.username %}">
+    <input type="text" name="search_query" placeholder="Search Playlists" value="{{ request.GET.search_query|default:'' }}">
+    <button type="submit">Search</button>
+    <a href="{% url 'view_playlists' user.username %}">
+        <button type="button">Clear</button>
+    </a>
+</form>
+
+
 
     <!-- Form for creating a new playlist -->
     <form method="post" action="{% url 'view_playlists' user.username %}">
@@ -43,6 +48,12 @@
                 {% else %}
                     <p>No songs in this playlist yet.</p>
                 {% endif %}
+
+                <!-- Form to Delete Playlist -->
+                <form method="post" action="{% url 'delete_playlist' playlist.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-delete" onclick="return confirm('Are you sure you want to delete this playlist?');">Delete Playlist</button>
+                </form>
             </div>
             <hr>
         {% endfor %}

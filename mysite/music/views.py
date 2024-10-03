@@ -19,13 +19,14 @@ def song_list(request):
 @login_required
 def view_playlists(request, username):
     user = get_object_or_404(User, username=username)
-    search_query = request.GET.get('search', '')
+    playlists = Playlist.objects.filter(user=user)
 
+    # Handle search functionality
+    search_query = request.GET.get('search_query', '')
     if search_query:
-        playlists = Playlist.objects.filter(user=user, name__icontains=search_query)
-    else:
-        playlists = Playlist.objects.filter(user=user)
+        playlists = playlists.filter(name__icontains=search_query)
 
+    # Handle creating a new playlist
     if request.method == 'POST':
         form = PlaylistForm(request.POST)
         if form.is_valid():
@@ -36,7 +37,12 @@ def view_playlists(request, username):
     else:
         form = PlaylistForm()
 
-    return render(request, 'music/view_playlists.html', {'playlists': playlists, 'user': user, 'form': form, 'search_query': search_query})
+    return render(request, 'music/view_playlists.html', {
+        'playlists': playlists,
+        'user': user,
+        'form': form,
+        'search_query': search_query
+    })
 
 @login_required
 def create_playlist(request):
