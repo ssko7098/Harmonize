@@ -35,6 +35,15 @@ def admin_dashboard(request):
 def delete_user(request, user_id):
     if request.method == 'POST':
         user = get_object_or_404(User, id=user_id)
+
+        # delete all songs, albums and playlists associated with the user
+        songs_to_delete = Song.objects.filter(user=user)
+        albums_to_delete = Album.objects.filter(user=user)
+        playlists_to_delete = Playlist.objects.filter(user=user)
+
+        songs_to_delete.delete()
+        albums_to_delete.delete()
+        playlists_to_delete.delete()
     
         user.is_active = False
         user.username = f"deactivated_user_{user_id}" # Anonymize the username
