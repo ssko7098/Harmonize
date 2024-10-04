@@ -148,7 +148,7 @@ def view_playlist_songs(request, username, playlist_id):
     # Render the in_playlist.html template with the playlist data
     return render(request, 'music/in_playlist.html', {'playlist': playlist, 'filtered_songs': filtered_songs})
 
-  @login_required
+@login_required
 def report_song(request, song_id):
     song = get_object_or_404(Song, song_id=song_id)
     
