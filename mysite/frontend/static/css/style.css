@@ -156,7 +156,7 @@ h1 {
 }
 
 /* Form group margin */
-.auth-form .form-group {
+.auth-form .auth-form-group {
     margin-bottom: 20px;
 }
 
@@ -191,13 +191,13 @@ p {
 }
 
 /* Styling the checkbox with label */
-.form-group.checkbox-group {
+.auth-form-group.checkbox-group {
     display: inline-flex;
     align-items: center;
     margin-bottom: 20px;
 }
 
-.form-group.checkbox-group input[type="checkbox"] {
+.auth-form-group.checkbox-group input[type="checkbox"] {
     margin-right: 10px;
     transform: translateY(-2px);
 }
@@ -573,5 +573,38 @@ ul.messages li.error {
 ul.messages li.success {
     background-color: #ddffdd;
     color: #5cb85c;
+}
+
+/* Textarea Styling */
+textarea {
+    min-height: 120px;
+    resize: vertical; /* Allow vertical resizing only */
+}
+
+:not(.auth-form) .form-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+:not(.auth-form) .form-group label {
+    width: 30%;
+    font-weight: bold;
+    color: #333;
+    margin-right: 10px;
+    text-align: right;
+}
+
+:not(.auth-form) .form-group input,
+:not(.auth-form) .form-group textarea,
+:not(.auth-form) .form-group select {
+    width: 65%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: #fff;
+    color: #333;
 }
 

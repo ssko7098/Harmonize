@@ -10,7 +10,7 @@
                 {% csrf_token %}
 
                 <!-- Username field with potential error -->
-                <div class="form-group {% if form.username.errors %}error-border{% endif %}">
+                <div class="auth-form-group {% if form.username.errors %}error-border{% endif %}">
                     <label for="username">Username</label>
                     {{ form.username }}
                     {% if form.username.errors %}
@@ -19,7 +19,7 @@
                 </div>
 
                 <!-- Password field with potential error -->
-                <div class="form-group {% if form.password.errors %}error-border{% endif %}">
+                <div class="auth-form-group {% if form.password.errors %}error-border{% endif %}">
                     <label for="password">Password</label>
                     {{ form.password }}  <!-- Render password input from form -->
                     {% if form.password.errors %}
