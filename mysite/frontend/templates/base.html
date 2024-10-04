@@ -16,15 +16,18 @@
                 <span class="hamburger-icon" onclick="toggleSidebar()">&#9776;</span>
                 <img src="{% static 'images/logo.png' %}" alt="Harmonize Logo">
             </div>
+
+            {% if user.is_authenticated %}
+            <form id="search-form" action="{% url 'search' %}" method="GET" class="search-form">
+                <input type="text" name="query" placeholder="Search..." required>
+                <!-- <button type="submit">Search</button> -->
+            </form>
+            {% endif %}
+
             <div class="nav-links">
                 <a href="{% url 'home' %}" class="nav-link">Harmonize</a>
         
                 {% if user.is_authenticated %}
-                    <form id="search-form" action="{% url 'search' %}" method="GET" class="search-form">
-                        <input type="text" name="query" placeholder="Search..." required>
-                        <button type="submit">Search</button>
-                    </form>
-
                     {% if not user.is_admin %}
                         <a href="{% url 'upload_song' %}" class="nav-link">Manage Music</a>
                         <a href="{% url 'profile' user.username %}" class="nav-link">My Profile</a>

@@ -6,15 +6,14 @@
 <div class="container">
     <h1>{{ user.username }}'s Playlists</h1>
 
-<!-- Search bar for filtering playlists -->
-<form method="get" action="{% url 'view_playlists' user.username %}">
-    <input type="text" name="search_query" placeholder="Search Playlists" value="{{ request.GET.search_query|default:'' }}">
-    <button type="submit">Search</button>
-    <a href="{% url 'view_playlists' user.username %}">
-        <button type="button">Clear</button>
-    </a>
-</form>
-
+    <!-- Search bar for filtering playlists -->
+    <form method="get" action="{% url 'view_playlists' user.username %}">
+        <input type="text" name="search_query" placeholder="Search Playlists" value="{{ request.GET.search_query|default:'' }}">
+        <button type="submit">Search</button>
+        <a href="{% url 'view_playlists' user.username %}">
+            <button type="button">Clear</button>
+        </a>
+    </form>
 
 
     <!-- Form for creating a new playlist -->
