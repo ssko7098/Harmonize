@@ -3,6 +3,7 @@ from users.models import User
 from mutagen.mp3 import MP3
 from datetime import timedelta
 from django.core.exceptions import ValidationError 
+import os
 
 # Create your models here.
 class Album(models.Model):
@@ -33,6 +34,15 @@ class Song(models.Model):
             audio = MP3(self.mp3_file)
             self.duration = timedelta(seconds=audio.info.length)  # length in seconds
         super(Song, self).save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        # Delete the mp3 file from storage
+        if self.mp3_file:
+            if os.path.isfile(self.mp3_file.path):
+                os.remove(self.mp3_file.path)
+
+        # Call the parent class's delete method to delete the Song instance
+        super(Song, self).delete(*args, **kwargs)
 
     def __str__(self):
         return self.title
