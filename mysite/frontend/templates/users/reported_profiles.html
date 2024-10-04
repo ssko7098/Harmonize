@@ -17,7 +17,7 @@
         <tbody>
             {% for profile in reported_profiles %}
             <tr>
-                <td>{{ profile.user.username }}</td>
+                <td><a href="{% url 'profile' profile.user.username %}" class="nav-link">{{ profile.user.username }}</a></td>
                 <td>{{ profile.report_count }}</td>
             </tr>
             {% endfor %}

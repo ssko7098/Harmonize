@@ -177,6 +177,8 @@ def profile_view(request, username):
     # Check if the logged-in user is viewing their own profile
     is_own_profile = (user == request.user)
 
+    is_admin = request.user.is_admin
+
     if request.method == 'POST':
         # Handle song deletion
         if 'delete_song' in request.POST:
@@ -192,11 +194,14 @@ def profile_view(request, username):
             profile.save()
             messages.success(request, 'Profile has been reported.')
 
+        # if 'delete_profile' in request.POST and user.is_admin:
+
     return render(request, 'users/profile.html', {
         'user_profile': profile,
         'singles': singles,
         'albums': albums,
-        'is_own_profile': is_own_profile
+        'is_own_profile': is_own_profile,
+        'is_admin': is_admin
     })
 
 
