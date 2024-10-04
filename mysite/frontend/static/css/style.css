@@ -9,7 +9,7 @@
 :root {
     --primary-color: #b19cd9; /* Softer lavender for the main theme */
     --secondary-color: #e6e1f0; /* Very light lavender for backgrounds */
-    --accent-color: #ffffff; /* White for contrast */
+    --accent-color: #2c2c2c; /* Dark gray for contrast */
     --hover-color: #a482c7; /* Slightly darker lavender for hover effects */
 }
 
@@ -77,8 +77,13 @@ body {
 }
 
 .search-form input {
-    padding: 5px;
-    margin-right: 5px; /* Space between input and button */
+    padding: 7px;
+    border: none;
+    border-radius: 4px;
+    margin-right: 5px;
+    height: 40px; /* Match the height of the button */
+    width: 200px; /* Adjust width as needed */
+    font-size: 16px;
 }
 
 .search-form button:hover {
@@ -87,11 +92,13 @@ body {
 
 .search-form button {
     padding: 7px 15px;
-    background-color: var(--secondary-color);
-    border: none;
-    color: var(--accent-color);
+    background-color: var(--primary-color); /* Softer lavender */
+    border: none; /* Remove border */
+    color: var(--accent-color); /* White text */
     border-radius: 4px;
     cursor: pointer;
+    height: 40px; /* Match the height of the input */
+    font-size: 16px;
     transition: background-color 0.3s ease;
 }
 
@@ -438,8 +445,8 @@ p {
     left: 0;
     width: 100%;
     background-color: var(--primary-color);
-    padding: 15px;
-    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
     z-index: 999;
     display: flex;
     justify-content: center;
@@ -448,7 +455,8 @@ p {
 /* Make sure the audio player takes up the full width of its container */
 .audio-player-container audio {
     width: 100%;
-    max-width: 700px;
+    max-width: 600px; /* Keep it sleek */
+    border-radius: 5px;
 }
 
 /* Hamburger icon for small screens */
