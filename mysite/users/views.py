@@ -70,6 +70,12 @@ def manage_reported_songs(request):
             return redirect('reported_songs')
     return render(request, 'users/reported_songs.html', {'reported_songs': reported_songs})
 
+@user_passes_test(is_admin)
+def manage_reported_profiles(request):
+    reported_profiles = Profile.objects.filter(report_count__gt=0).order_by('-report_count')
+    return render(request, 'users/reported_profiles.html', {'reported_profiles': reported_profiles})
+
+
 # Registration
 def register(request):
     form = RegisterForm()
@@ -168,6 +174,11 @@ def profile_view(request, username):
     singles = Song.objects.filter(user=user)
     albums = Album.objects.filter(user=user)
 
+    # Check if the logged-in user is viewing their own profile
+    is_own_profile = (user == request.user)
+
+    is_admin = request.user.is_admin
+
     if request.method == 'POST':
         # Handle song deletion
         if 'delete_song' in request.POST:
@@ -177,10 +188,21 @@ def profile_view(request, username):
             messages.success(request, 'Song deleted successfully.')
             return redirect('profile', username=username)
 
+        # Handle profile report
+        if 'report_profile' in request.POST and not is_own_profile:
+            profile.report_count += 1
+            profile.save()
+            messages.success(request, 'Profile has been reported.')
 
-    return render(request, 'users/profile.html', {'user_profile': profile,
-                                                  'singles': singles,
-                                                  'albums': albums})
+        # if 'delete_profile' in request.POST and user.is_admin:
+
+    return render(request, 'users/profile.html', {
+        'user_profile': profile,
+        'singles': singles,
+        'albums': albums,
+        'is_own_profile': is_own_profile,
+        'is_admin': is_admin
+    })
 
 
 
