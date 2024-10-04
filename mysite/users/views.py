@@ -168,6 +168,9 @@ def profile_view(request, username):
     singles = Song.objects.filter(user=user)
     albums = Album.objects.filter(user=user)
 
+    # Check if the logged-in user is viewing their own profile
+    is_own_profile = (user == request.user)
+
     if request.method == 'POST':
         # Handle song deletion
         if 'delete_song' in request.POST:
@@ -177,10 +180,18 @@ def profile_view(request, username):
             messages.success(request, 'Song deleted successfully.')
             return redirect('profile', username=username)
 
+        # Handle profile report
+        if 'report_profile' in request.POST and not is_own_profile:
+            profile.report_count += 1
+            profile.save()
+            messages.success(request, 'Profile has been reported.')
 
-    return render(request, 'users/profile.html', {'user_profile': profile,
-                                                  'singles': singles,
-                                                  'albums': albums})
+    return render(request, 'users/profile.html', {
+        'user_profile': profile,
+        'singles': singles,
+        'albums': albums,
+        'is_own_profile': is_own_profile
+    })
 
 
 

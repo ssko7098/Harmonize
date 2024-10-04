@@ -6,19 +6,35 @@
 {% block content %}
     <body>
         <div class="container">
-            <h1>{{ user_profile.user.username }}'s Profile</h1>
+            <div>
+                <h1>{{ user_profile.user.username }}'s Profile</h1>
+                {% if not is_own_profile %}
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" name="report_profile" class="btn btn-report">Report Profile</button>
+                    </form>
+
+                    {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                {% endif %}
+            </div>
             <img src="{% static 'images/default_cover.png' %}" alt="Single Cover" id="cover-preview">
             <div class="profile-info">
                 <p><strong>Full Name:</strong> {{ user_profile.user.full_name }}</p>
                 <p><strong>Bio:</strong> {{ user_profile.bio }}</p>
-                
+
                 <h2>Singles</h2>
                     <ul>
                         {% for single in singles %}
                             <li>
                                 <a href="#" onclick="playAudio('{{ single.mp3_file.url }}'); return false;">{{ single.title }}</a>
 
-                                {% if request.user == user_profile.user %}
+                                {% if is_own_profile %}
                                     <form method="post" style="display:inline;">
                                         {% csrf_token %}
                                         <input type="hidden" name="song_id" value="{{ single.song_id }}">
