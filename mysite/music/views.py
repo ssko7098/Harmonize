@@ -12,10 +12,6 @@ def album_list(request):
     albums = Album.objects.all()
     return render(request, 'music/album_list.html', {'albums': albums})
 
-def song_list(request):
-    songs = Song.objects.all()
-    return render(request, 'music/song_list.html', {'songs': songs})
-
 @login_required
 def view_playlists(request, username):
     user = get_object_or_404(User, username=username)
