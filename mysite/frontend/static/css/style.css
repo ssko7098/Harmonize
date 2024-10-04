@@ -104,12 +104,19 @@ body {
 
 /* Container styling */
 .container {
-    max-width: 600px; /* Limit the form width to a more reasonable size */
+    max-width: 600px;
     margin: 50px auto;
-    padding: 20px;
+    padding: 30px;
     background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    font-size: 2em;
+    color: #6a0dad; /* Lavender primary color */
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 /* Auth form styling */
@@ -365,13 +372,13 @@ p {
 }
 
 #upload-page .upload-button.active {
-    background-color: #007BFF;
-    color: #fff;
+    background-color: var(--primary-color);
+    color: var(--accent-color);
 }
 
 #upload-page .upload-button:hover {
-    background-color: #007BFF;
-    color: #fff;
+    background-color: var(--hover-color);
+    color: var(--accent-color);
 }
 
 #upload-page .upload-form {
@@ -423,8 +430,8 @@ p {
 
 #upload-page .submit-button {
     padding: 12px;
-    background-color: #007BFF;
-    color: #fff;
+    background-color: var(--primary-color);
+    color: var(--accent-color);
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -434,7 +441,7 @@ p {
 }
 
 #upload-page .submit-button:hover {
-    background-color: #0056b3;
+    background-color: var(--hover-color);
 }
 
 
@@ -473,23 +480,24 @@ p {
 
 /* Sidebar styles */
 .sidebar {
-    height: 100%;
-    width: 250px;
+    height: 100%; /* Full height */
+    width: 0; /* Initially hidden */
     position: fixed;
-    left: -250px;
-    top: 0;
-    background-color: var(--primary-color);
-    transition: 0.4s;
-    padding-top: 60px;
     z-index: 1000;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: width 0.5s ease;
+    padding-top: 60px; /* Push content down */
 }
 
 .sidebar a {
-    display: block;
-    padding: 15px 25px;
-    color: var(--accent-color);
-    font-size: 18px;
+    padding: 8px 8px 8px 32px;
     text-decoration: none;
+    font-size: 25px;
+    color: white;
+    display: block;
     transition: 0.3s;
 }
 
@@ -538,3 +546,37 @@ p {
     margin-left: auto;
     margin-right: auto;
 }
+
+/* Profile Info Paragraphs */
+.profile-info p {
+    font-size: 1.1em;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* Messages Styling */
+ul.messages {
+    margin-top: 20px;
+    list-style-type: none;
+    padding: 0;
+}
+
+ul.messages li {
+    background-color: #f8f8f8;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    color: #333;
+    font-size: 0.95em;
+}
+
+ul.messages li.error {
+    background-color: #ffdddd;
+    color: #d9534f;
+}
+
+ul.messages li.success {
+    background-color: #ddffdd;
+    color: #5cb85c;
+}
+
