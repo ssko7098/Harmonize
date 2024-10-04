@@ -13,4 +13,5 @@ urlpatterns = [
     path('admin_dashboard/', views.admin_dashboard, name='admin_dashboard'),
     path('delete_user/<int:user_id>/', views.delete_user, name='delete_user'),
     path('admin_dashboard/reported_songs/', views.manage_reported_songs, name='reported_songs'),
+    path('admin_dashboard/reported_profiles/', views.manage_reported_profiles, name='reported_profiles'),
 ]

@@ -1,0 +1,30 @@
+{% extends '../base.html' %}
+
+{% block title %}Reported Profiles{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Reported Profiles</h1>
+    
+    {% if reported_profiles.exists %}
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Report Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for profile in reported_profiles %}
+            <tr>
+                <td>{{ profile.user.username }}</td>
+                <td>{{ profile.report_count }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No reported profiles found.</p>
+    {% endif %}
+</div>
+{% endblock %}
