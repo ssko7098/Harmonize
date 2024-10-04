@@ -79,12 +79,16 @@ def upload_song(request):
             song = form.save(commit=False)
             song.user = request.user
             song.save()
-            return redirect('song_list')  
+            return redirect('song_details', song_id=song.song_id)
     else:
         form = SongForm()
 
     return render(request, 'music/upload_song.html', {'form': form})
 
+@login_required
+def song_details(request, song_id):
+    song = Song.objects.get(song_id=song_id)
+    return render(request, 'music/song_details.html', {'song': song}) 
 
 @login_required
 def view_playlist_songs(request, username, playlist_id):
