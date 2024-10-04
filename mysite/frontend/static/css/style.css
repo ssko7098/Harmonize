@@ -5,23 +5,36 @@
     box-sizing: border-box;
 }
 
+/* Softer Lavender Theme Colors */
+:root {
+    --primary-color: #b19cd9; /* Softer lavender for the main theme */
+    --secondary-color: #e6e1f0; /* Very light lavender for backgrounds */
+    --accent-color: #ffffff; /* White for contrast */
+    --hover-color: #a482c7; /* Slightly darker lavender for hover effects */
+}
+
+
+
 /* Body and global styling */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f3f4f6;
+    color: #333;
     margin: 0;
     padding: 0;
+    line-height: 1.6;
 }
 
 /* Navbar styling */
 .navbar {
     display: flex;
     justify-content: space-between;
-    padding: 10px 20px;
-    background-color: #ffffff;
-    border-bottom: 1px solid #eaeaea;
     align-items: center;
+    padding: 15px 20px;
+    background-color: var(--primary-color);
+    color: var(--accent-color);
 }
+
 
 /* Align logo and hamburger in the same container */
 .navbar .logo {
@@ -32,6 +45,23 @@ body {
 .logo img {
     height: 40px; /* Adjust as needed */
     margin-right: 20px; /* Space between logo and hamburger */
+}
+
+.navbar .nav-links {
+    display: flex;
+    align-items: center;
+}
+
+.navbar .nav-link {
+    margin: 0 15px;
+    text-decoration: none;
+    color: var(--accent-color);
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.navbar .nav-link:hover {
+    color: var(--hover-color);
 }
 
 .navbar .nav-links a {
@@ -49,6 +79,20 @@ body {
 .search-form input {
     padding: 5px;
     margin-right: 5px; /* Space between input and button */
+}
+
+.search-form button:hover {
+    background-color: var(--hover-color);
+}
+
+.search-form button {
+    padding: 7px 15px;
+    background-color: var(--secondary-color);
+    border: none;
+    color: var(--accent-color);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 /* Container styling */
@@ -83,7 +127,7 @@ body {
 .auth-form .btn {
     width: 100%; /* Force full width for the button */
     padding: 12px;
-    background-color: #555;
+    background-color: var(--primary-color);
     color: white;
     border: none;
     border-radius: 4px;
@@ -91,9 +135,8 @@ body {
     margin-top: 10px;
 }
 
-/* Hover effect for button */
 .auth-form .btn:hover {
-    background-color: #000000;
+    background-color: var(--hover-color);;
 }
 
 /* Center the heading */
@@ -210,8 +253,7 @@ p {
     background-color: #fff;
     padding: 30px;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    text-align: left;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* Admin header */
@@ -220,10 +262,9 @@ p {
 }
 
 .page-title {
-    font-size: 2em;
-    margin-bottom: 10px;
-    color: #333;
-    text-align: left;
+    font-size: 2.5em;
+    color: var(--primary-color);
+    margin-bottom: 20px;
 }
 
 /* Table styling for user management */
@@ -254,6 +295,20 @@ p {
 }
 
 /* Full-width buttons */
+.btn {
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+    border: none;
+    color: var(--accent-color);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: var(--hover-color);
+}
+
 .btn-delete {
     background-color: #ff4d4d;
     color: white;
@@ -379,22 +434,21 @@ p {
 /* Ensure the audio player stays fixed at the bottom of the viewport */
 .audio-player-container {
     position: fixed;
-    bottom: 10px; /* Stick to the bottom of the viewport */
+    bottom: 0;
     left: 0;
-    width: 100%; /* Make it span the full width of the page */
-    background-color: #f1f1f1; /* Optional: background color for the player */
-    padding: 10px; /* Optional: padding around the player */
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); /* Optional: shadow for visual effect */
-    z-index: 1000; /* Make sure the player stays on top of other elements */
+    width: 100%;
+    background-color: var(--primary-color);
+    padding: 15px;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 999;
     display: flex;
     justify-content: center;
-    align-items: center;
 }
 
 /* Make sure the audio player takes up the full width of its container */
 .audio-player-container audio {
     width: 100%;
-    max-width: 600px; /* Optional: max width to limit how wide the player can stretch */
+    max-width: 700px;
 }
 
 /* Hamburger icon for small screens */
@@ -411,29 +465,28 @@ p {
 
 /* Sidebar styles */
 .sidebar {
-    height: 100%; /* Full height */
-    width: 0; /* Initially hidden */
+    height: 100%;
+    width: 250px;
     position: fixed;
-    z-index: 1000;
+    left: -250px;
     top: 0;
-    left: 0;
-    background-color: #111;
-    overflow-x: hidden;
-    transition: width 0.5s ease;
-    padding-top: 60px; /* Push content down */
+    background-color: var(--primary-color);
+    transition: 0.4s;
+    padding-top: 60px;
+    z-index: 1000;
 }
 
 .sidebar a {
-    padding: 8px 8px 8px 32px;
-    text-decoration: none;
-    font-size: 25px;
-    color: white;
     display: block;
+    padding: 15px 25px;
+    color: var(--accent-color);
+    font-size: 18px;
+    text-decoration: none;
     transition: 0.3s;
 }
 
 .sidebar a:hover {
-    color: #f1f1f1;
+    background-color: var(--hover-color);
 }
 
 .sidebar .closebtn {
@@ -461,7 +514,14 @@ p {
     }
 
     .hamburger-icon {
-        display: block; /* Show hamburger icon on small screens */
+        font-size: 25px;
+        cursor: pointer;
+        color: var(--accent-color);
+        display: block;
+    }
+
+    .hamburger-icon:hover {
+        color: var(--hover-color);
     }
 }
 
