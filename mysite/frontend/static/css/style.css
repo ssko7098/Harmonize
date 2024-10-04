@@ -30,7 +30,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 20px;
+    padding: 10px 20px;
     background-color: var(--primary-color);
     color: var(--accent-color);
 }
@@ -45,11 +45,6 @@ body {
 .logo img {
     height: 40px; /* Adjust as needed */
     margin-right: 20px; /* Space between logo and hamburger */
-}
-
-.navbar .nav-links {
-    display: flex;
-    align-items: center;
 }
 
 .navbar .nav-link {
