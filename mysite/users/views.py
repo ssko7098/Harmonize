@@ -14,7 +14,17 @@ from music.models import Song, Album, Playlist
 
 # Create your views here.
 def home(request):
-    return render(request, 'base.html')
+    if request.user.is_admin:
+        users = User.objects.filter(is_active=True, is_admin=False)  # Only fetch active users
+        total_users = User.objects.filter(is_active=True, is_admin=False).count()  # Count total users not including admins and inactive
+        total_songs = Song.objects.count()  # Count total songs
+
+        return render(request, 'users/admin_dashboard.html', {
+            'users': users,
+            'total_users': total_users,
+            'total_songs': total_songs
+        })
+    return render('base.html')
 
 def is_admin(user):
     return user.is_superuser
