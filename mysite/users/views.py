@@ -6,10 +6,11 @@ from django.db.models import Q
 from allauth.account.models import EmailAddress
 from allauth.account.utils import send_email_confirmation
 from .models import User, Profile
-
+from comments.models import Comment
+from comments.forms import CommentForm
+from django.db.models import Count
 from .forms import RegisterForm, ProfileForm
 from django.contrib.auth.decorators import user_passes_test, login_required
-
 from music.models import Song, Album, Playlist
 
 # Create your views here.
@@ -195,9 +196,16 @@ def profile_view(request, username):
 
     # Check if the logged-in user is viewing their own profile
     is_own_profile = (user == request.user)
-
     is_admin = request.user.is_admin
 
+    filter_type = request.GET.get('filter', 'timestamp')
+
+    if filter_type == 'likes':
+        comments = Comment.objects.filter(profile=profile, parent_comment__isnull=True).annotate(total_likes=Count('liked_by')).order_by('-likes')
+    else:
+        comments = Comment.objects.filter(profile=profile, parent_comment__isnull=True).order_by('-created_at')  
+    
+    comment_form = CommentForm()
     if request.method == 'POST':
         # Handle song deletion
         if 'delete_song' in request.POST:
@@ -220,7 +228,9 @@ def profile_view(request, username):
         'singles': singles,
         'albums': albums,
         'is_own_profile': is_own_profile,
-        'is_admin': is_admin
+        'is_admin': is_admin,
+        'comments': comments,
+        'comment_form': comment_form
     })
 
 

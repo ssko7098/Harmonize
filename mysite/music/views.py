@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from .models import Album, Song, Playlist, User, PlaylistSong
 from .forms import SongForm, PlaylistForm
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404
 
@@ -60,7 +59,6 @@ def delete_playlist(request, playlist_id):
 
     if request.method == 'POST':
         playlist.delete()
-        messages.success(request, 'Playlist deleted successfully!')
         return redirect('view_playlists', username=request.user.username)
 
     return render(request, 'music/confirm_delete_playlist.html', {'playlist': playlist})
