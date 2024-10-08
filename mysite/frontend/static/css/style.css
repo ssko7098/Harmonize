@@ -440,25 +440,81 @@ p {
 }
 
 
-/* Ensure the audio player stays fixed at the bottom of the viewport */
+/* Modern Audio Player Container */
 .audio-player-container {
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
-    background-color: var(--primary-color);
-    padding: 10px;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+    background-color: var(--primary-color); /* Lavender base color */
+    padding: 15px 20px; /* More padding for a spacious look */
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1); /* Softer shadow */
     z-index: 999;
     display: flex;
     justify-content: center;
+    align-items: center; /* Vertically center the player */
 }
 
-/* Make sure the audio player takes up the full width of its container */
+/* Customize the audio player appearance */
 .audio-player-container audio {
     width: 100%;
-    max-width: 600px; /* Keep it sleek */
+    max-width: 800px; /* A bit wider for larger screens */
+    border-radius: 10px; /* Smooth rounded corners */
+    background-color: #f0f0f0; /* Light background for the player */
+    padding: 5px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.15); /* Softer inset shadow */
+}
+
+/* Customize the player controls */
+.audio-player-container audio::-webkit-media-controls-play-button,
+.audio-player-container audio::-webkit-media-controls-volume-slider,
+.audio-player-container audio::-webkit-media-controls-current-time-display,
+.audio-player-container audio::-webkit-media-controls-time-remaining-display {
+    background-color: #fff;
     border-radius: 5px;
+    padding: 5px;
+    transition: background-color 0.3s ease;
+}
+
+/* Custom hover effect for controls */
+.audio-player-container audio::-webkit-media-controls-play-button:hover,
+.audio-player-container audio::-webkit-media-controls-volume-slider:hover,
+.audio-player-container audio::-webkit-media-controls-current-time-display:hover,
+.audio-player-container audio::-webkit-media-controls-time-remaining-display:hover {
+    background-color: var(--hover-color); /* Darker hover shade */
+}
+
+/* Custom styling for the progress bar */
+.audio-player-container audio::-webkit-media-controls-timeline {
+    height: 8px;
+    border-radius: 4px;
+    background-color: #d1d1d1;
+}
+
+.audio-player-container audio::-webkit-media-controls-timeline::-webkit-media-controls-progress-value {
+    background-color: #fff; /* White progress line */
+}
+
+/* For non-Webkit browsers */
+audio::-moz-progress-bar {
+    background-color: #fff;
+}
+
+/* Adding a little bit of padding and transition for smooth effects */
+.audio-player-container audio {
+    padding: 10px;
+    transition: all 0.3s ease;
+}
+
+.audio-player-container:hover {
+    background-color: var(--hover-color); /* Slight hover effect to the container */
+}
+
+/* Optional: For better control alignment on different browsers */
+.audio-player-container audio {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 /* Hamburger icon for small screens */
@@ -533,6 +589,14 @@ p {
 
     .hamburger-icon:hover {
         color: var(--hover-color);
+    }
+
+    .audio-player-container {
+        padding: 10px 15px;
+    }
+
+    .audio-player-container audio {
+        max-width: 100%; /* Full width on smaller screens */
     }
 }
 
