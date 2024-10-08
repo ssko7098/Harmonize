@@ -88,13 +88,61 @@ def manage_reported_songs(request):
             song.delete()
             messages.success(request, 'Song deleted successfully.')
             return redirect('reported_songs')
+        
+        if 'clear_reports' in request.POST:
+            song_id = request.POST.get('song_id')
+
+            if not song_id:
+                messages.error(request, 'No song selected for clearing.')
+                return redirect('reported_songs')
+            
+            song = get_object_or_404(Song, pk=song_id)
+
+            song.report_count = 0
+            song.save()
+            messages.success(request, f"Song reports have been cleared for {song.title}.")
+
     return render(request, 'users/reported_songs.html', {'reported_songs': reported_songs})
 
 @user_passes_test(is_admin)
 def manage_reported_profiles(request):
     reported_profiles = Profile.objects.filter(report_count__gt=0, user__is_active=True).order_by('-report_count')
+    if request.method == 'POST':
+        if 'clear_reports' in request.POST:
+            profile_id = request.POST.get('profile_id')
+
+            if not profile_id:
+                messages.error(request, 'No Profile selected for clearing.')
+                return redirect('reported_profiles')
+            
+            profile = get_object_or_404(Profile, pk=profile_id)
+
+            profile.report_count = 0
+            profile.save()
+            messages.success(request, f"Profile reports have been cleared for {profile.user.username}.")
+    
     return render(request, 'users/reported_profiles.html', {'reported_profiles': reported_profiles})
 
+@user_passes_test(is_admin)
+def manage_reported_comments(request):
+    # Fetch comments that have been reported
+    reported_comments = Comment.objects.filter(report_count__gt=0).order_by('-report_count')
+
+    if request.method == 'POST':
+        if 'clear_reports' in request.POST:
+            comment_id = request.POST.get('comment_id')
+
+            if not comment_id:
+                messages.error(request, 'No comment selected for clearing.')
+                return redirect('reported_comments')
+            
+            comment = get_object_or_404(Comment, pk=comment_id)
+
+            comment.report_count = 0
+            comment.save()
+            messages.success(request, f"Comment reports have been cleared for {comment.user.username}'s comment.")
+    
+    return render(request, 'users/reported_comments.html', {'reported_comments': reported_comments})
 
 # Registration
 def register(request):

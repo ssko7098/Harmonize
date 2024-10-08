@@ -3,7 +3,8 @@ from .models import Album, Song, Playlist, User, PlaylistSong
 from .forms import SongForm, PlaylistForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import Http404, JsonResponse
+from django.http import Http404
+from django.contrib import messages
 
 
 def album_list(request):
@@ -62,8 +63,7 @@ def delete_playlist(request, playlist_id):
 
     return render(request, 'music/confirm_delete_playlist.html', {'playlist': playlist})
 
-
-
+  
 @login_required
 def upload_song(request):
     if request.method == 'POST':
@@ -156,7 +156,6 @@ def report_song(request, song_id):
     if query:
         return redirect(f'/search/?query={query}')
     return redirect('home')
-
 
 @login_required
 def liked_songs(request, username):

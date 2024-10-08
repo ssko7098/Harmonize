@@ -25,12 +25,15 @@
                         </button>
                     </form>
 
+                    {% if request.user != single.user %}
                     <!-- Report Button -->
                     <form method="post" action="{% url 'report_song' single.pk %}" style="display:inline;">
                         {% csrf_token %}
                         <input type="hidden" name="song_id" value="{{ single.pk }}">
                         <button type="submit" class="btn-report">Report</button>
                     </form>
+                    {% endif %}
+
                 </div>
 
                 <!-- Inline dropdown form to add to playlist -->
