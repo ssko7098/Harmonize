@@ -8,10 +8,9 @@ from allauth.account.utils import send_email_confirmation
 from .models import User, Profile
 from comments.models import Comment
 from comments.forms import CommentForm
-
+from django.db.models import Count
 from .forms import RegisterForm, ProfileForm
 from django.contrib.auth.decorators import user_passes_test, login_required
-
 from music.models import Song, Album, Playlist
 
 # Create your views here.
@@ -199,7 +198,7 @@ def profile_view(request, username):
     is_own_profile = (user == request.user)
     is_admin = request.user.is_admin
 
-    comments = Comment.objects.filter(profile=profile)
+    comments = Comment.objects.annotate(like_count=Count('liked_by')).order_by('-like_count')
     comment_form = CommentForm()
     if request.method == 'POST':
         # Handle song deletion
