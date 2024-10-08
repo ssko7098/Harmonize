@@ -198,7 +198,13 @@ def profile_view(request, username):
     is_own_profile = (user == request.user)
     is_admin = request.user.is_admin
 
-    comments = Comment.objects.annotate(like_count=Count('liked_by')).order_by('-like_count')
+    filter_type = request.GET.get('filter', 'timestamp')
+
+    if filter_type == 'likes':
+        comments = Comment.objects.filter(profile=profile, parent_comment__isnull=True).annotate(total_likes=Count('liked_by')).order_by('-likes')
+    else:
+        comments = Comment.objects.filter(profile=profile, parent_comment__isnull=True).order_by('-created_at')  
+    
     comment_form = CommentForm()
     if request.method == 'POST':
         # Handle song deletion

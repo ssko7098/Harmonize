@@ -60,6 +60,16 @@
 
 <!-- Comment Section -->
 <h2>Comments</h2>
+
+<!-- Filter switch: Sort by Timestamp or Likes -->
+<form method="get" action="{% url 'profile' user_profile.user.username %}">
+    <label for="filter">Sort comments by:</label>
+    <select name="filter" id="filter" onchange="this.form.submit()">
+        <option value="timestamp" {% if request.GET.filter == "timestamp" %}selected{% endif %}>Most Recent</option>
+        <option value="likes" {% if request.GET.filter == "likes" %}selected{% endif %}>Most Liked</option>
+    </select>
+</form>
+
 {% if comments %}
     <ul>
         {% for comment in comments %}
