@@ -42,3 +42,39 @@ def delete_comment(request, comment_id):
         pass
 
     return redirect('profile', username=profile.user.username)
+
+@login_required
+def like_comment(request, comment_id):
+    comment = get_object_or_404(Comment, pk=comment_id)
+    user = request.user
+
+    if user in comment.liked_by.all():
+        comment.liked_by.remove(user)
+        comment.likes -= 1
+    else:
+        if user in comment.disliked_by.all():
+            comment.disliked_by.remove(user)
+            comment.dislikes -= 1
+        comment.liked_by.add(user)
+        comment.likes += 1
+
+    comment.save()
+    return redirect(request.META.get('HTTP_REFERER', 'home'))
+
+@login_required
+def dislike_comment(request, comment_id):
+    comment = get_object_or_404(Comment, pk=comment_id)
+    user = request.user
+
+    if user in comment.disliked_by.all():
+        comment.disliked_by.remove(user)
+        comment.dislikes -= 1
+    else:
+        if user in comment.liked_by.all():
+            comment.liked_by.remove(user)
+            comment.likes -= 1
+        comment.disliked_by.add(user)
+        comment.dislikes += 1
+
+    comment.save()
+    return redirect(request.META.get('HTTP_REFERER', 'home'))
