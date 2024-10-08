@@ -1,10 +1,15 @@
 {% extends '../base.html' %}
 
-{% block title %}Playlists{% endblock %}
+{% block title %}Library{% endblock %}
 
 {% block content %}
 <div class="container">
-    <h1>{{ user.username }}'s Playlists</h1>
+    <h1>{{ user.username }}'s Library</h1>
+
+    <!-- Link to view Liked Songs -->
+    <div style="margin-bottom: 20px;">
+        <a href="{% url 'liked_songs' user.username %}" class="btn-view-liked">View Liked Songs</a>
+    </div>
 
     <!-- Search bar for filtering playlists -->
     <form method="get" action="{% url 'view_playlists' user.username %}">

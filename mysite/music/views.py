@@ -159,3 +159,19 @@ def report_song(request, song_id):
     if query:
         return redirect(f'/search/?query={query}')
     return redirect('home')
+
+
+@login_required
+def liked_songs(request, username):
+    user = get_object_or_404(User, username=username)
+    liked_songs = Song.objects.filter(liked_by=user)
+    search_query = request.GET.get('search', '')
+    if search_query:
+        filtered_liked_songs = liked_songs.filter(title__icontains=search_query)
+    else:
+        filtered_liked_songs = liked_songs
+
+    return render(request, 'music/liked_songs.html', {
+        'user': user,
+        'filtered_liked_songs': filtered_liked_songs,
+    })
