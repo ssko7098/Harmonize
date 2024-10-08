@@ -3,8 +3,7 @@ from .models import Album, Song, Playlist, User, PlaylistSong
 from .forms import SongForm, PlaylistForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import Http404
-
+from django.http import Http404, JsonResponse
 
 
 def album_list(request):
@@ -114,8 +113,6 @@ def add_to_playlist(request):
     return redirect('home')
 
 
-
-
 @login_required
 def delete_song_from_playlist(request, playlist_id, song_id):
     playlist = get_object_or_404(Playlist, pk=playlist_id, user=request.user)
@@ -176,17 +173,22 @@ def liked_songs(request, username):
         'filtered_liked_songs': filtered_liked_songs,
     })
 
-
-from django.shortcuts import get_object_or_404, redirect
-from .models import Song
-
 @login_required
-def toggle_like_song(request, song_id):
+def add_to_liked_songs(request, song_id):
     song = get_object_or_404(Song, pk=song_id)
 
-    if request.user in song.liked_by.all():
-        song.liked_by.remove(request.user)  # Unlike
-    else:
-        song.liked_by.add(request.user)  # Like
+    if request.user not in song.liked_by.all():
+        song.liked_by.add(request.user)
+    query = request.session.get('last_search_query', '')
+    if query:
+        return redirect(f'/search/?query={query}')  # Redirect back to the search page with the same query
+    return redirect('home')
 
-    return redirect(request.META.get('HTTP_REFERER', 'search'))
+@login_required
+def remove_liked_song(request, song_id):
+    song = get_object_or_404(Song, pk=song_id)
+    
+    if request.user in song.liked_by.all():
+        song.liked_by.remove(request.user)
+
+    return redirect('liked_songs', username=request.user.username)

@@ -17,18 +17,14 @@
                         - <a href="{% url 'profile' single.user.username %}" class="nav-link">{{ single.user.username }}</a>
                     </span>
 
-                    <!-- Like/Unlike Heart Icon -->
-                    <form method="post" action="{% url 'toggle_like_song' single.pk %}" style="display:inline;">
+                    <!-- Add to Liked Songs Button -->
+                    <form method="post" action="{% url 'add_to_liked_songs' single.pk %}">
                         {% csrf_token %}
-                        <button type="submit" class="like-button" style="background: none; border: none; cursor: pointer;">
-                            {% if request.user in single.liked_by.all %}
-                                <span style="color: red; font-size: 3rem;">&#9829;</span> <!-- Filled heart -->
-                            {% else %}
-                                <span style="color: grey; font-size: 3rem;">&#9825;</span> <!-- Empty heart -->
-                            {% endif %}
+                        <button type="submit" class="btn-submit" style="margin-top: 10px; padding: 5px 15px; background-color: #28a745; color: white; border: none; border-radius: 5px;">
+                            Add to Liked Songs
                         </button>
                     </form>
-                
+
                     <!-- Report Button -->
                     <form method="post" action="{% url 'report_song' single.pk %}" style="display:inline;">
                         {% csrf_token %}
