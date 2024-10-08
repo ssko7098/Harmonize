@@ -31,3 +31,14 @@ def add_comment(request, username):
 
     return redirect('profile', username=username)
 
+@login_required
+def delete_comment(request, comment_id):
+    comment = get_object_or_404(Comment, pk=comment_id)
+    profile = comment.profile
+
+    if request.user == comment.user or request.user == profile.user:
+        comment.delete()
+    else:
+        pass
+
+    return redirect('profile', username=profile.user.username)
