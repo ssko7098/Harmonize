@@ -78,3 +78,16 @@ def dislike_comment(request, comment_id):
 
     comment.save()
     return redirect(request.META.get('HTTP_REFERER', 'home'))
+
+@login_required
+def report_comment(request, comment_id):
+    comment = get_object_or_404(Comment, pk=comment_id)
+    
+    # Increment the report count
+    comment.report_count += 1
+    comment.save()
+
+    commenter = comment.profile.user.username
+    
+    messages.success(request, f"{commenter}'s comment has been reported.")
+    return redirect('profile', username=commenter)

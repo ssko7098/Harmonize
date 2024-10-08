@@ -63,4 +63,20 @@
         </ul>
     {% endif %}
 </div>
+
+<!-- Save search state in history -->
+<script>
+    function saveSearchState() {
+        const searchResults = document.querySelector('.container').innerHTML;
+        const query = '{{ query }}';
+        history.replaceState({searchResults, query}, '', window.location.href);
+    }
+
+    window.addEventListener('popstate', function(event) {
+        if (event.state && event.state.searchResults) {
+            document.querySelector('.container').innerHTML = event.state.searchResults;
+        }
+    });
+</script>
+
 {% endblock %}
