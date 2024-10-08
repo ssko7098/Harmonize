@@ -58,22 +58,50 @@
                         <li>{{ album.title }} - <a href="#">Listen</a></li>
                     {% endfor %}
 
-                <!-- Comments Section -->
-                <h2>Comments</h2>
-                <ul>
-                    {% for comment in comments %}
-                        <li>{{ comment.user.username }}: {{ comment.message }} - {{ comment.created_at|date:"F j, Y, g:i a" }}</li>
-                    {% endfor %}
-                </ul>
+    <!-- Comment Section -->
+    <h2>Comments</h2>
+    {% if comments %}
+        <ul>
+            {% for comment in comments %}
+                <li>
+                    <strong>{{ comment.user.username }}:</strong> {{ comment.message }}
+                    <br>
+                    <small>{{ comment.created_at }}</small>
 
-                <!-- Add Comment Form -->
-                <h3>Add a Comment</h3>
-                <form method="post" action="{% url 'add_comment' user_profile.user.username %}">
-                    {% csrf_token %}
-                    {{ comment_form.as_p }}
-                    <button type="submit" class="btn-submit">Post Comment</button>
-                </form>
-            </div>
-        </div>
-    </body>
+                    <!-- If comment has replies, show them -->
+                    {% if comment.replies.exists %}
+                        <ul>
+                            {% for reply in comment.replies.all %}
+                                <li>
+                                    <strong>{{ reply.user.username }}:</strong> {{ reply.message }}
+                                    <br>
+                                    <small>{{ reply.created_at }}</small>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+
+                    <!-- Reply Form (All users, including profile owner, can reply) -->
+                    <form method="post" action="{% url 'add_comment' user_profile.user.username %}">
+                        {% csrf_token %}
+                        <textarea name="message" required></textarea>
+                        <input type="hidden" name="parent_comment_id" value="{{ comment.comment_id }}">
+                        <button type="submit">Reply</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No comments yet. Be the first to comment!</p>
+    {% endif %}
+
+    <!-- Add Comment (Only for users other than the profile owner) -->
+    {% if not is_own_profile %}
+        <form method="post" action="{% url 'add_comment' user_profile.user.username %}">
+            {% csrf_token %}
+            <textarea name="message" placeholder="Add a comment" required></textarea>
+            <button type="submit">Comment</button>
+        </form>
+    {% endif %}
+</div>
 {% endblock %}

@@ -1,29 +1,33 @@
-from django.shortcuts import render
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
+from users.models import User, Profile
+from .models import Comment
+from .forms import CommentForm  # Assuming you've created a form for comments
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Comment
-from users.models import Profile, User
-from .forms import CommentForm
 
 @login_required
 def add_comment(request, username):
-    user_profile = get_object_or_404(Profile, user__username=username)
-    
+    profile = get_object_or_404(Profile, user__username=username)
+
+    # Prevent a user from commenting on their own profile but allow replies
+    if request.user == profile.user and 'parent_comment_id' not in request.POST:
+        return redirect('profile', username=username)
+
     if request.method == 'POST':
         form = CommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
+            comment.profile = profile
             comment.user = request.user
-            comment.profile = user_profile
+
+            # Check if it's a reply to another comment
+            parent_comment_id = request.POST.get('parent_comment_id')
+            if parent_comment_id:
+                parent_comment = get_object_or_404(Comment, pk=parent_comment_id)
+                comment.parent_comment = parent_comment
+
             comment.save()
-            messages.success(request, 'Your comment has been posted.')
-        else:
-            messages.error(request, 'There was an error in your comment.')
-    
+            return redirect('profile', username=username)
+
     return redirect('profile', username=username)
 
-# Create your views here.
-def comment_list(request):
-    comments = Comment.objects.all()
-    return render(request, 'comments/comment_list.html', {'comments': comments})

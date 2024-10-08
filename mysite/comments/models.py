@@ -9,6 +9,8 @@ class Comment(models.Model):
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     report_count = models.PositiveIntegerField(default=0)
+    parent_comment = models.ForeignKey('self', null=True, blank=True, related_name='replies', on_delete=models.CASCADE)  # Add this for replies
+
 
     def __str__(self):
         return f'Comment by {self.user.username}'
