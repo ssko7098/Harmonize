@@ -175,3 +175,18 @@ def liked_songs(request, username):
         'user': user,
         'filtered_liked_songs': filtered_liked_songs,
     })
+
+
+from django.shortcuts import get_object_or_404, redirect
+from .models import Song
+
+@login_required
+def toggle_like_song(request, song_id):
+    song = get_object_or_404(Song, pk=song_id)
+
+    if request.user in song.liked_by.all():
+        song.liked_by.remove(request.user)  # Unlike
+    else:
+        song.liked_by.add(request.user)  # Like
+
+    return redirect(request.META.get('HTTP_REFERER', 'search'))

@@ -16,6 +16,20 @@
                         <a href="#" onclick="playAudio('{{ single.mp3_file.url }}'); return false;">{{ single.title }}</a> 
                         - <a href="{% url 'profile' single.user.username %}" class="nav-link">{{ single.user.username }}</a>
                     </span>
+
+                    <!-- Like/Unlike Heart Icon -->
+                    <form method="post" action="{% url 'toggle_like_song' single.pk %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="like-button" style="background: none; border: none;">
+                            {% if request.user in single.liked_by.all %}
+                                <span style="color: red;">&#9829;</span> <!-- Filled heart -->
+                            {% else %}
+                                <span style="color: grey;">&#9825;</span> <!-- Empty heart -->
+                            {% endif %}
+                        </button>
+                    </form>
+                    
+
                     <!-- Report Button -->
                     <form method="post" action="{% url 'report_song' single.pk %}" style="display:inline;">
                         {% csrf_token %}

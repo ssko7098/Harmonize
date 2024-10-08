@@ -29,11 +29,13 @@
                     {% else %}
                         - No audio file available
                     {% endif %}
-                    <!-- Form to Unlike the Song -->
-                    <form method="post" action="{% url 'unlike_song' song.pk %}" class="inline-form">
-                        {% csrf_token %}
-                        <button type="submit" class="btn-delete">Unlike</button>
-                    </form>
+                <!-- Form to Unlike the Song -->
+                <form method="post" action="{% url 'toggle_like_song' song.pk %}" class="inline-form">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-delete">Unlike</button>
+                </form>
+
+
                 </li>
             {% endfor %}
         </ul>
