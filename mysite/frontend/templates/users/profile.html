@@ -53,13 +53,27 @@
                         {% endfor %}
                     </ul>
 
-                <h2>Albums</h2>
+                    <h2>Albums</h2>
                     {% for album in albums %}
                         <li>{{ album.title }} - <a href="#">Listen</a></li>
                     {% endfor %}
+
+                <!-- Comments Section -->
+                <h2>Comments</h2>
+                <ul>
+                    {% for comment in comments %}
+                        <li>{{ comment.user.username }}: {{ comment.message }} - {{ comment.created_at|date:"F j, Y, g:i a" }}</li>
+                    {% endfor %}
+                </ul>
+
+                <!-- Add Comment Form -->
+                <h3>Add a Comment</h3>
+                <form method="post" action="{% url 'add_comment' user_profile.user.username %}">
+                    {% csrf_token %}
+                    {{ comment_form.as_p }}
+                    <button type="submit" class="btn-submit">Post Comment</button>
+                </form>
             </div>
         </div>
-        
     </body>
 {% endblock %}
-

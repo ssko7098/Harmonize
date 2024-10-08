@@ -6,6 +6,8 @@ from django.db.models import Q
 from allauth.account.models import EmailAddress
 from allauth.account.utils import send_email_confirmation
 from .models import User, Profile
+from comments.models import Comment
+from comments.forms import CommentForm
 
 from .forms import RegisterForm, ProfileForm
 from django.contrib.auth.decorators import user_passes_test, login_required
@@ -195,9 +197,10 @@ def profile_view(request, username):
 
     # Check if the logged-in user is viewing their own profile
     is_own_profile = (user == request.user)
-
     is_admin = request.user.is_admin
 
+    comments = Comment.objects.filter(profile=profile)
+    comment_form = CommentForm()
     if request.method == 'POST':
         # Handle song deletion
         if 'delete_song' in request.POST:
@@ -220,7 +223,9 @@ def profile_view(request, username):
         'singles': singles,
         'albums': albums,
         'is_own_profile': is_own_profile,
-        'is_admin': is_admin
+        'is_admin': is_admin,
+        'comments': comments,
+        'comment_form': comment_form
     })
 
 
