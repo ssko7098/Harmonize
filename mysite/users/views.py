@@ -173,12 +173,8 @@ def search_view(request):
                                 & Q(is_active=True)  & Q(is_admin=False))  # Search for active users by username
     
     singles = Song.objects.filter(Q(title__icontains=query))
-    
     albums = Album.objects.filter(Q(title__icontains=query))
-
     user_playlists = Playlist.objects.filter(user=request.user)
-
-
     return render(request, 'users/search_results.html', {'users': users, 
                                                          'query': query,
                                                          'singles': singles,

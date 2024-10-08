@@ -32,7 +32,7 @@
                         <a href="{% url 'upload_song' %}" class="nav-link">Manage Music</a>
                         <a href="{% url 'profile' user.username %}" class="nav-link">My Profile</a>
                         <a href="{% url 'profile_settings' %}" class="nav-link">Profile Settings</a>
-                        <a href="{% url 'view_playlists' user.username %}" class="nav-link">Playlists</a>
+                        <a href="{% url 'view_playlists' user.username %}" class="nav-link">Library</a>
                         {% endif %}
 
                     <a href="{% url 'logout' %}">Logout</a>

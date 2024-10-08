@@ -23,6 +23,8 @@ class Song(models.Model):
     duration = models.DurationField(editable=False, null=True)
     mp3_file = models.FileField(upload_to='songs/', null=True)
     report_count = models.PositiveIntegerField(default=0)
+    liked_by = models.ManyToManyField(User, related_name='liked_songs', blank=True)
+
 
     def clean(self):
         if not self.mp3_file.name.endswith('.mp3'):

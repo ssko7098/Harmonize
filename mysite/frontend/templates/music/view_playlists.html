@@ -1,10 +1,15 @@
 {% extends '../base.html' %}
 
-{% block title %}Playlists{% endblock %}
+{% block title %}Library{% endblock %}
 
 {% block content %}
 <div class="container">
-    <h1>{{ user.username }}'s Playlists</h1>
+    <h1>{{ user.username }}'s Library</h1>
+
+    <!-- Link to view Liked Songs -->
+    <div style="margin-top: 30px; margin-bottom: 30px;">
+        <a href="{% url 'liked_songs' user.username %}" class="btn-view-liked">View Liked Songs</a>
+    </div>
 
     <!-- Search bar for filtering playlists -->
     <form method="get" action="{% url 'view_playlists' user.username %}">
@@ -31,22 +36,11 @@
                 <a href="{% url 'view_playlist_songs' user.username playlist.pk %}">View Songs</a>
 
                 {% if playlist.playlistsong_set.exists %}
-                    <h3>Songs in this playlist:</h3>
-                    <ul>
-                        {% for playlist_song in playlist.playlistsong_set.all %}
-                            <li>
-                                {{ playlist_song.song.title }} by {{ playlist_song.song.user.username }}
-                                {% if playlist_song.song.mp3_file %}
-                                    - <a href="#" onclick="playAudio('{{ playlist_song.song.mp3_file.url }}'); return false;">Listen</a>
-                                {% else %}
-                                    - No audio file available
-                                {% endif %}
-                            </li>
-                        {% endfor %}
-                    </ul>
+                    <h3> Songs: {{ playlist.playlistsong_set.count }} </h3>
                 {% else %}
                     <p>No songs in this playlist yet.</p>
                 {% endif %}
+            
 
                 <!-- Form to Delete Playlist -->
                 <form method="post" action="{% url 'delete_playlist' playlist.pk %}">
@@ -60,4 +54,31 @@
         <p>No current playlists available.</p>
     {% endif %}
 </div>
+<style>
+    .btn-view-liked {
+        padding: 10px 20px;
+        background-color: #007BFF;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        border: none;
+    }
+
+    .btn-view-liked:hover {
+        background-color: #0056b3;
+    }
+
+    .btn-delete {
+        background-color: red;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+    }
+
+    .btn-delete:hover {
+        background-color: darkred;
+    }
+</style>
+
 {% endblock %}
