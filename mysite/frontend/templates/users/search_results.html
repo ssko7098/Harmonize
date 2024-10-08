@@ -20,16 +20,15 @@
                     <!-- Like/Unlike Heart Icon -->
                     <form method="post" action="{% url 'toggle_like_song' single.pk %}" style="display:inline;">
                         {% csrf_token %}
-                        <button type="submit" class="like-button" style="background: none; border: none;">
+                        <button type="submit" class="like-button" style="background: none; border: none; cursor: pointer;">
                             {% if request.user in single.liked_by.all %}
-                                <span style="color: red;">&#9829;</span> <!-- Filled heart -->
+                                <span style="color: red; font-size: 3rem;">&#9829;</span> <!-- Filled heart -->
                             {% else %}
-                                <span style="color: grey;">&#9825;</span> <!-- Empty heart -->
+                                <span style="color: grey; font-size: 3rem;">&#9825;</span> <!-- Empty heart -->
                             {% endif %}
                         </button>
                     </form>
-                    
-
+                
                     <!-- Report Button -->
                     <form method="post" action="{% url 'report_song' single.pk %}" style="display:inline;">
                         {% csrf_token %}
