@@ -36,7 +36,7 @@ def delete_comment(request, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
     profile = comment.profile
 
-    if request.user == comment.user or request.user == profile.user:
+    if request.user == comment.user or request.user == profile.user or request.user.is_admin:
         comment.delete()
     else:
         pass
@@ -65,7 +65,7 @@ def like_comment(request, comment_id):
 def dislike_comment(request, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
     user = request.user
-
+    
     if user in comment.disliked_by.all():
         comment.disliked_by.remove(user)
         comment.dislikes -= 1
@@ -87,7 +87,7 @@ def report_comment(request, comment_id):
     comment.report_count += 1
     comment.save()
 
-    commenter = comment.profile.user.username
-    
+    commenter = comment.user.username
+
     messages.success(request, f"{commenter}'s comment has been reported.")
-    return redirect('profile', username=commenter)
+    return redirect('profile', username=comment.profile.user.username)

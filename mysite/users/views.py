@@ -95,6 +95,12 @@ def manage_reported_profiles(request):
     reported_profiles = Profile.objects.filter(report_count__gt=0, user__is_active=True).order_by('-report_count')
     return render(request, 'users/reported_profiles.html', {'reported_profiles': reported_profiles})
 
+@user_passes_test(is_admin)
+def manage_reported_comments(request):
+    # Fetch comments that have been reported
+    reported_comments = Comment.objects.filter(report_count__gt=0).order_by('-report_count')
+    
+    return render(request, 'users/reported_comments.html', {'reported_comments': reported_comments})
 
 # Registration
 def register(request):
