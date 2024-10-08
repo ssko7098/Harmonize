@@ -88,6 +88,20 @@ def manage_reported_songs(request):
             song.delete()
             messages.success(request, 'Song deleted successfully.')
             return redirect('reported_songs')
+        
+        if 'clear_reports' in request.POST:
+            song_id = request.POST.get('song_id')
+
+            if not song_id:
+                messages.error(request, 'No song selected for deletion.')
+                return redirect('reported_songs')
+            
+            song = get_object_or_404(Song, pk=song_id)
+
+            song.report_count = 0
+            song.save()
+            messages.success(request, f"Song reports have been cleared for {song.title}.")
+
     return render(request, 'users/reported_songs.html', {'reported_songs': reported_songs})
 
 @user_passes_test(is_admin)
