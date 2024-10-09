@@ -18,6 +18,9 @@
   --font-size-medium: 14px;
   --font-size-base: 16px;
   --font-size-large: 20px;
+
+  /* Font weight variables*/
+  --font-weight-navbar: 500;
 }
 
 /* Body and global styling */
@@ -55,7 +58,7 @@ body {
   margin: 0 15px;
   text-decoration: none;
   color: var(--accent-color);
-  font-weight: 500;
+  font-weight: var(--font-weight-navbar);
   transition: color 0.3s ease;
 }
 
@@ -67,7 +70,7 @@ body {
   margin: 0 10px;
   text-decoration: none;
   color: #ebebeb;
-  font-weight: 500;
+  font-weight: var(--font-weight-navbar);
 }
 
 /* Flex container for the icon and input */
@@ -88,7 +91,7 @@ body {
   align-items: center; /* Center the icon vertically */
   justify-content: center; /* Center the icon horizontally */
   margin-right: 8px; /* Space between the icon and the input */
-  color: var(--soft-white); /* Icon color */
+  color: var(--soft-white); /* Icon colour */
   font-size: var(--font-size-medium); /* Adjust icon size as needed */
   transition: all 0.3s ease;
 }
@@ -108,20 +111,19 @@ body {
 
 /* Change the placeholder style */
 .search-form input::placeholder {
-  color: #ffffff; /* Placeholder color with transparency */
+  color: var(--soft-white); /* Placeholder colour with transparency */
   font-family: "Montserrat", sans-serif;
 }
 
 /* Default (inactive) state of the input wrapper */
 .input-wrapper {
-  border: 1px solid rgba(255, 255, 255, 0.5); /* Subtle border when inactive */
-  background: rgba(
-    255,
-    255,
-    255,
-    0.1
-  ); /* Transparent background when inactive */
-  /* box-shadow: 0 0 10px rgba(255, 255, 255, 0.5); "Lit up" effect */
+  border: 1px solid var(--soft-white); /* Subtle border when inactive */
+  background: var(--primary-color); /* Transparent background when inactive */
+}
+
+/* Change background colour on hover */
+.input-wrapper:hover {
+  background-color: var(--soft-white); /* Change to a lighter background on hover */
 }
 
 /* Focused state of the icon */
@@ -130,18 +132,19 @@ body {
   color: var(--primary-color);
 }
 
-/* Focused state of the input */
-.search-form input:focus + .input-wrapper,
-.input-wrapper:hover {
-  background-color: rgba(
-    255,
-    255,
-    255,
-    0.9
-  ); /* Background becomes more solid when focused */
-  border: 1px solid rgba(255, 255, 255, 0.8); /* Change the border color on focus */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Enhance shadow on focus */
-  color: #000;
+/* Focused state of placeholder text */
+.search-form:hover input::placeholder {
+  color: var(--primary-color); 
+}
+
+/* Font colour when the input is focused */
+.search-form input:focus {
+  color: var(--accent-color); /* can use this functionality if we want */
+}
+
+/* Font colour when the input is not focused */
+.search-form input:not(:focus) {
+  color: var(--accent-color); /* can use this functionality if we want */
 }
 
 /* ------------------------------------------------------------ */
@@ -178,6 +181,12 @@ h1 {
   color: #6a0dad; /* Lavender primary color */
   text-align: center;
   margin-bottom: 20px;
+}
+
+.user-data {
+  font-family: "Montserrat", sans-serif; /* Keep the existing font */
+  font-size: var(--font-size-medium); /* Use your defined font size */
+  color: #333; /* Default color */
 }
 
 /* Auth form styling */
