@@ -18,6 +18,15 @@
   --font-size-medium: 14px;
   --font-size-base: 16px;
   --font-size-large: 20px;
+  --font-size-header: 32px;
+
+  /* Font weight variables */
+  --font-weight-navbar: 500;
+  --font-weight-button: 400;
+
+  /* Border radius variables */
+  --border-radius-textbox: 5px;
+  --border-radius-button: 10px;
 }
 
 /* Body and global styling */
@@ -55,7 +64,7 @@ body {
   margin: 0 15px;
   text-decoration: none;
   color: var(--accent-color);
-  font-weight: 500;
+  font-weight: var(--font-weight-navbar);
   transition: color 0.3s ease;
 }
 
@@ -67,7 +76,7 @@ body {
   margin: 0 10px;
   text-decoration: none;
   color: #ebebeb;
-  font-weight: 500;
+  font-weight: var(--font-weight-navbar);
 }
 
 /* Flex container for the icon and input */
@@ -88,7 +97,7 @@ body {
   align-items: center; /* Center the icon vertically */
   justify-content: center; /* Center the icon horizontally */
   margin-right: 8px; /* Space between the icon and the input */
-  color: var(--soft-white); /* Icon color */
+  color: var(--soft-white); /* Icon colour */
   font-size: var(--font-size-medium); /* Adjust icon size as needed */
   transition: all 0.3s ease;
 }
@@ -108,20 +117,19 @@ body {
 
 /* Change the placeholder style */
 .search-form input::placeholder {
-  color: #ffffff; /* Placeholder color with transparency */
+  color: var(--soft-white); /* Placeholder colour with transparency */
   font-family: "Montserrat", sans-serif;
 }
 
 /* Default (inactive) state of the input wrapper */
 .input-wrapper {
-  border: 1px solid rgba(255, 255, 255, 0.5); /* Subtle border when inactive */
-  background: rgba(
-    255,
-    255,
-    255,
-    0.1
-  ); /* Transparent background when inactive */
-  /* box-shadow: 0 0 10px rgba(255, 255, 255, 0.5); "Lit up" effect */
+  border: 1px solid var(--soft-white); /* Subtle border when inactive */
+  background: var(--primary-color); /* Transparent background when inactive */
+}
+
+/* Change background colour on hover */
+.input-wrapper:hover {
+  background-color: var(--soft-white); /* Change to a lighter background on hover */
 }
 
 /* Focused state of the icon */
@@ -130,21 +138,21 @@ body {
   color: var(--primary-color);
 }
 
-/* Focused state of the input */
-.search-form input:focus + .input-wrapper,
-.input-wrapper:hover {
-  background-color: rgba(
-    255,
-    255,
-    255,
-    0.9
-  ); /* Background becomes more solid when focused */
-  border: 1px solid rgba(255, 255, 255, 0.8); /* Change the border color on focus */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Enhance shadow on focus */
-  color: #000;
+/* Focused state of placeholder text */
+.search-form:hover input::placeholder {
+  color: var(--primary-color); 
 }
 
-/* ------------------------------------------------------------ */
+/* Font colour when the input is focused */
+.search-form input:focus {
+  color: var(--accent-color); /* can use this functionality if we want */
+}
+
+/* Font colour when the input is not focused */
+.search-form input:not(:focus) {
+  color: var(--accent-color); /* can use this functionality if we want */
+}
+
 
 /* Styling for the button
 .search-form button {
@@ -166,6 +174,7 @@ body {
 /* Container styling */
 .container {
   max-width: 600px;
+  min-width: 600px;
   margin: 50px auto;
   padding: 30px;
   background-color: #ffffff;
@@ -174,8 +183,9 @@ body {
 }
 
 h1 {
-  font-size: 2em;
-  color: #6a0dad; /* Lavender primary color */
+  font-family: "Montserrat", sans-serif;
+  font-size: var(--font-size-header);
+  color: var(--primary-color); /* Lavender primary color */
   text-align: center;
   margin-bottom: 20px;
 }
@@ -608,11 +618,55 @@ p {
   margin-right: auto;
 }
 
-/* Profile Info Paragraphs */
+/* -----------------    Profile Settings    ------------------- */
+
 .profile-info p {
-  font-size: 1.1em;
-  color: #333;
+  font-size: var(--font-size-base); /* placeholder size and colour until me and ethan decide */
+  color: var(--accent-color);
+  font-family: "Montserrat", sans-serif;
   margin-bottom: 10px;
+}
+
+.profile-row {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.profile-label {
+  min-width: 190px; /* forces profile values to be inline veritcally with text boxes */
+  text-align: right;
+  padding-right: 30px; /* pushes labels back from 190px to the right to be inline with bio and avatar url */
+}
+
+/* ------------------------------------------------------------ */
+
+
+/* Update profile info button */
+#profile-settings-page .submit-button {
+  align-items: center;
+  border-radius: var(--border-radius-button);
+  display: flex;
+  padding: 5px 15px;
+  background: var(--soft-white);
+  font-family: "Montserrat", sans-serif;
+  font-weight: var(--font-weight-button);
+  font-size: var(--font-size-medium);
+  border: var(--accent-color);
+  border-width: 1.5px;
+  border-style: solid;
+}
+
+/* highlights button when cursor is hovering over it */
+#profile-settings-page .submit-button:hover {
+  background-color: var(--hover-color);
+  border-color: var(--hover-color);
+}
+
+/* makes button flash when clicked */
+#profile-settings-page .submit-button:active {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
 }
 
 /* Messages Styling */
@@ -639,6 +693,7 @@ ul.messages li.error {
 ul.messages li.success {
   background-color: #ddffdd;
   color: #5cb85c;
+  border-radius: 10px;
 }
 
 /* Textarea Styling */
@@ -667,9 +722,11 @@ textarea {
 :not(.auth-form) .form-group select {
   width: 65%;
   padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  font-family: "Montserrat", sans-serif;
+  border: 1px solid var(--accent-color);
+  border-radius: var(--border-radius-textbox);
   box-sizing: border-box;
   background-color: #fff;
-  color: #333;
+  color: var(--accent-color);
+  
 }
