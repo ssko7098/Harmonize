@@ -18,9 +18,15 @@
   --font-size-medium: 14px;
   --font-size-base: 16px;
   --font-size-large: 20px;
+  --font-size-header: 32px;
 
-  /* Font weight variables*/
+  /* Font weight variables */
   --font-weight-navbar: 500;
+  --font-weight-button: 400;
+
+  /* Border radius variables */
+  --border-radius-textbox: 5px;
+  --border-radius-button: 10px;
 }
 
 /* Body and global styling */
@@ -147,7 +153,6 @@ body {
   color: var(--accent-color); /* can use this functionality if we want */
 }
 
-/* ------------------------------------------------------------ */
 
 /* Styling for the button
 .search-form button {
@@ -169,6 +174,7 @@ body {
 /* Container styling */
 .container {
   max-width: 600px;
+  min-width: 600px;
   margin: 50px auto;
   padding: 30px;
   background-color: #ffffff;
@@ -177,16 +183,11 @@ body {
 }
 
 h1 {
-  font-size: 2em;
-  color: #6a0dad; /* Lavender primary color */
+  font-family: "Montserrat", sans-serif;
+  font-size: var(--font-size-header);
+  color: var(--primary-color); /* Lavender primary color */
   text-align: center;
   margin-bottom: 20px;
-}
-
-.user-data {
-  font-family: "Montserrat", sans-serif; /* Keep the existing font */
-  font-size: var(--font-size-medium); /* Use your defined font size */
-  color: #333; /* Default color */
 }
 
 /* Auth form styling */
@@ -617,11 +618,55 @@ p {
   margin-right: auto;
 }
 
-/* Profile Info Paragraphs */
+/* -----------------    Profile Settings    ------------------- */
+
 .profile-info p {
-  font-size: 1.1em;
-  color: #333;
+  font-size: var(--font-size-base); /* placeholder size and colour until me and ethan decide */
+  color: var(--accent-color);
+  font-family: "Montserrat", sans-serif;
   margin-bottom: 10px;
+}
+
+.profile-row {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.profile-label {
+  min-width: 190px; /* forces profile values to be inline veritcally with text boxes */
+  text-align: right;
+  padding-right: 30px; /* pushes labels back from 190px to the right to be inline with bio and avatar url */
+}
+
+/* ------------------------------------------------------------ */
+
+
+/* Update profile info button */
+#profile-settings-page .submit-button {
+  align-items: center;
+  border-radius: var(--border-radius-button);
+  display: flex;
+  padding: 5px 15px;
+  background: var(--soft-white);
+  font-family: "Montserrat", sans-serif;
+  font-weight: var(--font-weight-button);
+  font-size: var(--font-size-medium);
+  border: var(--accent-color);
+  border-width: 1.5px;
+  border-style: solid;
+}
+
+/* highlights button when cursor is hovering over it */
+#profile-settings-page .submit-button:hover {
+  background-color: var(--hover-color);
+  border-color: var(--hover-color);
+}
+
+/* makes button flash when clicked */
+#profile-settings-page .submit-button:active {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
 }
 
 /* Messages Styling */
@@ -648,6 +693,7 @@ ul.messages li.error {
 ul.messages li.success {
   background-color: #ddffdd;
   color: #5cb85c;
+  border-radius: 10px;
 }
 
 /* Textarea Styling */
@@ -676,9 +722,11 @@ textarea {
 :not(.auth-form) .form-group select {
   width: 65%;
   padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  font-family: "Montserrat", sans-serif;
+  border: 1px solid var(--accent-color);
+  border-radius: var(--border-radius-textbox);
   box-sizing: border-box;
   background-color: #fff;
-  color: #333;
+  color: var(--accent-color);
+  
 }
