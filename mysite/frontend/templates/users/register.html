@@ -11,7 +11,7 @@
                     {% csrf_token %}
         
                     <!-- Full name field -->
-                    <div class="form-group {% if form.full_name.errors %}error-border{% endif %}">
+                    <div class="auth-form-group {% if form.full_name.errors %}error-border{% endif %}">
                         <label for="full_name">Full Name</label>
                         {{ form.full_name }}
                         {% if form.full_name.errors %}
@@ -20,7 +20,7 @@
                     </div>
         
                     <!-- Username field -->
-                    <div class="form-group {% if form.username.errors %}error-border{% endif %}">
+                    <div class="auth-form-group {% if form.username.errors %}error-border{% endif %}">
                         <label for="username">Username</label>
                         {{ form.username }}
                         {% if form.username.errors %}
@@ -30,7 +30,7 @@
         
         
                     <!-- Email field -->
-                    <div class="form-group {% if form.email.errors %}error-border{% endif %}">
+                    <div class="auth-form-group {% if form.email.errors %}error-border{% endif %}">
                         <label for="email">Email</label>
                         {{ form.email }}
                         {% if form.email.errors %}
@@ -39,7 +39,7 @@
                     </div>
         
                     <!-- Password field with potential error -->
-                    <div class="form-group">
+                    <div class="auth-form-group">
                         <label for="password">Password</label>
                         {{ form.password1 }}  <!-- Render password input from form -->
                         {% if form.password1.errors %}
@@ -48,7 +48,7 @@
                     </div>
         
                     <!-- Password confirmation field with potential error -->
-                    <div class="form-group">
+                    <div class="auth-form-group">
                         <label for="password2">Confirm Password</label>
                         {{ form.password2 }}  <!-- Render password confirmation input from form -->
                         {% if form.password2.errors %}
@@ -57,7 +57,7 @@
                     </div>
         
         
-                    <div class="form-group checkbox-group">
+                    <div class="auth-form-group checkbox-group">
                         <input type="checkbox" name="terms" required>
                         <label for="terms">I agree to Harmonize's <a href="#">terms and conditions</a></label>
                     </div>

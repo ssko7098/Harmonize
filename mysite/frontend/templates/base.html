@@ -1,73 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     {% load static %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}Harmonize{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-</head>
-<body>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <! -- Montserrat Font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+  </head>
+  <body>
     <!-- Static Navigation Bar -->
     <nav>
-        <div class="navbar">
-            <div class="logo">
-                <!-- Hamburger icon -->
-                <span class="hamburger-icon" onclick="toggleSidebar()">&#9776;</span>
-                <img src="{% static 'images/logo.png' %}" alt="Harmonize Logo">
-            </div>
-            <div class="nav-links">
-                <a href="{% url 'home' %}" class="nav-link">Harmonize</a>
-        
-                {% if user.is_authenticated %}
-                    <form id="search-form" action="{% url 'search' %}" method="GET" class="search-form">
-                        <input type="text" name="query" placeholder="Search..." required>
-                        <button type="submit">Search</button>
-                    </form>
-
-                    {% if not user.is_admin %}
-                        <a href="{% url 'upload_song' %}" class="nav-link">Manage Music</a>
-                        <a href="{% url 'profile' user.username %}" class="nav-link">My Profile</a>
-                        <a href="{% url 'profile_settings' %}" class="nav-link">Profile Settings</a>
-                    {% endif %}
-
-                    <a href="{% url 'logout' %}">Logout</a>
-                {% else %}
-                    <a href="{% url 'login' %}">Login</a>
-                    <a href="{% url 'register' %}">Register</a>
-                {% endif %}
-            </div>
-
+      <div class="navbar">
+        <div class="logo">
+          <!-- Hamburger icon -->
+          <span class="hamburger-icon" onclick="toggleSidebar()">&#9776;</span>
+          <img src="{% static 'images/logo.png' %}" alt="Harmonize Logo" />
         </div>
+
+        {% if user.is_authenticated %}
+        <form
+          id="search-form"
+          action="{% url 'search' %}"
+          method="GET"
+          class="search-form"
+        >
+          <div class="input-wrapper">
+            <span class="search-icon">
+              <i class="fas fa-search"></i>
+              <!-- Font Awesome search icon -->
+            </span>
+            <input
+              type="text"
+              name="query"
+              placeholder="What do you want to play?"
+              required
+            />
+          </div>
+        </form>
+        {% endif %}
+
+        <div class="nav-links">
+          <a href="{% url 'home' %}" class="nav-link">Harmonize</a>
+
+          {% if user.is_authenticated %} {% if not user.is_admin %}
+          <a href="{% url 'upload_song' %}" class="nav-link">Manage Music</a>
+          <a href="{% url 'profile' user.username %}" class="nav-link"
+            >My Profile</a
+          >
+          <a href="{% url 'profile_settings' %}" class="nav-link"
+            >Profile Settings</a
+          >
+          <a href="{% url 'view_playlists' user.username %}" class="nav-link"
+            >Library</a
+          >
+          {% endif %}
+
+          <a href="{% url 'logout' %}">Logout</a>
+          {% else %}
+          <a href="{% url 'login' %}">Login</a>
+          <a href="{% url 'register' %}">Register</a>
+          {% endif %}
+        </div>
+      </div>
     </nav>
 
     {% include 'sidebar.html' %}
 
     <!-- Content Section (Only this part will be updated dynamically) -->
     <div id="content-container" class="content">
-        {% block content %}
-        {% endblock %}
+      {% block content %} {% endblock %}
     </div>
 
     <!-- Hidden element to pass the username using a data- attribute -->
-    <div id="user-data" data-username="{% if user.is_authenticated %}{{ user.username }}{% else %}null{% endif %}"></div>
+    <div
+      id="user-data"
+      data-username="{% if user.is_authenticated %}{{ user.username }}{% else %}null{% endif %}"
+    ></div>
 
-    {% if user.is_authenticated and not user.is_admin %}
-        <!-- Persistent Audio Player (only loaded once) -->
-        <div class="audio-player-container">
-            <audio id="audio-player" controls>
-                <source id="audio-source" src="" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
-        </div>
+    {% if user.is_authenticated %}
+    <!-- Persistent Audio Player (only loaded once) -->
+    <div class="audio-player-container">
+      <audio id="audio-player" controls>
+        <source id="audio-source" src="" type="audio/mpeg" />
+        Your browser does not support the audio element.
+      </audio>
+    </div>
     {% endif %}
-
 
     <!-- Link to the external JavaScript file -->
     <script type="module" src="{% static 'js/main.js' %}"></script>
 
     <!-- JavaScript for toggling sidebar -->
     <script src="{% static 'js/sidebar.js' %}"></script>
-
-</body>
+  </body>
 </html>
