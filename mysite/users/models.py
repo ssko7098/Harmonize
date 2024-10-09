@@ -43,6 +43,10 @@ class User(AbstractUser, PermissionsMixin):
                                     help_text=("Designates whether this user should be treated as active. Unselect this instead of deleting accounts.")
                                     )
     
+    is_verified = models.BooleanField(default=False,
+                                    help_text=("Designates whether this user has verified their email address.")
+                                    )
+    
     date_joined = models.DateTimeField(("date joined"), default=timezone.now)
 
     objects = CustomAccountManager()

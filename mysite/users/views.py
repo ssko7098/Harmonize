@@ -182,3 +182,17 @@ def logout_view(request):
     return redirect('home')  # Redirect to the home page after logging out
 
 
+from allauth.account.views import ConfirmEmailView
+class CustomConfirmEmailView(ConfirmEmailView):
+    def post(self, *args, **kwargs):
+        response = super().post(*args, **kwargs)
+        confirmation = self.get_object()
+
+        if confirmation and confirmation.email_address and confirmation.email_address.user:
+            user = confirmation.email_address.user
+            user.is_verified = True
+            user.save()
+            print("TEST")
+            messages.success(self.request, "Your email has been verified successfully!")
+        
+        return response
