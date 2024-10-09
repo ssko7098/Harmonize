@@ -52,16 +52,24 @@
           <a href="{% url 'home' %}" class="nav-link">Harmonize</a>
 
           {% if user.is_authenticated %} {% if not user.is_admin %}
+          {% if user.is_verified %}
           <a href="{% url 'upload_song' %}" class="nav-link">Manage Music</a>
+          {% endif %}
           <a href="{% url 'profile' user.username %}" class="nav-link"
             >My Profile</a
           >
+
+          {% if user.is_verified %}
           <a href="{% url 'profile_settings' %}" class="nav-link"
             >Profile Settings</a
           >
+          {% endif %}
+          
+          {% if user.is_verified %}
           <a href="{% url 'view_playlists' user.username %}" class="nav-link"
             >Library</a
           >
+          {% endif %}
           {% endif %}
 
           <a href="{% url 'logout' %}">Logout</a>
