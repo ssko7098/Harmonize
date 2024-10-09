@@ -51,10 +51,12 @@ def delete_user(request, user_id):
         songs_to_delete = Song.objects.filter(user=user)
         albums_to_delete = Album.objects.filter(user=user)
         playlists_to_delete = Playlist.objects.filter(user=user)
+        comments_to_delete = Comment.objects.filter(user=user)
 
         songs_to_delete.delete()
         albums_to_delete.delete()
         playlists_to_delete.delete()
+        comments_to_delete.delete()
     
         user.is_active = False
         user.username = f"deactivated_user_{user_id}" # Anonymize the username
@@ -128,7 +130,7 @@ def manage_reported_profiles(request):
 @user_passes_test(is_admin)
 def manage_reported_comments(request):
     # Fetch comments that have been reported
-    reported_comments = Comment.objects.filter(report_count__gt=0).order_by('-report_count')
+    reported_comments = Comment.objects.filter(report_count__gt=0, user__is_active=True).order_by('-report_count')
 
     if request.method == 'POST':
         if 'clear_reports' in request.POST:
