@@ -1,0 +1,65 @@
+{% extends '../base.html' %}
+
+{% block title %}Liked Songs{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Back Button to Playlists -->
+    <a href="{% url 'view_playlists' request.user.username %}" class="btn-back">← Back to My Playlists</a>
+
+    <h1>{{ user.username }}'s Liked Songs</h1>
+
+    <!-- Search bar for filtering liked songs -->
+    <form method="get" action="{% url 'liked_songs' user.username %}">
+        <input type="text" name="search" placeholder="Search Liked Songs" value="{{ request.GET.search|default:'' }}">
+        <button type="submit">Search</button>
+        <a href="{% url 'liked_songs' user.username %}">
+            <button type="button">Clear</button>
+        </a>
+    </form>
+
+    {% if filtered_liked_songs.exists %}
+        <h3>Liked Songs:</h3>
+        <ul>
+            {% for song in filtered_liked_songs %}
+                <li>
+                    <!-- Hyperlink to play song -->
+                    <a href="#" onclick="playAudio('{{ song.mp3_file.url }}'); return false;">{{ song.title }}</a>
+                    by 
+                    <!-- Hyperlink to the user's profile -->
+                    <a href="{% url 'profile' song.user.username %}">{{ song.user.username }}</a>
+                    {% if not song.mp3_file %}
+                        - No audio file available
+                    {% endif %}
+                    <!-- Form to Remove (Unlike) the Song -->
+                    <form method="post" action="{% url 'remove_liked_song' song.pk %}" class="inline-form">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-delete">Remove from Liked Songs</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No liked songs yet.</p>
+    {% endif %}
+</div>
+
+<style>
+    .btn-back {
+        display: inline-block;
+        margin-bottom: 20px;
+        padding: 10px 15px;
+        background-color: #f0f0f0;
+        color: #333;
+        text-decoration: none;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+    .btn-back:hover {
+        background-color: #e0e0e0;
+    }
+    .inline-form {
+        display: inline;
+    }
+</style>
+{% endblock %}

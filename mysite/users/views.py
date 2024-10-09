@@ -6,14 +6,25 @@ from django.db.models import Q
 from allauth.account.models import EmailAddress
 from allauth.account.utils import send_email_confirmation
 from .models import User, Profile
-
+from comments.models import Comment
+from comments.forms import CommentForm
+from django.db.models import Count
 from .forms import RegisterForm, ProfileForm
 from django.contrib.auth.decorators import user_passes_test, login_required
-
 from music.models import Song, Album, Playlist
 
 # Create your views here.
 def home(request):
+    if request.user.is_authenticated and request.user.is_admin:
+        users = User.objects.filter(is_active=True, is_admin=False)  # Only fetch active users
+        total_users = User.objects.filter(is_active=True, is_admin=False).count()  # Count total users not including admins and inactive
+        total_songs = Song.objects.count()  # Count total songs
+
+        return render(request, 'users/admin_dashboard.html', {
+            'users': users,
+            'total_users': total_users,
+            'total_songs': total_songs
+        })
     return render(request, 'base.html')
 
 def is_admin(user):
@@ -77,13 +88,61 @@ def manage_reported_songs(request):
             song.delete()
             messages.success(request, 'Song deleted successfully.')
             return redirect('reported_songs')
+        
+        if 'clear_reports' in request.POST:
+            song_id = request.POST.get('song_id')
+
+            if not song_id:
+                messages.error(request, 'No song selected for clearing.')
+                return redirect('reported_songs')
+            
+            song = get_object_or_404(Song, pk=song_id)
+
+            song.report_count = 0
+            song.save()
+            messages.success(request, f"Song reports have been cleared for {song.title}.")
+
     return render(request, 'users/reported_songs.html', {'reported_songs': reported_songs})
 
 @user_passes_test(is_admin)
 def manage_reported_profiles(request):
-    reported_profiles = Profile.objects.filter(report_count__gt=0).order_by('-report_count')
+    reported_profiles = Profile.objects.filter(report_count__gt=0, user__is_active=True).order_by('-report_count')
+    if request.method == 'POST':
+        if 'clear_reports' in request.POST:
+            profile_id = request.POST.get('profile_id')
+
+            if not profile_id:
+                messages.error(request, 'No Profile selected for clearing.')
+                return redirect('reported_profiles')
+            
+            profile = get_object_or_404(Profile, pk=profile_id)
+
+            profile.report_count = 0
+            profile.save()
+            messages.success(request, f"Profile reports have been cleared for {profile.user.username}.")
+    
     return render(request, 'users/reported_profiles.html', {'reported_profiles': reported_profiles})
 
+@user_passes_test(is_admin)
+def manage_reported_comments(request):
+    # Fetch comments that have been reported
+    reported_comments = Comment.objects.filter(report_count__gt=0).order_by('-report_count')
+
+    if request.method == 'POST':
+        if 'clear_reports' in request.POST:
+            comment_id = request.POST.get('comment_id')
+
+            if not comment_id:
+                messages.error(request, 'No comment selected for clearing.')
+                return redirect('reported_comments')
+            
+            comment = get_object_or_404(Comment, pk=comment_id)
+
+            comment.report_count = 0
+            comment.save()
+            messages.success(request, f"Comment reports have been cleared for {comment.user.username}'s comment.")
+    
+    return render(request, 'users/reported_comments.html', {'reported_comments': reported_comments})
 
 # Registration
 def register(request):
@@ -162,12 +221,8 @@ def search_view(request):
                                 & Q(is_active=True)  & Q(is_admin=False))  # Search for active users by username
     
     singles = Song.objects.filter(Q(title__icontains=query))
-    
     albums = Album.objects.filter(Q(title__icontains=query))
-
     user_playlists = Playlist.objects.filter(user=request.user)
-
-
     return render(request, 'users/search_results.html', {'users': users, 
                                                          'query': query,
                                                          'singles': singles,
@@ -185,9 +240,16 @@ def profile_view(request, username):
 
     # Check if the logged-in user is viewing their own profile
     is_own_profile = (user == request.user)
-
     is_admin = request.user.is_admin
 
+    filter_type = request.GET.get('filter', 'timestamp')
+
+    if filter_type == 'likes':
+        comments = Comment.objects.filter(profile=profile, parent_comment__isnull=True).annotate(total_likes=Count('liked_by')).order_by('-likes')
+    else:
+        comments = Comment.objects.filter(profile=profile, parent_comment__isnull=True).order_by('-created_at')  
+    
+    comment_form = CommentForm()
     if request.method == 'POST':
         # Handle song deletion
         if 'delete_song' in request.POST:
@@ -210,7 +272,9 @@ def profile_view(request, username):
         'singles': singles,
         'albums': albums,
         'is_own_profile': is_own_profile,
-        'is_admin': is_admin
+        'is_admin': is_admin,
+        'comments': comments,
+        'comment_form': comment_form
     })
 
 

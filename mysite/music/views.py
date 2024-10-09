@@ -2,10 +2,9 @@ from django.shortcuts import render, redirect
 from .models import Album, Song, Playlist, User, PlaylistSong
 from .forms import SongForm, PlaylistForm
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404
-
+from django.contrib import messages
 
 
 def album_list(request):
@@ -60,13 +59,11 @@ def delete_playlist(request, playlist_id):
 
     if request.method == 'POST':
         playlist.delete()
-        messages.success(request, 'Playlist deleted successfully!')
         return redirect('view_playlists', username=request.user.username)
 
     return render(request, 'music/confirm_delete_playlist.html', {'playlist': playlist})
 
-
-
+  
 @login_required
 def upload_song(request):
     if request.method == 'POST':
@@ -116,8 +113,6 @@ def add_to_playlist(request):
     return redirect('home')
 
 
-
-
 @login_required
 def delete_song_from_playlist(request, playlist_id, song_id):
     playlist = get_object_or_404(Playlist, pk=playlist_id, user=request.user)
@@ -161,3 +156,38 @@ def report_song(request, song_id):
     if query:
         return redirect(f'/search/?query={query}')
     return redirect('home')
+
+@login_required
+def liked_songs(request, username):
+    user = get_object_or_404(User, username=username)
+    liked_songs = Song.objects.filter(liked_by=user)
+    search_query = request.GET.get('search', '')
+    if search_query:
+        filtered_liked_songs = liked_songs.filter(title__icontains=search_query)
+    else:
+        filtered_liked_songs = liked_songs
+
+    return render(request, 'music/liked_songs.html', {
+        'user': user,
+        'filtered_liked_songs': filtered_liked_songs,
+    })
+
+@login_required
+def add_to_liked_songs(request, song_id):
+    song = get_object_or_404(Song, pk=song_id)
+
+    if request.user not in song.liked_by.all():
+        song.liked_by.add(request.user)
+    query = request.session.get('last_search_query', '')
+    if query:
+        return redirect(f'/search/?query={query}')  # Redirect back to the search page with the same query
+    return redirect('home')
+
+@login_required
+def remove_liked_song(request, song_id):
+    song = get_object_or_404(Song, pk=song_id)
+    
+    if request.user in song.liked_by.all():
+        song.liked_by.remove(request.user)
+
+    return redirect('liked_songs', username=request.user.username)

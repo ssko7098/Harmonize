@@ -11,7 +11,8 @@
         <thead>
             <tr>
                 <th>Username</th>
-                <th>Report Count</th>
+                <th>Reports</th>
+                <th>Clear Reports</th>
             </tr>
         </thead>
         <tbody>
@@ -19,6 +20,13 @@
             <tr>
                 <td><a href="{% url 'profile' profile.user.username %}" class="nav-link">{{ profile.user.username }}</a></td>
                 <td>{{ profile.report_count }}</td>
+                <td>
+                    <form method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="profile_id" value="{{ profile.id }}">
+                        <button type="submit" name="clear_reports" onclick="return confirm('Are you sure you want to clear reports for this profile?');">Clear</button>
+                    </form>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
@@ -27,4 +35,13 @@
     <p>No reported profiles found.</p>
     {% endif %}
 </div>
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
 {% endblock %}
