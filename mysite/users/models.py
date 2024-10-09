@@ -73,5 +73,7 @@ class Profile(models.Model):
     avatar_url = models.CharField(max_length=50, null=True, blank=True)
     report_count = models.PositiveIntegerField(default=0)
 
+    reported_by = models.ManyToManyField(User, related_name='reported_profiles', blank=True)
+
     def __str__(self):
         return self.user.username

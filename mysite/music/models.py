@@ -25,6 +25,8 @@ class Song(models.Model):
     report_count = models.PositiveIntegerField(default=0)
     liked_by = models.ManyToManyField(User, related_name='liked_songs', blank=True)
 
+    reported_by = models.ManyToManyField(User, related_name='reported_songs', blank=True)
+
 
     def clean(self):
         if not self.mp3_file.name.endswith('.mp3'):

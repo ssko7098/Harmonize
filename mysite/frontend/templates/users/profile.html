@@ -7,8 +7,7 @@
     <div class="container">
         <div>
             <h1>{{ user_profile.user.username }}'s Profile</h1>
-
-            {% if not is_own_profile and is_verified %}
+            {% if not is_own_profile and not request.user.is_admin and is_verified %}
                 <form method="post">
                     {% csrf_token %}
                     <button type="submit" name="report_profile" class="btn btn-report">Report Profile</button>
@@ -36,21 +35,31 @@
                 <p><strong>Bio:</strong> {{ user_profile.bio }}</p>
 
                 <h2>Singles</h2>
-                <ul>
-                    {% for single in singles %}
-                        <li>
-                            <a href="#" onclick="playAudio('{{ single.mp3_file.url }}'); return false;">{{ single.title }}</a>
+                    <ul>
+                        {% for single in singles %}
+                            <li>
+                                <a href="#" onclick="playAudio('{{ single.mp3_file.url }}'); return false;">{{ single.title }}</a>
 
-                            {% if is_own_profile %}
-                                <form method="post" style="display:inline;">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="song_id" value="{{ single.song_id }}">
-                                    <button type="submit" name="delete_song" onclick="return confirm('Are you sure you want to delete this song?');">Delete</button>
-                                </form>
-                            {% endif %}
-                        </li>
-                    {% endfor %}
-                </ul>
+                                {% if is_own_profile or request.user.is_admin %}
+                                    <!-- Delete Button -->
+                                    <form method="post" style="display:inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="song_id" value="{{ single.song_id }}">
+                                        <button type="submit" name="delete_song" onclick="return confirm('Are you sure you want to delete this song?');">Delete</button>
+                                    </form>
+                                {% else %}
+                                     <!-- Report Button -->
+                                    <form method="post" action="{% url 'report_song' single.pk %}" style="display:inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="song_id" value="{{ single.pk }}">
+                                        <input type="hidden" name="from_profile" value="true">
+                                        <button type="submit" class="btn-report">Report</button>
+                                    </form>
+                                {% endif %}
+                                    
+                            </li>
+                        {% endfor %}
+                    </ul>
 
                 <h2>Albums</h2>
                 <ul>
@@ -62,6 +71,7 @@
                 <!-- Include the comment section here -->
                 {% include "comments/comments.html" %}
             </div>
+
         </div>
     </div>
 {% endblock %}
