@@ -82,12 +82,15 @@ def dislike_comment(request, comment_id):
 @login_required
 def report_comment(request, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
-    
-    # Increment the report count
-    comment.report_count += 1
-    comment.save()
-
     commenter = comment.user.username
+    
+    if request.user in comment.reported_by.all():
+        messages.warning(request, f"You have already reported {commenter}'s comment.")
+    else:
+        comment.report_count += 1
+        comment.reported_by.add(request.user)
+        comment.save()
 
-    messages.success(request, f"{commenter}'s comment has been reported.")
+        messages.success(request, f"{commenter}'s comment has been reported.")
+
     return redirect('profile', username=comment.profile.user.username)

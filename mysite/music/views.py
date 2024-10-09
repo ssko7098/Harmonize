@@ -147,10 +147,18 @@ def view_playlist_songs(request, username, playlist_id):
 def report_song(request, song_id):
     song = get_object_or_404(Song, song_id=song_id)
     
-    # Increment the report count
-    song.report_count += 1
-    song.save()
+    if request.user in song.reported_by.all():
+        messages.warning(request, f"You have already reported the song '{song.title}'.")
+    else:
+        song.report_count += 1
+        song.reported_by.add(request.user)  # Add the user to the list of reporters
+        song.save()
+        messages.success(request, f"The song '{song.title}' has been reported.")
 
+    # If the report came from the profile page, redirect to this page not the search page.
+    if request.POST.get('from_profile'):
+        return redirect('profile', username=song.user.username)
+    
     # Redirect back to search with the original query
     query = request.session.get('last_search_query', '')
     if query:

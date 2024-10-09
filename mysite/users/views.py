@@ -51,10 +51,12 @@ def delete_user(request, user_id):
         songs_to_delete = Song.objects.filter(user=user)
         albums_to_delete = Album.objects.filter(user=user)
         playlists_to_delete = Playlist.objects.filter(user=user)
+        comments_to_delete = Comment.objects.filter(user=user)
 
         songs_to_delete.delete()
         albums_to_delete.delete()
         playlists_to_delete.delete()
+        comments_to_delete.delete()
     
         user.is_active = False
         user.username = f"deactivated_user_{user_id}" # Anonymize the username
@@ -99,6 +101,7 @@ def manage_reported_songs(request):
             song = get_object_or_404(Song, pk=song_id)
 
             song.report_count = 0
+            song.reported_by.clear()
             song.save()
             messages.success(request, f"Song reports have been cleared for {song.title}.")
 
@@ -118,6 +121,7 @@ def manage_reported_profiles(request):
             profile = get_object_or_404(Profile, pk=profile_id)
 
             profile.report_count = 0
+            profile.reported_by.clear()
             profile.save()
             messages.success(request, f"Profile reports have been cleared for {profile.user.username}.")
     
@@ -126,7 +130,7 @@ def manage_reported_profiles(request):
 @user_passes_test(is_admin)
 def manage_reported_comments(request):
     # Fetch comments that have been reported
-    reported_comments = Comment.objects.filter(report_count__gt=0).order_by('-report_count')
+    reported_comments = Comment.objects.filter(report_count__gt=0, user__is_active=True).order_by('-report_count')
 
     if request.method == 'POST':
         if 'clear_reports' in request.POST:
@@ -139,6 +143,7 @@ def manage_reported_comments(request):
             comment = get_object_or_404(Comment, pk=comment_id)
 
             comment.report_count = 0
+            comment.reported_by.clear()
             comment.save()
             messages.success(request, f"Comment reports have been cleared for {comment.user.username}'s comment.")
     
@@ -261,11 +266,13 @@ def profile_view(request, username):
 
         # Handle profile report
         if 'report_profile' in request.POST and not is_own_profile:
-            profile.report_count += 1
-            profile.save()
-            messages.success(request, 'Profile has been reported.')
-
-        # if 'delete_profile' in request.POST and user.is_admin:
+            if request.user in profile.reported_by.all():
+                messages.warning(request, "You have already reported this profile.")
+            else:
+                profile.report_count += 1
+                profile.reported_by.add(request.user)
+                profile.save()
+                messages.success(request, "Profile has been reported.")
 
     return render(request, 'users/profile.html', {
         'user_profile': profile,
