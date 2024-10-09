@@ -155,6 +155,10 @@ def report_song(request, song_id):
         song.save()
         messages.success(request, f"The song '{song.title}' has been reported.")
 
+    # If the report came from the profile page, redirect to this page not the search page.
+    if request.POST.get('from_profile'):
+        return redirect('profile', username=song.user.username)
+    
     # Redirect back to search with the original query
     query = request.session.get('last_search_query', '')
     if query:
