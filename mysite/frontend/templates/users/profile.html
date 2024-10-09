@@ -7,7 +7,7 @@
     <div class="container">
         <div>
             <h1>{{ user_profile.user.username }}'s Profile</h1>
-            {% if not is_own_profile %}
+            {% if not is_own_profile and not request.user.is_admin %}
                 <form method="post">
                     {% csrf_token %}
                     <button type="submit" name="report_profile" class="btn btn-report">Report Profile</button>
@@ -41,7 +41,7 @@
                             <li>
                                 <a href="#" onclick="playAudio('{{ single.mp3_file.url }}'); return false;">{{ single.title }}</a>
 
-                                {% if is_own_profile %}
+                                {% if is_own_profile or request.user.is_admin %}
                                     <!-- Delete Button -->
                                     <form method="post" style="display:inline;">
                                         {% csrf_token %}
