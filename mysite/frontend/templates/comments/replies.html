@@ -1,0 +1,27 @@
+{% if comment.replies.exists %}
+    <ul>
+        {% for reply in comment.replies.all %}
+            <li>
+                <strong>{{ reply.user.username }}:</strong> {{ reply.message }}
+                <br>
+                <small>{{ reply.created_at }}</small>
+
+                <!-- Like, Dislike, Delete, Report, etc. for replies -->
+                {% include "comments/comment_actions.html" with comment=reply %}
+
+                <!-- Recursive inclusion for replies to replies -->
+                {% include "comments/replies.html" with comment=reply %}
+
+                <!-- Reply Form for each reply -->
+                {% if is_verified %}
+                <form method="post" action="{% url 'add_comment' user_profile.user.username %}">
+                    {% csrf_token %}
+                    <textarea name="message" placeholder="Write a reply" required></textarea>
+                    <input type="hidden" name="parent_comment_id" value="{{ reply.comment_id }}">
+                    <button type="submit">Reply</button>
+                </form>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}

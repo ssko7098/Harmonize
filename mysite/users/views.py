@@ -30,6 +30,9 @@ def home(request):
 def is_admin(user):
     return user.is_superuser
 
+def is_verified(user):
+    return user.is_verified
+
 @user_passes_test(is_admin)
 def admin_dashboard(request):
     users = User.objects.filter(is_active=True, is_admin=False)  # Only fetch active users
@@ -193,15 +196,16 @@ def login_view(request):
                 # Check if the email address is verified
                 email_address = EmailAddress.objects.filter(user=user, verified=True).first()
                 
-                if email_address:  # If a verified email address exists
-                    login(request, user)
+                if email_address and not user.is_verified:
+                    user.is_verified = True
+                    user.save()
+                
+                login(request, user)
 
-                    if user.username == 'admin':
-                        return redirect('admin_dashboard')
-                    
-                    return redirect('home')
-                else:
-                    messages.error(request, "Your email address has not been verified. Please verify your email before logging in.")
+                if user.username == 'admin':
+                    return redirect('admin_dashboard')
+                
+                return redirect('home')
             else:
                 messages.error(request, "Invalid username or password.")
         else:
@@ -241,6 +245,7 @@ def profile_view(request, username):
     # Check if the logged-in user is viewing their own profile
     is_own_profile = (user == request.user)
     is_admin = request.user.is_admin
+    is_verified = request.user.is_verified
 
     filter_type = request.GET.get('filter', 'timestamp')
 
@@ -274,7 +279,8 @@ def profile_view(request, username):
         'is_own_profile': is_own_profile,
         'is_admin': is_admin,
         'comments': comments,
-        'comment_form': comment_form
+        'comment_form': comment_form,
+        'is_verified': is_verified
     })
 
 
@@ -306,18 +312,3 @@ def logout_view(request):
     logout(request)
     return redirect('home')  # Redirect to the home page after logging out
 
-
-from allauth.account.views import ConfirmEmailView
-class CustomConfirmEmailView(ConfirmEmailView):
-    def post(self, *args, **kwargs):
-        response = super().post(*args, **kwargs)
-        confirmation = self.get_object()
-
-        if confirmation and confirmation.email_address and confirmation.email_address.user:
-            user = confirmation.email_address.user
-            user.is_verified = True
-            user.save()
-            print("TEST")
-            messages.success(self.request, "Your email has been verified successfully!")
-        
-        return response

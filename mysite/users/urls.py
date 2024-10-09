@@ -15,5 +15,4 @@ urlpatterns = [
     path('admin_dashboard/reported_songs/', views.manage_reported_songs, name='reported_songs'),
     path('admin_dashboard/reported_profiles/', views.manage_reported_profiles, name='reported_profiles'),
     path('admin_dashboard/reported_comments/', views.manage_reported_comments, name='reported_comments'),
-    path('accounts/confirm-email/<str:key>/', views.CustomConfirmEmailView.as_view(), name='account_confirm_email'),
 ]

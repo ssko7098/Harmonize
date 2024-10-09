@@ -1,17 +1,18 @@
 from django.shortcuts import render, redirect
 from .models import Album, Song, Playlist, User, PlaylistSong
 from .forms import SongForm, PlaylistForm
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404
 from django.contrib import messages
-
+from users.views import is_verified
 
 def album_list(request):
     albums = Album.objects.all()
     return render(request, 'music/album_list.html', {'albums': albums})
 
 @login_required
+@user_passes_test(is_verified)
 def view_playlists(request, username):
     user = get_object_or_404(User, username=username)
     playlists = Playlist.objects.filter(user=user)
@@ -40,6 +41,7 @@ def view_playlists(request, username):
     })
 
 @login_required
+@user_passes_test(is_verified)
 def create_playlist(request):
     if request.method == 'POST':
         form = PlaylistForm(request.POST)
@@ -54,6 +56,7 @@ def create_playlist(request):
     return render(request, 'music/create_playlist.html', {'form': form})
 
 @login_required
+@user_passes_test(is_verified)
 def delete_playlist(request, playlist_id):
     playlist = get_object_or_404(Playlist, pk=playlist_id, user=request.user)
 
@@ -65,6 +68,7 @@ def delete_playlist(request, playlist_id):
 
   
 @login_required
+@user_passes_test(is_verified)
 def upload_song(request):
     if request.method == 'POST':
         form = SongForm(request.POST, request.FILES)
@@ -84,6 +88,7 @@ def song_details(request, song_id):
     return render(request, 'music/song_details.html', {'song': song}) 
 
 @login_required
+@user_passes_test(is_verified)
 def view_playlist_songs(request, username, playlist_id):
     user = get_object_or_404(User, username=username)
 
@@ -95,6 +100,7 @@ def view_playlist_songs(request, username, playlist_id):
     return render(request, 'music/in_playlist.html', {'playlist': playlist})
 
 @login_required
+@user_passes_test(is_verified)
 def add_to_playlist(request):
     if request.method == 'POST':
         playlist_id = request.POST.get('playlist')
@@ -114,6 +120,7 @@ def add_to_playlist(request):
 
 
 @login_required
+@user_passes_test(is_verified)
 def delete_song_from_playlist(request, playlist_id, song_id):
     playlist = get_object_or_404(Playlist, pk=playlist_id, user=request.user)
     song = get_object_or_404(Song, pk=song_id)
@@ -125,6 +132,7 @@ def delete_song_from_playlist(request, playlist_id, song_id):
     return redirect('view_playlist_songs', username=request.user.username, playlist_id=playlist.pk)
 
 @login_required
+@user_passes_test(is_verified)
 def view_playlist_songs(request, username, playlist_id):
     user = get_object_or_404(User, username=username)
     playlist = get_object_or_404(Playlist, pk=playlist_id, user=user)
@@ -144,6 +152,7 @@ def view_playlist_songs(request, username, playlist_id):
     return render(request, 'music/in_playlist.html', {'playlist': playlist, 'filtered_songs': filtered_songs})
 
 @login_required
+@user_passes_test(is_verified)
 def report_song(request, song_id):
     song = get_object_or_404(Song, song_id=song_id)
     
@@ -158,6 +167,7 @@ def report_song(request, song_id):
     return redirect('home')
 
 @login_required
+@user_passes_test(is_verified)
 def liked_songs(request, username):
     user = get_object_or_404(User, username=username)
     liked_songs = Song.objects.filter(liked_by=user)
@@ -173,6 +183,7 @@ def liked_songs(request, username):
     })
 
 @login_required
+@user_passes_test(is_verified)
 def add_to_liked_songs(request, song_id):
     song = get_object_or_404(Song, pk=song_id)
 
@@ -184,6 +195,7 @@ def add_to_liked_songs(request, song_id):
     return redirect('home')
 
 @login_required
+@user_passes_test(is_verified)
 def remove_liked_song(request, song_id):
     song = get_object_or_404(Song, pk=song_id)
     
