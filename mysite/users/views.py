@@ -12,6 +12,7 @@ from django.db.models import Count
 from .forms import RegisterForm, ProfileForm
 from django.contrib.auth.decorators import user_passes_test, login_required
 from music.models import Song, Album, Playlist
+from django.core.exceptions import ValidationError
 
 # Create your views here.
 def home(request):
@@ -29,6 +30,9 @@ def home(request):
 
 def is_admin(user):
     return user.is_superuser
+
+def is_verified(user):
+    return user.is_verified
 
 @user_passes_test(is_admin)
 def admin_dashboard(request):
@@ -51,10 +55,12 @@ def delete_user(request, user_id):
         songs_to_delete = Song.objects.filter(user=user)
         albums_to_delete = Album.objects.filter(user=user)
         playlists_to_delete = Playlist.objects.filter(user=user)
+        comments_to_delete = Comment.objects.filter(user=user)
 
         songs_to_delete.delete()
         albums_to_delete.delete()
         playlists_to_delete.delete()
+        comments_to_delete.delete()
     
         user.is_active = False
         user.username = f"deactivated_user_{user_id}" # Anonymize the username
@@ -88,13 +94,64 @@ def manage_reported_songs(request):
             song.delete()
             messages.success(request, 'Song deleted successfully.')
             return redirect('reported_songs')
+        
+        if 'clear_reports' in request.POST:
+            song_id = request.POST.get('song_id')
+
+            if not song_id:
+                messages.error(request, 'No song selected for clearing.')
+                return redirect('reported_songs')
+            
+            song = get_object_or_404(Song, pk=song_id)
+
+            song.report_count = 0
+            song.reported_by.clear()
+            song.save()
+            messages.success(request, f"Song reports have been cleared for {song.title}.")
+
     return render(request, 'users/reported_songs.html', {'reported_songs': reported_songs})
 
 @user_passes_test(is_admin)
 def manage_reported_profiles(request):
     reported_profiles = Profile.objects.filter(report_count__gt=0, user__is_active=True).order_by('-report_count')
+    if request.method == 'POST':
+        if 'clear_reports' in request.POST:
+            profile_id = request.POST.get('profile_id')
+
+            if not profile_id:
+                messages.error(request, 'No Profile selected for clearing.')
+                return redirect('reported_profiles')
+            
+            profile = get_object_or_404(Profile, pk=profile_id)
+
+            profile.report_count = 0
+            profile.reported_by.clear()
+            profile.save()
+            messages.success(request, f"Profile reports have been cleared for {profile.user.username}.")
+    
     return render(request, 'users/reported_profiles.html', {'reported_profiles': reported_profiles})
 
+@user_passes_test(is_admin)
+def manage_reported_comments(request):
+    # Fetch comments that have been reported
+    reported_comments = Comment.objects.filter(report_count__gt=0, user__is_active=True).order_by('-report_count')
+
+    if request.method == 'POST':
+        if 'clear_reports' in request.POST:
+            comment_id = request.POST.get('comment_id')
+
+            if not comment_id:
+                messages.error(request, 'No comment selected for clearing.')
+                return redirect('reported_comments')
+            
+            comment = get_object_or_404(Comment, pk=comment_id)
+
+            comment.report_count = 0
+            comment.reported_by.clear()
+            comment.save()
+            messages.success(request, f"Comment reports have been cleared for {comment.user.username}'s comment.")
+    
+    return render(request, 'users/reported_comments.html', {'reported_comments': reported_comments})
 
 # Registration
 def register(request):
@@ -145,15 +202,16 @@ def login_view(request):
                 # Check if the email address is verified
                 email_address = EmailAddress.objects.filter(user=user, verified=True).first()
                 
-                if email_address:  # If a verified email address exists
-                    login(request, user)
+                if email_address and not user.is_verified:
+                    user.is_verified = True
+                    user.save()
+                
+                login(request, user)
 
-                    if user.username == 'admin':
-                        return redirect('admin_dashboard')
-                    
-                    return redirect('home')
-                else:
-                    messages.error(request, "Your email address has not been verified. Please verify your email before logging in.")
+                if user.username == 'admin':
+                    return redirect('admin_dashboard')
+                
+                return redirect('home')
             else:
                 messages.error(request, "Invalid username or password.")
         else:
@@ -173,12 +231,8 @@ def search_view(request):
                                 & Q(is_active=True)  & Q(is_admin=False))  # Search for active users by username
     
     singles = Song.objects.filter(Q(title__icontains=query))
-    
     albums = Album.objects.filter(Q(title__icontains=query))
-
     user_playlists = Playlist.objects.filter(user=request.user)
-
-
     return render(request, 'users/search_results.html', {'users': users, 
                                                          'query': query,
                                                          'singles': singles,
@@ -197,6 +251,7 @@ def profile_view(request, username):
     # Check if the logged-in user is viewing their own profile
     is_own_profile = (user == request.user)
     is_admin = request.user.is_admin
+    is_verified = request.user.is_verified
 
     filter_type = request.GET.get('filter', 'timestamp')
 
@@ -217,11 +272,13 @@ def profile_view(request, username):
 
         # Handle profile report
         if 'report_profile' in request.POST and not is_own_profile:
-            profile.report_count += 1
-            profile.save()
-            messages.success(request, 'Profile has been reported.')
-
-        # if 'delete_profile' in request.POST and user.is_admin:
+            if request.user in profile.reported_by.all():
+                messages.warning(request, "You have already reported this profile.")
+            else:
+                profile.report_count += 1
+                profile.reported_by.add(request.user)
+                profile.save()
+                messages.success(request, "Profile has been reported.")
 
     return render(request, 'users/profile.html', {
         'user_profile': profile,
@@ -230,7 +287,8 @@ def profile_view(request, username):
         'is_own_profile': is_own_profile,
         'is_admin': is_admin,
         'comments': comments,
-        'comment_form': comment_form
+        'comment_form': comment_form,
+        'is_verified': is_verified
     })
 
 
@@ -242,11 +300,13 @@ def profile_settings_view(request):
 
     # if the user wants to change the profile, check if this is valid and save 
     if request.method == 'POST':
-        form = ProfileForm(request.POST, instance=profile)
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+
         if form.is_valid():
             form.save()
             messages.success(request, 'Your profile has been updated.')
             return redirect('profile_settings')  # Redirect back to the profile page
+
     else:
         form = ProfileForm(instance=profile)
 
@@ -261,5 +321,4 @@ def profile_settings_view(request):
 def logout_view(request):
     logout(request)
     return redirect('home')  # Redirect to the home page after logging out
-
 

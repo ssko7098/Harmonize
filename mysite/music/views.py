@@ -1,17 +1,18 @@
 from django.shortcuts import render, redirect
 from .models import Album, Song, Playlist, User, PlaylistSong
 from .forms import SongForm, PlaylistForm
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404
-
-
+from django.contrib import messages
+from users.views import is_verified
 
 def album_list(request):
     albums = Album.objects.all()
     return render(request, 'music/album_list.html', {'albums': albums})
 
 @login_required
+@user_passes_test(is_verified)
 def view_playlists(request, username):
     user = get_object_or_404(User, username=username)
     playlists = Playlist.objects.filter(user=user)
@@ -40,6 +41,7 @@ def view_playlists(request, username):
     })
 
 @login_required
+@user_passes_test(is_verified)
 def create_playlist(request):
     if request.method == 'POST':
         form = PlaylistForm(request.POST)
@@ -54,6 +56,7 @@ def create_playlist(request):
     return render(request, 'music/create_playlist.html', {'form': form})
 
 @login_required
+@user_passes_test(is_verified)
 def delete_playlist(request, playlist_id):
     playlist = get_object_or_404(Playlist, pk=playlist_id, user=request.user)
 
@@ -63,9 +66,9 @@ def delete_playlist(request, playlist_id):
 
     return render(request, 'music/confirm_delete_playlist.html', {'playlist': playlist})
 
-
-
+  
 @login_required
+@user_passes_test(is_verified)
 def upload_song(request):
     if request.method == 'POST':
         form = SongForm(request.POST, request.FILES)
@@ -85,6 +88,7 @@ def song_details(request, song_id):
     return render(request, 'music/song_details.html', {'song': song}) 
 
 @login_required
+@user_passes_test(is_verified)
 def view_playlist_songs(request, username, playlist_id):
     user = get_object_or_404(User, username=username)
 
@@ -96,6 +100,7 @@ def view_playlist_songs(request, username, playlist_id):
     return render(request, 'music/in_playlist.html', {'playlist': playlist})
 
 @login_required
+@user_passes_test(is_verified)
 def add_to_playlist(request):
     if request.method == 'POST':
         playlist_id = request.POST.get('playlist')
@@ -114,9 +119,8 @@ def add_to_playlist(request):
     return redirect('home')
 
 
-
-
 @login_required
+@user_passes_test(is_verified)
 def delete_song_from_playlist(request, playlist_id, song_id):
     playlist = get_object_or_404(Playlist, pk=playlist_id, user=request.user)
     song = get_object_or_404(Song, pk=song_id)
@@ -128,6 +132,7 @@ def delete_song_from_playlist(request, playlist_id, song_id):
     return redirect('view_playlist_songs', username=request.user.username, playlist_id=playlist.pk)
 
 @login_required
+@user_passes_test(is_verified)
 def view_playlist_songs(request, username, playlist_id):
     user = get_object_or_404(User, username=username)
     playlist = get_object_or_404(Playlist, pk=playlist_id, user=user)
@@ -147,15 +152,62 @@ def view_playlist_songs(request, username, playlist_id):
     return render(request, 'music/in_playlist.html', {'playlist': playlist, 'filtered_songs': filtered_songs})
 
 @login_required
+@user_passes_test(is_verified)
 def report_song(request, song_id):
     song = get_object_or_404(Song, song_id=song_id)
     
-    # Increment the report count
-    song.report_count += 1
-    song.save()
+    if request.user in song.reported_by.all():
+        messages.warning(request, f"You have already reported the song '{song.title}'.")
+    else:
+        song.report_count += 1
+        song.reported_by.add(request.user)  # Add the user to the list of reporters
+        song.save()
+        messages.success(request, f"The song '{song.title}' has been reported.")
 
+    # If the report came from the profile page, redirect to this page not the search page.
+    if request.POST.get('from_profile'):
+        return redirect('profile', username=song.user.username)
+    
     # Redirect back to search with the original query
     query = request.session.get('last_search_query', '')
     if query:
         return redirect(f'/search/?query={query}')
     return redirect('home')
+
+@login_required
+@user_passes_test(is_verified)
+def liked_songs(request, username):
+    user = get_object_or_404(User, username=username)
+    liked_songs = Song.objects.filter(liked_by=user)
+    search_query = request.GET.get('search', '')
+    if search_query:
+        filtered_liked_songs = liked_songs.filter(title__icontains=search_query)
+    else:
+        filtered_liked_songs = liked_songs
+
+    return render(request, 'music/liked_songs.html', {
+        'user': user,
+        'filtered_liked_songs': filtered_liked_songs,
+    })
+
+@login_required
+@user_passes_test(is_verified)
+def add_to_liked_songs(request, song_id):
+    song = get_object_or_404(Song, pk=song_id)
+
+    if request.user not in song.liked_by.all():
+        song.liked_by.add(request.user)
+    query = request.session.get('last_search_query', '')
+    if query:
+        return redirect(f'/search/?query={query}')  # Redirect back to the search page with the same query
+    return redirect('home')
+
+@login_required
+@user_passes_test(is_verified)
+def remove_liked_song(request, song_id):
+    song = get_object_or_404(Song, pk=song_id)
+    
+    if request.user in song.liked_by.all():
+        song.liked_by.remove(request.user)
+
+    return redirect('liked_songs', username=request.user.username)

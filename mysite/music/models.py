@@ -22,11 +22,19 @@ class Song(models.Model):
     title = models.CharField(max_length=30)
     duration = models.DurationField(editable=False, null=True)
     mp3_file = models.FileField(upload_to='songs/', null=True)
+    cover_image_file = models.FileField(upload_to='cover_art/', null=True, blank=True)
     report_count = models.PositiveIntegerField(default=0)
+    liked_by = models.ManyToManyField(User, related_name='liked_songs', blank=True)
+
+    reported_by = models.ManyToManyField(User, related_name='reported_songs', blank=True)
+
 
     def clean(self):
         if not self.mp3_file.name.endswith('.mp3'):
             raise ValidationError('Only .mp3 files are allowed.')
+        
+        if not self.cover_image_file.name.endswith(('.jpg', '.jpeg')):
+            raise ValidationError('Only JPEG files are allowed.')
 
     def save(self, *args, **kwargs):
         # If a new file is uploaded or the song is newly created, calculate duration
@@ -37,9 +45,11 @@ class Song(models.Model):
 
     def delete(self, *args, **kwargs):
         # Delete the mp3 file from storage
-        if self.mp3_file:
-            if os.path.isfile(self.mp3_file.path):
-                os.remove(self.mp3_file.path)
+        if self.mp3_file and os.path.isfile(self.mp3_file.path):
+            os.remove(self.mp3_file.path)
+
+        if self.cover_image_file and os.path.isfile(self.cover_image_file.path):
+            os.remove(self.cover_image_file.path)
 
         # Call the parent class's delete method to delete the Song instance
         super(Song, self).delete(*args, **kwargs)

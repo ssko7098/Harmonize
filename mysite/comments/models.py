@@ -15,6 +15,8 @@ class Comment(models.Model):
     liked_by = models.ManyToManyField(User, related_name='liked_comments', blank=True)
     disliked_by = models.ManyToManyField(User, related_name='disliked_comments', blank=True)
 
+    reported_by = models.ManyToManyField(User, related_name='reported_comments', blank=True)
+
 
     def __str__(self):
         return f'Comment by {self.user.username}'

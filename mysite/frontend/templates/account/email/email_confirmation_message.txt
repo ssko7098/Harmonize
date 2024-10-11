@@ -1,13 +1,13 @@
-Hello from {{ current_site.name }}!
+Hello from Harmonize!
 
-Thank you for signing up at {{ current_site.name }}.
+Thank you for signing up at Harmonize.
 
 Please confirm your email address by clicking the link below:
 {{ activate_url }}
 
 If you did not sign up for an account, please ignore this email.
 
-Thank you for using {{ current_site.name }}!
+Thank you for using Harmonize!
 
 Best regards,
-The {{ current_site.name }} Team
+The Harmonize Team
