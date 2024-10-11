@@ -738,38 +738,31 @@ textarea {
   border-radius: 50%; /* Makes it circular */
 }
 
-/* Style for avatar upload section */
+/* Flexbox for avatar upload section */
 .avatar-upload {
   display: flex;
-  flex-direction: column;
-  margin-bottom: 1rem;
+  align-items: center;  /* Vertically center the items */
+  gap: 20px;  /* Space between the label and avatar preview */
 }
 
-.avatar-container {
+/* Right-side container for avatar image and upload button */
+.avatar-upload-right {
   display: flex;
-  align-items: left;
-  gap: 20px; /* Spacing between avatar and input field */
+  align-items: center;  /* Vertically align the avatar and upload input */
+  gap: 15px;  /* Space between the avatar and file input */
 }
 
+/* Avatar image styling */
 .avatar-preview {
   width: 100px;
   height: 100px;
   object-fit: cover;
-  border-radius: 50%; /* Make avatar round */
+  border-radius: 50%;  /* Make the image round */
   border: 2px solid #ddd;
 }
 
+/* File input container styling */
 .file-input-container {
   display: flex;
   flex-direction: column;
-  gap: 5px;
-}
-
-input[type="file"] {
-  display: inline-block;
-  cursor: pointer;
-}
-
-label {
-  font-weight: bold;
 }
