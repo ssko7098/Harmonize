@@ -154,6 +154,7 @@ def manage_reported_comments(request):
     
     return render(request, 'users/reported_comments.html', {'reported_comments': reported_comments})
 
+
 # Registration
 def register(request):
     form = RegisterForm()
@@ -175,7 +176,20 @@ def register(request):
 
                 send_email_confirmation(request, user, signup=True)
 
-                messages.success(request, 'We have sent a verification email to your email address. Please check your inbox and click the confirmation link.')
+                # For AJAX requests, return a JSON response
+                if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                    return JsonResponse({
+                        'status': 'success',
+                        'message': 'Registration successful. A verification email has been sent to your email address. '
+                    }, status=200)
+
+        else:
+            # Return validation errors for AJAX requests
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({
+                    'status': 'error',
+                    'errors': form.errors
+                }, status=400)
 
     return render(request, 'users/register.html', {'form': form})
 

@@ -13,6 +13,13 @@ export function attachEventListeners() {
         searchForm.addEventListener('submit', handleSearchSubmit);
     }
 
+    // For the registration form
+    const registerForm = document.getElementById('register-form');
+    if (registerForm) {
+        registerForm.removeEventListener('submit', handleRegisterSubmit);
+        registerForm.addEventListener('submit', handleRegisterSubmit);
+    }
+
     const uploadForm = document.getElementById('profile-settings-form');
     if (uploadForm) {
         uploadForm.removeEventListener('submit', handleProfileSubmit);
@@ -136,4 +143,55 @@ function previewAvatar() {
         };
         reader.readAsDataURL(fileInput.files[0]);
     }
+}
+
+function handleRegisterSubmit(e) {
+    e.preventDefault();
+
+    const form = this;
+    const formData = new FormData(form);
+    const url = form.action;
+    const messageContainer = document.getElementById('message-container');
+
+    // Clear previous messages
+    messageContainer.innerHTML = '';
+
+    // Disable the submit button to prevent multiple submissions
+    const submitButton = form.querySelector('button[type="submit"]');
+    if (submitButton) {
+        submitButton.disabled = true;
+    }
+
+    // Submit the form via AJAX
+    fetch(url, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',  // Indicate this is an AJAX request
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            // Display success message
+            messageContainer.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
+        } else if (data.status === 'error') {
+            // Display error message and handle form validation errors
+            let errorMessages = '';
+            for (const [field, errors] of Object.entries(data.errors)) {
+                errorMessages += `<p class="alert alert-danger">${errors.join(', ')}</p>`;
+            }
+            messageContainer.innerHTML = errorMessages;
+        }
+    })
+    .catch(error => {
+        console.error('Error during registration:', error);
+        messageContainer.innerHTML = `<p class="alert alert-danger">An error occurred. Please try again later.</p>`;
+    })
+    .finally(() => {
+        // Re-enable the submit button
+        if (submitButton) {
+            submitButton.disabled = false;
+        }
+    });
 }
