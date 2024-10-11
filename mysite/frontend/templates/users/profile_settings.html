@@ -23,7 +23,7 @@
                         <p class="profile-value">{{ user.email }}</p>
                     </div>
 
-                    <form method="POST" enctype="multipart/form-data">
+                    <form method="POST" enctype="multipart/form-data" id="profile-settings-form">
                         {% csrf_token %}
                         
                         <div class="form-group">
@@ -37,7 +37,7 @@
                             <div class="avatar-container">
                                 {% if user.profile.avatar_file %}
                                     <!-- Show the current avatar if available -->
-                                    <img src="{{ user.profile.avatar_file.url }}" alt="Profile Picture" class="avatar-preview">
+                                    <img src="{{ user.profile.avatar_file.url }}" alt="Profile Picture" class="avatar-preview" id="avatar-preview">
                                 {% else %}
                                     <p>No avatar uploaded</p>
                                 {% endif %}
@@ -45,7 +45,7 @@
 
                                 <!-- File input for changing the avatar -->
                                 <div class="file-input-container">
-                                    <input type="file" name="avatar_file" id="id_avatar_file">
+                                    <input type="file" name="avatar_file" id="avatar_file" onchange="previewCover()">
                                 </div>
                             </div>
                         </div>
@@ -59,17 +59,39 @@
                         {% endif %}
                     </form>
 
-                    <ul class="messages">
-                        {% for message in messages %}
-                            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
-                                {{ message }}
-                            </li>
-                        {% endfor %}
-                    </ul>
+                    <div id="message-container">
+                        <ul class="messages">
+                            {% for message in messages %}
+                                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                                    {{ message }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
                     
                 </div>
             </div>
         </body>
     </div>
+
+    <script>
+        function previewCover() {
+            var fileInput = document.getElementById('avatar_file');
+            var preview = document.getElementById('avatar-preview');
+            
+            // Check if a file has been selected
+            if (fileInput.files && fileInput.files[0]) {
+                var reader = new FileReader();
+                
+                // When the image is fully loaded, set it as the source of the preview
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                }
+                
+                // Read the image file as a data URL
+                reader.readAsDataURL(fileInput.files[0]);
+            }
+        }
+    </script>
 {% endblock %}
 

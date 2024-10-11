@@ -765,4 +765,41 @@ textarea {
 .file-input-container {
   display: flex;
   flex-direction: column;
+<<<<<<< Updated upstream
+=======
+}
+
+.cover-art-input-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.cover-preview {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+/* Success message */
+.alert-success {
+  color: #155724;
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 5px;
+}
+
+/* Error message */
+.alert-danger {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 5px;
+>>>>>>> Stashed changes
 }
