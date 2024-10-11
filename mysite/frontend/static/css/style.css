@@ -759,3 +759,17 @@ textarea {
   display: flex;
   flex-direction: column;
 }
+
+.cover-art-input-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.cover-preview {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}

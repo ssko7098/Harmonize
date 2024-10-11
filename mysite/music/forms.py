@@ -5,11 +5,12 @@ from .models import Song, Playlist
 class SongForm(forms.ModelForm):
     class Meta:
         model = Song
-        fields = ['title', 'mp3_file']
+        fields = ['title', 'mp3_file', 'cover_image_file']
 
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'mp3_file': forms.FileInput(attrs={'class': 'form-control-file'}),
+            'cover_image_file': forms.ClearableFileInput(attrs={'required': False}),
         }
 
         # Custom validation method for the file field
