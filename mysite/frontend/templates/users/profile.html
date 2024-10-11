@@ -29,7 +29,10 @@
                 </form>
             {% endif %}
 
-            <img src="{% static 'images/default_cover.png' %}" alt="Single Cover" id="cover-preview">
+            <img src="{% if user_profile.avatar_file %}{{ user_profile.avatar_file.url }}{% else %}{% static 'images/default_cover.png' %}{% endif %}" 
+            alt="Profile Picture" 
+            id="cover-preview"
+            class="profile-picture">
             <div class="profile-info">
                 <p><strong>Full Name:</strong> {{ user_profile.user.full_name }}</p>
                 <p><strong>Bio:</strong> {{ user_profile.bio }}</p>
