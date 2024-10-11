@@ -79,6 +79,15 @@ body {
   font-weight: var(--font-weight-navbar);
 }
 
+/* Flex container for the search form */
+.search-form {
+  flex-grow: 1; /* Allow the form to grow */
+  display: flex;
+  justify-content: center;
+  max-width: 600px;
+  min-width: 400px;
+}
+
 /* Flex container for the icon and input */
 .input-wrapper {
   display: flex;
@@ -86,8 +95,9 @@ body {
   border-radius: 15px; /* Rounded corners */
   padding: 5px 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  max-width: 400px; /* Set a max-width for the input container */
   width: 100%; /* Ensure the wrapper takes full width */
+  max-width: none; /* Set a max-width for the input container */
+  flex-grow: 1;
   transition: all 0.3s ease;
 }
 
@@ -110,15 +120,23 @@ body {
   width: 100%; /* Make the input take up remaining space */
   font-size: var(--font-size-medium);
   font-family: "Montserrat", sans-serif;
-  color: #333;
+  color: var(--soft-white); /* Default text color is white */
   height: 30px;
+  flex-grow: 1;
   transition: all 0.3s ease;
+}
+
+/* Change input text color when the input-wrapper is hovered or focused */
+.input-wrapper:hover input,
+.input-wrapper:focus-within input {
+  color: var(--accent-color); /* Change text color when hovered or focused */
 }
 
 /* Change the placeholder style */
 .search-form input::placeholder {
   color: var(--soft-white); /* Placeholder colour with transparency */
   font-family: "Montserrat", sans-serif;
+  transition: color 0.3s ease;
 }
 
 /* Default (inactive) state of the input wrapper */
@@ -128,48 +146,23 @@ body {
 }
 
 /* Change background colour on hover */
-.input-wrapper:hover {
+.input-wrapper:hover,
+.input-wrapper:focus-within {
   background-color: var(--soft-white); /* Change to a lighter background on hover */
 }
 
-/* Focused state of the icon */
-.search-form input:focus + .search-icon i,
+/* Change placeholder text color when input-wrapper is hovered or focused */
+.input-wrapper:hover input::placeholder,
+.input-wrapper:focus-within input::placeholder {
+  color: var(--primary-color); /* Change placeholder color */
+}
+
+/* Icon color change when the input-wrapper is hovered or focused */
+.input-wrapper:focus-within .search-icon i,
 .input-wrapper:hover .search-icon i {
-  color: var(--primary-color);
+  color: var(--primary-color); /* Change icon color when hovered or focused */
 }
 
-/* Focused state of placeholder text */
-.search-form:hover input::placeholder {
-  color: var(--primary-color); 
-}
-
-/* Font colour when the input is focused */
-.search-form input:focus {
-  color: var(--accent-color); /* can use this functionality if we want */
-}
-
-/* Font colour when the input is not focused */
-.search-form input:not(:focus) {
-  color: var(--accent-color); /* can use this functionality if we want */
-}
-
-
-/* Styling for the button
-.search-form button {
-    padding: 7px 15px;
-    background-color: var(--primary-color);
-    border: none;
-    color: var(--accent-color);
-    border-radius: 4px;
-    cursor: pointer;
-    height: 40px;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
-}
-
-.search-form button:hover {
-    background-color: var(--hover-color);
-} */
 
 /* Container styling */
 .container {
@@ -765,8 +758,6 @@ textarea {
 .file-input-container {
   display: flex;
   flex-direction: column;
-<<<<<<< Updated upstream
-=======
 }
 
 .cover-art-input-container {
@@ -801,5 +792,32 @@ textarea {
   padding: 10px;
   margin-top: 10px;
   border-radius: 5px;
->>>>>>> Stashed changes
+}
+
+.cover-art-input-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.cover-preview {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+.cover-art-input-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.cover-preview {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid #ddd;
 }
