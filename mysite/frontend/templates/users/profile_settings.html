@@ -23,7 +23,7 @@
                         <p class="profile-value">{{ user.email }}</p>
                     </div>
 
-                    <form method="POST">
+                    <form method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         
                         <div class="form-group">
@@ -31,12 +31,32 @@
                             {{ form.bio }}
                         </div>
         
-                        <div class="form-group">
-                            <label for="avatar_url">Avatar URL:</label>
-                            {{ form.avatar_url }}
+                        <div class="form-group avatar-upload">
+                            <label for="avatar_file">Avatar Upload:</label>
+
+                            <div class="avatar-container">
+                                {% if user.profile.avatar_file %}
+                                    <!-- Show the current avatar if available -->
+                                    <img src="{{ user.profile.avatar_file.url }}" alt="Profile Picture" class="avatar-preview">
+                                {% else %}
+                                    <p>No avatar uploaded</p>
+                                {% endif %}
+
+
+                                <!-- File input for changing the avatar -->
+                                <div class="file-input-container">
+                                    <input type="file" name="avatar_file" id="id_avatar_file">
+                                </div>
+                            </div>
                         </div>
         
                         <button type="submit" class="submit-button">Update Profile</button>
+
+                        {% if form.errors %}
+                            {% for field, errors in form.errors.items %}
+                                <p class="error">{{ errors|striptags }}</p>
+                            {% endfor %}
+                        {% endif %}
                     </form>
 
                     <ul class="messages">

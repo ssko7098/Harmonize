@@ -36,3 +36,9 @@ Run the following commands to fix the issue:
 ### 2.4 Dumping new data
 If you have added new data into the database and you want the rest of us to be able to see it, make sure you dump the new data in the `db_dump.json` file. You can do this with the following command:
 * `python3 manage.py dumpdata > db_dump.json`
+
+## 3. Instructions for Accessing sqlite CLI
+__NOTE:__ Before running the below code in the terminal, make sure to `cd` into the `mysite` directory.
+
+Run the following code to access the CLI for sqlite:
+* `sqlite3 -init config.sql db.sqlite3`

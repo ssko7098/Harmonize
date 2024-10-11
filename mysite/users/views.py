@@ -12,6 +12,7 @@ from django.db.models import Count
 from .forms import RegisterForm, ProfileForm
 from django.contrib.auth.decorators import user_passes_test, login_required
 from music.models import Song, Album, Playlist
+from django.core.exceptions import ValidationError
 
 # Create your views here.
 def home(request):
@@ -299,11 +300,13 @@ def profile_settings_view(request):
 
     # if the user wants to change the profile, check if this is valid and save 
     if request.method == 'POST':
-        form = ProfileForm(request.POST, instance=profile)
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+
         if form.is_valid():
             form.save()
             messages.success(request, 'Your profile has been updated.')
             return redirect('profile_settings')  # Redirect back to the profile page
+
     else:
         form = ProfileForm(instance=profile)
 

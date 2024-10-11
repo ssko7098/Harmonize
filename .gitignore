@@ -1,6 +1,8 @@
 *.pyc
 __pycache__/
 *.sqlite3
+*.sql
+*.csv
 .env
 .DS_Store
 
@@ -13,4 +15,4 @@ mysite/*/migrations
 
 test_script.py
 
-*.mp3
+*/media/*

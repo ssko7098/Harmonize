@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, PermissionsMixin, BaseUserManager
 from django.utils import timezone
+from django.core.exceptions import ValidationError
+import os 
 
 # Create your models here.
 class CustomAccountManager(BaseUserManager):
@@ -70,10 +72,22 @@ class Profile(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(null=True, blank=True)
-    avatar_url = models.CharField(max_length=50, null=True, blank=True)
+    avatar_file = models.FileField(upload_to='avatars/', null=True, blank=True)
     report_count = models.PositiveIntegerField(default=0)
 
     reported_by = models.ManyToManyField(User, related_name='reported_profiles', blank=True)
 
     def __str__(self):
         return self.user.username
+    
+    def clean(self):
+        if self.avatar_file and not self.avatar_file.name.endswith(('.jpg', '.jpeg')):
+            raise ValidationError('Only JPEG files are allowed.')
+        
+    def delete(self, *args, **kwargs):
+        # Delete the jpg file from storage
+        if self.avatar_file and os.path.isfile(self.avatar_file.path):
+            os.remove(self.avatar_file.path)
+
+        # Call the parent class's delete method to delete the Profile instance
+        super(Profile, self).delete(*args, **kwargs)

@@ -723,3 +723,39 @@ textarea {
   color: var(--accent-color);
   
 }
+
+.profile-picture {
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 50%; /* Makes it circular */
+}
+
+/* Flexbox for avatar upload section */
+.avatar-upload {
+  display: flex;
+  align-items: center;  /* Vertically center the items */
+  gap: 20px;  /* Space between the label and avatar preview */
+}
+
+/* Right-side container for avatar image and upload button */
+.avatar-upload-right {
+  display: flex;
+  align-items: center;  /* Vertically align the avatar and upload input */
+  gap: 15px;  /* Space between the avatar and file input */
+}
+
+/* Avatar image styling */
+.avatar-preview {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;  /* Make the image round */
+  border: 2px solid #ddd;
+}
+
+/* File input container styling */
+.file-input-container {
+  display: flex;
+  flex-direction: column;
+}
