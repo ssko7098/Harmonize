@@ -1,97 +1,76 @@
 {% extends '../base.html' %}
 
 {% block title %}Profile{% endblock %}
+{% load static %}
 
 {% block content %}
     <div id="profile-settings-page">
-        <body>
-            <div class="container">
-                <h1>My Profile Information</h1>
-                <div class="profile-info">
-                    <div class="profile-row">
-                        <p class="profile-label"><strong>Username:</strong></p>
-                        <p class="profile-value">{{ user.username }}</p>
+        <div class="container">
+            <h1>My Profile Information</h1>
+            <div class="profile-info">
+                <div class="profile-row">
+                    <p class="profile-label"><strong>Username:</strong></p>
+                    <p class="profile-value">{{ user.username }}</p>
+                </div>
+
+                <div class="profile-row">
+                    <p class="profile-label"><strong>Full Name:</strong></p>
+                    <p class="profile-value">{{ user.full_name }}</p>
+                </div>
+
+                <div class="profile-row">
+                    <p class="profile-label"><strong>Email:</strong></p>
+                    <p class="profile-value">{{ user.email }}</p>
+                </div>
+
+                <form method="POST" enctype="multipart/form-data" id="profile-settings-form">
+                    {% csrf_token %}
+                    
+                    <div class="form-group">
+                        <label for="bio">Bio:</label>
+                        {{ form.bio }}
                     </div>
+    
+                    <div class="form-group avatar-upload">
+                        <label for="avatar_file">Avatar Upload:</label>
 
-                    <div class="profile-row">
-                        <p class="profile-label"><strong>Full Name:</strong></p>
-                        <p class="profile-value">{{ user.full_name }}</p>
-                    </div>
-
-                    <div class="profile-row">
-                        <p class="profile-label"><strong>Email:</strong></p>
-                        <p class="profile-value">{{ user.email }}</p>
-                    </div>
-
-                    <form method="POST" enctype="multipart/form-data" id="profile-settings-form">
-                        {% csrf_token %}
-                        
-                        <div class="form-group">
-                            <label for="bio">Bio:</label>
-                            {{ form.bio }}
-                        </div>
-        
-                        <div class="form-group avatar-upload">
-                            <label for="avatar_file">Avatar Upload:</label>
-
-                            <div class="avatar-container">
-                                {% if user.profile.avatar_file %}
-                                    <!-- Show the current avatar if available -->
-                                    <img src="{{ user.profile.avatar_file.url }}" alt="Profile Picture" class="avatar-preview" id="avatar-preview">
-                                {% else %}
-                                    <p>No avatar uploaded</p>
-                                {% endif %}
+                        <div class="avatar-container">
+                            {% if user.profile.avatar_file %}
+                                <!-- Show the current avatar if available -->
+                                <img src="{{ user.profile.avatar_file.url }}" alt="Profile Picture" class="avatar-preview" id="avatar-preview">
+                            {% else %}
+                                <p>No avatar uploaded</p>
+                            {% endif %}
 
 
-                                <!-- File input for changing the avatar -->
-                                <div class="file-input-container">
-                                    <input type="file" name="avatar_file" id="avatar_file" onchange="previewCover()">
-                                </div>
+                            <!-- File input for changing the avatar -->
+                            <div class="file-input-container">
+                                <input type="file" name="avatar_file" id="avatar_file">
                             </div>
                         </div>
-        
-                        <button type="submit" class="submit-button">Update Profile</button>
-
-                        {% if form.errors %}
-                            {% for field, errors in form.errors.items %}
-                                <p class="error">{{ errors|striptags }}</p>
-                            {% endfor %}
-                        {% endif %}
-                    </form>
-
-                    <div id="message-container">
-                        <ul class="messages">
-                            {% for message in messages %}
-                                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
-                                    {{ message }}
-                                </li>
-                            {% endfor %}
-                        </ul>
                     </div>
-                    
-                </div>
-            </div>
-        </body>
-    </div>
+    
+                    <button type="submit" class="submit-button">Update Profile</button>
 
-    <script>
-        function previewCover() {
-            var fileInput = document.getElementById('avatar_file');
-            var preview = document.getElementById('avatar-preview');
-            
-            // Check if a file has been selected
-            if (fileInput.files && fileInput.files[0]) {
-                var reader = new FileReader();
+                    {% if form.errors %}
+                        {% for field, errors in form.errors.items %}
+                            <p class="error">{{ errors|striptags }}</p>
+                        {% endfor %}
+                    {% endif %}
+                </form>
+
+                <div id="message-container">
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                                {{ message }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
                 
-                // When the image is fully loaded, set it as the source of the preview
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                }
-                
-                // Read the image file as a data URL
-                reader.readAsDataURL(fileInput.files[0]);
-            }
-        }
-    </script>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 

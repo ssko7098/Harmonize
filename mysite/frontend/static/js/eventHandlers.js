@@ -18,6 +18,21 @@ export function attachEventListeners() {
         uploadForm.removeEventListener('submit', handleProfileSubmit);
         uploadForm.addEventListener('submit', handleProfileSubmit);
     }
+
+    // For the song cover
+    const coverInput = document.getElementById('cover_image_file');
+    if (coverInput) {
+        coverInput.removeEventListener('change', previewCover);
+        coverInput.addEventListener('change', previewCover);
+    }
+
+    // For the profile picture
+    const avatarInput = document.getElementById('avatar_file');
+    if (avatarInput) {
+        avatarInput.removeEventListener('change', previewAvatar);
+        avatarInput.addEventListener('change', previewAvatar);
+    }
+
 }
 
 function handleLinkClick(e) {
@@ -95,4 +110,30 @@ function handleProfileSubmit(e) {
             submitButton.disabled = false;
         }
     });
+}
+
+function previewCover() {
+    const fileInput = document.getElementById('cover_image_file');
+    const preview = document.getElementById('cover-preview');
+
+    if (fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+    }
+}
+
+function previewAvatar() {
+    const fileInput = document.getElementById('avatar_file');
+    const preview = document.getElementById('avatar-preview');
+
+    if (fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+    }
 }
