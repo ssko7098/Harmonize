@@ -1,4 +1,4 @@
-Hello from {{ current_site.name }}!
+Hello from Harmonize!
 
 You are receiving this email because someone tried to sign up using the email address: {{ email }}.
 
@@ -9,4 +9,4 @@ If you have forgotten your password, please reset it using the following link:
 
 Thank you for using {{ current_site.name }}!
 
--- The {{ current_site.name }} Team
+-- The Harmonize Team

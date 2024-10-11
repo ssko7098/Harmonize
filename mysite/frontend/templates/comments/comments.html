@@ -1,0 +1,50 @@
+<h2>Comments</h2>
+
+<!-- Filter switch: Sort by Timestamp or Likes -->
+<form method="get" action="{% url 'profile' user_profile.user.username %}">
+    <label for="filter">Sort comments by:</label>
+    <select name="filter" id="filter" onchange="this.form.submit()">
+        <option value="timestamp" {% if request.GET.filter == "timestamp" %}selected{% endif %}>Most Recent</option>
+        <option value="likes" {% if request.GET.filter == "likes" %}selected{% endif %}>Most Liked</option>
+    </select>
+</form>
+
+{% if comments %}
+    <ul>
+        {% for comment in comments %}
+            {% if not comment.parent_comment %}
+                <li>
+                    <strong>{{ comment.user.username }}:</strong> {{ comment.message }}
+                    <br>
+                    <small>{{ comment.created_at }}</small>
+
+                    <!-- Like, Dislike, Delete, Report, etc. -->
+                    {% include "comments/comment_actions.html" with comment=comment %}
+
+                    <!-- Include replies for this comment -->
+                    {% include "comments/replies.html" with comment=comment %}
+
+                    <!-- Reply Form (for top-level comments) -->
+                    {% if is_verified %}
+                    <form method="post" action="{% url 'add_comment' user_profile.user.username %}">
+                        {% csrf_token %}
+                        <textarea name="message" placeholder="Write a reply" required></textarea>
+                        <input type="hidden" name="parent_comment_id" value="{{ comment.comment_id }}">
+                        <button type="submit">Reply</button>
+                    </form>
+                    {% endif %}
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No comments yet!</p>
+{% endif %}
+
+{% if not is_own_profile and is_verified %}
+    <form method="post" action="{% url 'add_comment' user_profile.user.username %}">
+        {% csrf_token %}
+        <textarea name="message" placeholder="Add a comment" required></textarea>
+        <button type="submit">Comment</button>
+    </form>
+{% endif %}

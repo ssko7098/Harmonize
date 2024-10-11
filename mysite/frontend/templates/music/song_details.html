@@ -1,0 +1,20 @@
+{% extends '../base.html' %}
+
+{% block title %}Song Details{% endblock %}
+
+{% block content %}
+    <body>
+        <div class="container">
+            <h1>Uploaded successfully!</h1>
+            <div>
+                <img src="#" alt="Cover Image">
+            </div>
+
+            <div>
+                <a href="#" onclick="playAudio('{{ song.mp3_file.url }}'); return false;">{{ song.title }}</a>
+            </div>
+
+            <button type="submit" class="submit-button" href="{% url 'upload_song' %}">Upload Another Song</button>
+        </div>
+    </body>
+{% endblock %}

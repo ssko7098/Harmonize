@@ -3,41 +3,85 @@
 {% block title %}Search Results{% endblock %}
 
 {% block content %}
-    <body>        
-        <div class="container">
-            <h1>Search Results for "{{ query }}"</h1>
+<div class="container">
+    <h1>Search Results for "{{ query }}"</h1>
 
-                {% if singles.exists %}
-                <h2>Songs</h2>
-                    <ul>
-                        {% for single in singles %}
-                        <li>
-                            <a href="#" onclick="playAudio('{{ single.mp3_file.url }}'); return false;">{{single.title}}</a> - <a href="{% url 'profile' single.user.username %}" class="nav-link">{{ single.user.username }}</a>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
+    {% if singles.exists %}
+    <h2>Songs</h2>
+    <ul>
+        {% for single in singles %}
+            <li>
+                <div class="song-details">
+                    <span>
+                        <a href="#" onclick="playAudio('{{ single.mp3_file.url }}'); return false;">{{ single.title }}</a> 
+                        - <a href="{% url 'profile' single.user.username %}" class="nav-link">{{ single.user.username }}</a>
+                    </span>
 
-                {% if users.exists %}
-                <h2>Artists</h2>
-                    <ul>
-                        {% for user in users %}
-                            <li>
-                                <a href="{% url 'profile' user.username %}" class="nav-link">{{ user.username }}</a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
+                    <!-- Add to Liked Songs Button -->
+                    <form method="post" action="{% url 'add_to_liked_songs' single.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-submit" style="margin-top: 10px; padding: 5px 15px; background-color: #28a745; color: white; border: none; border-radius: 5px;">
+                            Add to Liked Songs
+                        </button>
+                    </form>
 
-                {% if albums.exists %}
-                <h2>Albums</h2>
-                    <ul>
-                        {% for album in albums %}
-                            <li><a href="#" class="nav-link">{{ album.title }}</a></li>
+                    {% if request.user != single.user %}
+                    <!-- Report Button -->
+                    <form method="post" action="{% url 'report_song' single.pk %}" style="display:inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="song_id" value="{{ single.pk }}">
+                        <button type="submit" class="btn-report">Report</button>
+                    </form>
+                    {% endif %}
+
+                </div>
+
+                <!-- Inline dropdown form to add to playlist -->
+                <form method="post" action="{% url 'add_to_playlist' %}">
+                    {% csrf_token %}
+                    <select name="playlist" id="playlist-{{ single.pk }}" required>
+                        <option value="" disabled selected>Select a Playlist</option>
+                        {% for playlist in playlists %}
+                            <option value="{{ playlist.pk }}">{{ playlist.name }}</option>
                         {% endfor %}
-                    </ul>
-                {% endif %}
-        </div>
-    </body>
+                    </select>
+                    <input type="hidden" name="song_id" value="{{ single.pk }}">
+
+                    <button type="submit" class="btn-submit">Add to Playlist</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+
+    {% if users.exists %}
+        <h2>Artists</h2>
+        <ul>
+            {% for user in users %}
+                <li>
+                    <a href="{% url 'profile' user.username %}" class="nav-link">{{ user.username }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if albums.exists %}
+        <h2>Albums</h2>
+        <ul>
+            {% for album in albums %}
+                <li><a href="#" class="nav-link">{{ album.title }}</a></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
+
 {% endblock %}
-

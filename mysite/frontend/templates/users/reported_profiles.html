@@ -1,0 +1,47 @@
+{% extends '../base.html' %}
+
+{% block title %}Reported Profiles{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Reported Profiles</h1>
+    
+    {% if reported_profiles.exists %}
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Reports</th>
+                <th>Clear Reports</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for profile in reported_profiles %}
+            <tr>
+                <td><a href="{% url 'profile' profile.user.username %}" class="nav-link">{{ profile.user.username }}</a></td>
+                <td>{{ profile.report_count }}</td>
+                <td>
+                    <form method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="profile_id" value="{{ profile.id }}">
+                        <button type="submit" name="clear_reports" onclick="return confirm('Are you sure you want to clear reports for this profile?');">Clear</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No reported profiles found.</p>
+    {% endif %}
+</div>
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% endblock %}

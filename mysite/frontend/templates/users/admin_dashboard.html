@@ -8,20 +8,29 @@
         <div class="main-content">
             <div class="admin-sidebar">
                 <ul>
-                    <li><a href="#">Manage Users</a></li>
-                    <li><a href="#">Manage Comments</a></li>
-                    <li><a href="#">Manage Songs</a></li>
+                    <li><a href="{% url 'reported_profiles' %}">Manage Profiles</a></li>
+                    <li><a href="{% url 'reported_comments' %}">Manage Comments</a></li>
+                    <li><a href="{% url 'reported_songs' %}">Manage Songs</a></li>
                     <li><a href="#">Manage Playlists</a></li>
                 </ul>
             </div>
+
 
             <!-- Admin content -->
             <div class="admin-content">
                 <div class="admin-dashboard">
                     <div class="admin-header">
                         <h2 class="page-title">Admin Dashboard</h2>
+
+                                    <!-- Admin statistics -->
+                                    <div class="admin-stats">
+                                        <p><strong>Total Users:</strong> {{ total_users }}</p>
+                                        <p><strong>Total Songs:</strong> {{ total_songs }}</p>
+                                    </div>
+                                    
                         <h3>All Active Users</h3>
                     </div>
+
 
                     <!-- User table -->
                     <table class="user-table">

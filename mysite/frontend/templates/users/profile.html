@@ -4,38 +4,77 @@
 {% load static %}
 
 {% block content %}
-    <body>
-        <div class="container">
+    <div class="container">
+        <div>
             <h1>{{ user_profile.user.username }}'s Profile</h1>
-            <img src="{% static 'images/default_cover.png' %}" alt="Single Cover" id="cover-preview">
+            {% if not is_own_profile and not request.user.is_admin and is_verified %}
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" name="report_profile" class="btn btn-report">Report Profile</button>
+                </form>
+
+                {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            {% endif %}
+
+            {% if is_admin and not is_own_profile %}
+                <form method="post" action="{% url 'delete_user' user_profile.user.id %}" style="margin-top: 10px;">
+                    {% csrf_token %}
+                    <button type="submit" name="delete_profile" class="btn btn-delete" onclick="return confirm('Are you sure you want to delete this user profile?');">Delete Profile</button>
+                </form>
+            {% endif %}
+
+            <img src="{% if user_profile.avatar_file %}{{ user_profile.avatar_file.url }}{% else %}{% static 'images/default_cover.png' %}{% endif %}" 
+            alt="Profile Picture" 
+            id="cover-preview"
+            class="profile-picture">
             <div class="profile-info">
                 <p><strong>Full Name:</strong> {{ user_profile.user.full_name }}</p>
                 <p><strong>Bio:</strong> {{ user_profile.bio }}</p>
-                
+
                 <h2>Singles</h2>
                     <ul>
                         {% for single in singles %}
                             <li>
                                 <a href="#" onclick="playAudio('{{ single.mp3_file.url }}'); return false;">{{ single.title }}</a>
 
-                                {% if request.user == user_profile.user %}
+                                {% if is_own_profile or request.user.is_admin %}
+                                    <!-- Delete Button -->
                                     <form method="post" style="display:inline;">
                                         {% csrf_token %}
                                         <input type="hidden" name="song_id" value="{{ single.song_id }}">
                                         <button type="submit" name="delete_song" onclick="return confirm('Are you sure you want to delete this song?');">Delete</button>
                                     </form>
+                                {% else %}
+                                     <!-- Report Button -->
+                                    <form method="post" action="{% url 'report_song' single.pk %}" style="display:inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="song_id" value="{{ single.pk }}">
+                                        <input type="hidden" name="from_profile" value="true">
+                                        <button type="submit" class="btn-report">Report</button>
+                                    </form>
                                 {% endif %}
+                                    
                             </li>
                         {% endfor %}
                     </ul>
 
                 <h2>Albums</h2>
+                <ul>
                     {% for album in albums %}
                         <li>{{ album.title }} - <a href="#">Listen</a></li>
                     {% endfor %}
-            </div>
-        </div>
-        
-    </body>
-{% endblock %}
+                </ul>
 
+                <!-- Include the comment section here -->
+                {% include "comments/comments.html" %}
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
