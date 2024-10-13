@@ -773,3 +773,33 @@ textarea {
   border-radius: 10px;
   border: 1px solid #ddd;
 }
+
+.song-container {
+  display: flex;
+  align-items: center;  /* Vertically centers the image and text */
+  margin: 20px 0;
+}
+
+.cover-image {
+  width: 150px;   /* Adjust the size of the image */
+  height: auto;
+  margin-right: 20px;
+}
+
+.song-info {
+  display: flex;
+  flex-direction: column;  /* Ensure elements are stacked properly */
+}
+
+.song-title {
+  font-size: 18px;
+  color: blue;
+  text-decoration: underline;
+  margin-bottom: 5px;  /* Add small space between title and artist */
+}
+
+.artist {
+  font-size: 14px;
+  color: gray;
+  margin-left: 5px;
+}
