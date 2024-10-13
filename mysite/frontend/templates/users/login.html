@@ -6,7 +6,7 @@
     <div class="container-alt">
         <div class="login-box">
             <img src="../../frontend/static/images/logo-temp.svg"
-            width="275`" height="275" style="display: block; margin: 0 auto;"></img>
+            width="220" height="220" style="display: block; margin: 0 auto;"></img>
             <h2>Login</h2>
             <form method="post">
                 {% csrf_token %}
@@ -32,7 +32,7 @@
                         src="../../frontend/static/images/lock-closed-outline-1.svg"
                         width="20" height="20"></img>
                     </span>
-                    <input type="text" id="password" name="password" required></input>
+                    <input type="password" id="password" name="password" required></input>
                     <label for="password">Password</label>
 
                     {% if form.password.errors %}
@@ -55,12 +55,12 @@
                 <button type="submit" class="btn">Sign In</button>
                 <div class="register-link">
                     <!-- Need to link the below -->
-                    <p>Forgot Password?</p>
+                    <a hef="#" class="register-link-text">Forgot Password?</a>
                 </div>
             </form>
             <div class="register-link">
-                <p><a style="color: #ccc">Don't have an account?</a>
-                <a href="{% url 'register' %}" class="register-link">Register here</a></p>
+                <a>Don't have an account?</a>
+                <a href="{% url 'register' %}" class="register-link-text">Register here</a></a>
             </div>
         </div>
     </div>

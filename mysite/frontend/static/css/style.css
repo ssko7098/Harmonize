@@ -18,7 +18,7 @@
   --font-size-medium: 14px;
   --font-size-base: 16px;
   --font-size-large: 20px;
-  --font-size-header: 36px;
+  --font-size-header: 32px;
 
   /* Font weight variables */
   --font-weight-navbar: 500;
@@ -268,11 +268,11 @@ background-attachment: fixed;
   min-width: 600px;
   margin: 50px auto;
   padding: 30px;
-  background: rgba(255, 255, 255, 0.15);; /* Slight transparent gray background */
+  background: rgba(255, 255, 255, 0.1);; /* Slight transparent gray background */
   border-radius: 10px;
   border: 2px solid rgba(255, 255, 255, 0.2); /* Light border for definition */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-  backdrop-filter: blur(10px); /* Optional blur effect */
+  backdrop-filter: blur(15px); /* Optional blur effect */
 }
 
 h1 {
@@ -320,6 +320,7 @@ h1 {
 /* Center the heading */
 .auth-form h2 {
   text-align: center;
+  mar
   margin-bottom: 20px;
   color: #333;
 }
@@ -352,6 +353,7 @@ h1 {
   max-width: 600px;
   margin: 30px 0;
   border-bottom: 2px solid var(--soft-white);
+  font-size: var(--font-size-medium);
   
 }
 
@@ -411,12 +413,27 @@ h1 {
   cursor: pointer;
   margin-top: 10px;
   font-size: var(--font-size-medium);
+  transition: .3s;
+  font-weight: 600;
 }
+
+.login-box .btn:hover {
+  background-color: #fff;
+  color: var(--primary-color);
+  font-size: calc(var(--font-size-medium) * 1.2);
+}
+/* Full-width button */
+
+.auth-form .btn:hover {
+  background-color: var(--hover-color);
+}
+
 
 .login-box h2 {
   text-align: center;
   font-size: var(--font-size-header);
-  margin-bottom: 20px;
+  margin-top: 0px;
+  margin-bottom: 10px;
   color: var(--soft-white);
 }
 
@@ -435,13 +452,21 @@ h1 {
 .register-link {
   text-align: center;
   margin-top: 10px;
-  color: #ccc
+  font-size: var(--font-size-small);
+  color: var(--soft-white)
 }
 
-.register-link:hover {
+.register-link-text {
+  color: var(--soft-white);
+  transition: color 0.3s ease;
+  text-decoration: underline;
+}
+
+.register-link-text:hover {
   text-align: center;
   margin-top: 10px;
-  color: #ffffff
+  color: #ffffff;
+  font-weight: calc(var(--font-weight-button) * 1.1);
 }
 
 /* Adjust margins and center text in paragraphs */
@@ -913,4 +938,54 @@ textarea {
   background-color: #fff;
   color: var(--accent-color);
   
+}
+
+.profile-picture {
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 50%; /* Makes it circular */
+}
+
+/* Flexbox for avatar upload section */
+.avatar-upload {
+  display: flex;
+  align-items: center;  /* Vertically center the items */
+  gap: 20px;  /* Space between the label and avatar preview */
+}
+
+/* Right-side container for avatar image and upload button */
+.avatar-upload-right {
+  display: flex;
+  align-items: center;  /* Vertically align the avatar and upload input */
+  gap: 15px;  /* Space between the avatar and file input */
+}
+
+/* Avatar image styling */
+.avatar-preview {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;  /* Make the image round */
+  border: 2px solid #ddd;
+}
+
+/* File input container styling */
+.file-input-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.cover-art-input-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.cover-preview {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid #ddd;
 }

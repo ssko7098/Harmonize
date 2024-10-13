@@ -47,10 +47,16 @@ class RegisterForm(UserCreationForm):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['bio', 'avatar_url']  # Fields to allow editing
+        fields = ['bio', 'avatar_file']  # Fields to allow editing
+
+        widgets = {
+            'avatar_file': forms.ClearableFileInput(attrs={'required': False}),
+        }
 
     def save(self, commit=True):
         profile = super(ProfileForm, self).save(commit=False)
+        if 'avatar_file' in self.changed_data:
+            profile.avatar_file = self.cleaned_data.get('avatar_file', profile.avatar_file)
         if commit:
             profile.save()
         return profile
