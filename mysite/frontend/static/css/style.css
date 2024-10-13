@@ -252,7 +252,7 @@ background-attachment: fixed;
 /* Default (inactive) state of the input wrapper */
 .input-wrapper {
   border: 1px solid var(--soft-white); /* Subtle border when inactive */
-  background: var(--primary-color); /* Transparent background when inactive */
+  background: none;
 }
 
 /* Change background colour on hover */
