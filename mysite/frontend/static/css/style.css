@@ -149,15 +149,19 @@ background-attachment: fixed;
 }
 
 .navbar .nav-link {
-  margin: 0 15px;
+  /* margin: 0 15px; */
   text-decoration: none;
   color: var(--accent-color);
   font-weight: var(--font-weight-navbar);
-  transition: color 0.3s ease;
+  transition: color 0.3s ease, background-color 0.3s ease;
+  border-radius: 5px;
+  pointer-events: auto;
+  padding: 5px 5px; /* Initial padding */
 }
 
 .navbar .nav-link:hover {
-  color: var(--hover-color);
+  color: var(--primary-color);
+  background-color: var(--soft-white);
 }
 
 .navbar .nav-links a {
@@ -166,6 +170,24 @@ background-attachment: fixed;
   color: #ebebeb;
   font-weight: var(--font-weight-navbar);
 }
+
+.navbar .nav-link-btn {
+  /* margin: 0 15px; */
+  text-decoration: none;
+  color: var(--accent-color);
+  font-weight: var(--font-weight-navbar);
+  transition: color 0.3s ease, background-color 0.3s ease;
+  border-radius: 5px;
+  pointer-events: auto;
+  padding: 5px 5px; /* Initial padding */
+}
+
+.navbar .nav-link-btn:hover {
+  color: var(--primary-color);
+  background-color: var(--soft-white);
+}
+
+
 
 /* Flex container for the search form */
 .search-form {
@@ -320,7 +342,6 @@ h1 {
 /* Center the heading */
 .auth-form h2 {
   text-align: center;
-  mar
   margin-bottom: 20px;
   color: #333;
 }
@@ -359,7 +380,7 @@ h1 {
 
 .login-input-box label {
   position: absolute;
-  top: 40%;
+  top: 50%;
   left: 5px;
   /* transform: translateY(-20%); */
   font-size: 1em;
@@ -371,8 +392,8 @@ h1 {
 
 .login-input-box input:focus~label,
 .login-input-box input:valid~label {
-  top: -2%;
-  font-size: 0.87em;
+  top: -1%;
+  font-size: 0.85em;
   color: var(--soft-white);
 }
 
@@ -382,7 +403,7 @@ h1 {
   background: transparent;
   border: none;
   outline: none;
-  font-size: 1em;
+  font-size: 1.2em;
   padding: 20px 40px 0px 0px; /* Increased top padding (T, R, B, L) */
   color: var(--soft-white);
 }
@@ -988,4 +1009,34 @@ textarea {
   object-fit: cover;
   border-radius: 10px;
   border: 1px solid #ddd;
+}
+
+.song-container {
+  display: flex;
+  align-items: center;  /* Vertically centers the image and text */
+  margin: 20px 0;
+}
+
+.cover-image {
+  width: 150px;   /* Adjust the size of the image */
+  height: auto;
+  margin-right: 20px;
+}
+
+.song-info {
+  display: flex;
+  flex-direction: column;  /* Ensure elements are stacked properly */
+}
+
+.song-title {
+  font-size: 18px;
+  color: blue;
+  text-decoration: underline;
+  margin-bottom: 5px;  /* Add small space between title and artist */
+}
+
+.artist {
+  font-size: 14px;
+  color: gray;
+  margin-left: 5px;
 }

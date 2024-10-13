@@ -13,6 +13,7 @@ from .forms import RegisterForm, ProfileForm
 from django.contrib.auth.decorators import user_passes_test, login_required
 from music.models import Song, Album, Playlist
 from django.core.exceptions import ValidationError
+import users.urls
 
 # Create your views here.
 def home(request):
@@ -319,6 +320,8 @@ def profile_settings_view(request):
     return render(request, 'users/profile_settings.html', context)
 
 def logout_view(request):
+    print("Logout view triggered")
     logout(request)
+    print(users.urls.urlpatterns[0])
     return redirect('home')  # Redirect to the home page after logging out
 

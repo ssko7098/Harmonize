@@ -1,17 +1,27 @@
 {% extends '../base.html' %}
 
 {% block title %}Song Details{% endblock %}
+{% load static %}
 
 {% block content %}
     <body>
         <div class="container">
             <h1>Uploaded successfully!</h1>
-            <div>
-                <img src="#" alt="Cover Image">
-            </div>
 
-            <div>
-                <a href="#" onclick="playAudio('{{ song.mp3_file.url }}'); return false;">{{ song.title }}</a>
+            <div class="song-container">
+                <!-- Cover Art -->
+                <div>
+                    <img src="{% if song.cover_image_file %}{{ song.cover_image_file.url }}{% else %}{% static 'images/default_cover.png' %}{% endif %}" 
+                    alt="Cover Image" 
+                    id="cover-image"
+                    class="cover-image">
+                </div>
+
+                <!-- Song Details -->
+                <div class="song-info">
+                    <a href="#" onclick="playAudio('{{ song.mp3_file.url }}'); return false;">{{ song.title }}</a>
+                    <span class="artist">by {{song.user.full_name}}</span>
+                </div>
             </div>
 
             <button type="submit" class="submit-button" href="{% url 'upload_song' %}">Upload Another Song</button>
