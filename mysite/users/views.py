@@ -13,6 +13,7 @@ from .forms import RegisterForm, ProfileForm
 from django.contrib.auth.decorators import user_passes_test, login_required
 from music.models import Song, Album, Playlist
 from django.core.exceptions import ValidationError
+from django.http import JsonResponse
 
 # Create your views here.
 def home(request):
@@ -153,6 +154,7 @@ def manage_reported_comments(request):
     
     return render(request, 'users/reported_comments.html', {'reported_comments': reported_comments})
 
+
 # Registration
 def register(request):
     form = RegisterForm()
@@ -174,7 +176,20 @@ def register(request):
 
                 send_email_confirmation(request, user, signup=True)
 
-                messages.success(request, 'We have sent a verification email to your email address. Please check your inbox and click the confirmation link.')
+                # For AJAX requests, return a JSON response
+                if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                    return JsonResponse({
+                        'status': 'success',
+                        'message': 'Registration successful. A verification email has been sent to your email address. '
+                    }, status=200)
+
+        else:
+            # Return validation errors for AJAX requests
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({
+                    'status': 'error',
+                    'errors': form.errors
+                }, status=400)
 
     return render(request, 'users/register.html', {'form': form})
 
@@ -304,8 +319,19 @@ def profile_settings_view(request):
 
         if form.is_valid():
             form.save()
-            messages.success(request, 'Your profile has been updated.')
-            return redirect('profile_settings')  # Redirect back to the profile page
+            
+            # Check if it's an AJAX request
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                # Return JSON response for AJAX
+                return JsonResponse({'status': 'success', 'message': 'Profile updated successfully!'})
+            else:
+                messages.success(request, 'Your profile has been updated.')
+                return redirect('profile_settings')  # Non-AJAX request, perform normal redirect
+        
+        else:
+            # If form is not valid, return errors for AJAX requests
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({'status': 'error', 'message': 'Invalid form data.', 'errors': form.errors}, status=400)
 
     else:
         form = ProfileForm(instance=profile)
