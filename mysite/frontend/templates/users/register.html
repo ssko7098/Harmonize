@@ -18,11 +18,11 @@
                         </span>
                         <input type="text" id="full_name" name="full_name" required></input>
                         <label for="full_name">Full Name</label>
+                        
                         {% if form.full_name.errors %}
                             <p class="error">{{ form.full_name.errors.0 }}</p>
                         {% endif %}
                     </div>
-        
                     <!-- Username field -->
                     <div class="login-input-box {% if form.username.errors %}error-border{% endif %}">
                         <span class="local-icon">
@@ -34,7 +34,6 @@
                             <p class="error">{{ form.username.errors.0 }}</p>
                         {% endif %}
                     </div>
-        
         
                     <!-- Email field -->
                     <div class="login-input-box {% if form.email.errors %}error-border{% endif %}">
@@ -62,7 +61,7 @@
                     
                     <!-- Password confirmation field with potential error -->
                     <div class="login-input-box">
-                        <span class="local-icon">
+                                            <span class="local-icon">
                             <img src="../../frontend/static/images/lock-closed-outline-1.svg" width="20" height="20"></img>
                         </span>
                         <input type="password" id="password2" name="password2" required></input>

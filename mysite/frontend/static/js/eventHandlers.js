@@ -12,6 +12,7 @@ export function attachEventListeners() {
         searchForm.removeEventListener('submit', handleSearchSubmit);
         searchForm.addEventListener('submit', handleSearchSubmit);
     }
+    attachNavLinkActiveState();
 }
 
 function handleLinkClick(e) {
@@ -27,6 +28,9 @@ function handleSearchSubmit(e) {
     const query = formData.get('query');
     const url = this.action + '?query=' + encodeURIComponent(query);
 
+    // Deselect any active nav links/buttons when search form is submitted
+    clearActiveNavLinks();
+
     fetch(url)
         .then(response => response.text())
         .then(data => {
@@ -38,4 +42,28 @@ function handleSearchSubmit(e) {
             attachEventListeners();
         })
         .catch(error => console.error('Error during search:', error));
+}
+
+// New function to manage "active" state of nav links
+function attachNavLinkActiveState() {
+    const navItems = document.querySelectorAll('.nav-link-btn, .nav-link');
+
+    navItems.forEach(navItem => {
+        // Add click event listener to each nav item
+        navItem.addEventListener('click', function () {
+            // Remove 'active' class from all nav items
+            navItems.forEach(item => item.classList.remove('active'));
+
+            // Add 'active' class to the clicked item
+            this.classList.add('active');
+        });
+    });
+}
+
+// Function to clear "active" class from nav links and buttons
+function clearActiveNavLinks() {
+    const navItems = document.querySelectorAll('.nav-link-btn, .nav-link');
+    navItems.forEach(item => {
+        item.classList.remove('active');
+    });
 }
