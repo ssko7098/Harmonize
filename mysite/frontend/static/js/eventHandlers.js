@@ -12,6 +12,7 @@ export function attachEventListeners() {
         searchForm.removeEventListener('submit', handleSearchSubmit);
         searchForm.addEventListener('submit', handleSearchSubmit);
     }
+<<<<<<< HEAD
 
     // For the registration form
     const registerForm = document.getElementById('register-form');
@@ -40,6 +41,9 @@ export function attachEventListeners() {
         avatarInput.addEventListener('change', previewAvatar);
     }
 
+=======
+    attachNavLinkActiveState();
+>>>>>>> c3d1c62e2c850f630dd1206d1fcd1f4c6b562a18
 }
 
 function handleLinkClick(e) {
@@ -55,6 +59,9 @@ function handleSearchSubmit(e) {
     const query = formData.get('query');
     const url = this.action + '?query=' + encodeURIComponent(query);
 
+    // Deselect any active nav links/buttons when search form is submitted
+    clearActiveNavLinks();
+
     fetch(url)
         .then(response => response.text())
         .then(data => {
@@ -68,6 +75,7 @@ function handleSearchSubmit(e) {
         .catch(error => console.error('Error during search:', error));
 }
 
+<<<<<<< HEAD
 // Handle profile settings form submission (for profile picture and bio updates)
 function handleProfileSubmit(e) {
     e.preventDefault();
@@ -195,3 +203,28 @@ function handleRegisterSubmit(e) {
         }
     });
 }
+=======
+// New function to manage "active" state of nav links
+function attachNavLinkActiveState() {
+    const navItems = document.querySelectorAll('.nav-link-btn, .nav-link');
+
+    navItems.forEach(navItem => {
+        // Add click event listener to each nav item
+        navItem.addEventListener('click', function () {
+            // Remove 'active' class from all nav items
+            navItems.forEach(item => item.classList.remove('active'));
+
+            // Add 'active' class to the clicked item
+            this.classList.add('active');
+        });
+    });
+}
+
+// Function to clear "active" class from nav links and buttons
+function clearActiveNavLinks() {
+    const navItems = document.querySelectorAll('.nav-link-btn, .nav-link');
+    navItems.forEach(item => {
+        item.classList.remove('active');
+    });
+}
+>>>>>>> c3d1c62e2c850f630dd1206d1fcd1f4c6b562a18

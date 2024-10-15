@@ -164,6 +164,11 @@ background-attachment: fixed;
   background-color: var(--soft-white);
 }
 
+.navbar .nav-link.active {
+  color: var(--primary-color);
+  background-color: var(--soft-white);
+}
+
 .navbar .nav-links a {
   margin: 0 10px;
   text-decoration: none;
@@ -187,6 +192,10 @@ background-attachment: fixed;
   background-color: var(--soft-white);
 }
 
+.navbar .nav-link-btn.active {
+  color: var(--primary-color);
+  background-color: var(--soft-white);
+}
 
 
 /* Flex container for the search form */
@@ -435,19 +444,23 @@ h1 {
 }
 
 
-.login-box h2 {
+h2 {
   text-align: center;
   font-size: var(--font-size-header);
   margin-top: 0px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   color: var(--soft-white);
 }
 
 /* Error message styling */
 .error {
+  position: absolute;
+  left: 0; /* Align to the left of the input box */
+  bottom: -40px; /* Move the error message below the input field */
+  width: 100%;
+  text-align: center;
   color: red;
   font-size: 0.875em;
-  margin-top: 5px;
 }
 
 .error-border input {
@@ -486,6 +499,7 @@ p {
   display: inline-flex;
   align-items: center;
   margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 /* Initial state for the label and link */ 
@@ -655,7 +669,7 @@ p {
 
 #upload-page .upload-button {
   padding: 10px 20px;
-  background-color: #f5f5f5;
+  background-color: #f2f0f0;
   border: none;
   margin: 0 5px;
   border-radius: 5px;
@@ -734,6 +748,35 @@ p {
 
 #upload-page .submit-button:hover {
   background-color: var(--hover-color);
+}
+
+#upload-page .upload-btn {
+  width: 40%; /* Force full width for the button */
+  padding: 12px;
+  background: transparent;
+  color: white;
+  border: 2px solid var(--soft-white);
+  border-radius: var(--border-radius-button);
+  cursor: pointer;
+  margin-top: 10px;
+  font-size: var(--font-size-medium);
+  transition: .3s;
+  font-weight: 600;
+  margin-right: 10px; /* Add space between the buttons */
+}
+
+#upload-page .upload-btn:hover {
+  background-color: #fff;
+  color: var(--primary-color);
+}
+
+#upload-page .upload-btn.active {
+  background-color: #fff;
+  color: var(--primary-color);
+}
+
+#upload-page .upload-btn:last-child {
+  margin-right: 0; /* Ensure no extra margin on the last button */
 }
 
 /* Ensure the audio player stays fixed at the bottom of the viewport */
