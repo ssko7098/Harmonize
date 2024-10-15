@@ -13,6 +13,9 @@
         
                     <!-- Full name field -->
                     <div class="login-input-box {% if form.full_name.errors %}error-border{% endif %}">
+                        <span class="local-icon">
+                            <img src="../../frontend/static/images/person-circle-white.png" width="20" height="20"></img>
+                        </span>
                         <input type="text" id="full_name" name="full_name" required></input>
                         <label for="full_name">Full Name</label>
                         {% if form.full_name.errors %}
@@ -22,6 +25,9 @@
         
                     <!-- Username field -->
                     <div class="login-input-box {% if form.username.errors %}error-border{% endif %}">
+                        <span class="local-icon">
+                            <img src="../../frontend/static/images/person-circle-outline-white.png" width="20" height="20"></img>
+                        </span>
                         <input type="text" id="username" name="username" required></input>
                         <label for="username">Username</label>
                         {% if form.username.errors %}
@@ -32,6 +38,9 @@
         
                     <!-- Email field -->
                     <div class="login-input-box {% if form.email.errors %}error-border{% endif %}">
+                        <span class="local-icon">
+                            <img src="../../frontend/static/images/mail-outline-1.svg" width="20" height="20"></img>
+                        </span>
                         <input type="text" id="email" name="email" required></input>
                         <label for="email">Email</label>
                         {% if form.email.errors %}
@@ -41,6 +50,9 @@
         
                     <!-- Password field with potential error -->
                     <div class="login-input-box">
+                        <span class="local-icon">
+                            <img src="../../frontend/static/images/lock-closed-outline-1.svg" width="20" height="20"></img>
+                        </span>
                         <input type="password" id="password" name="password" required></input>
                         <label for="password">Password</label>
                         {% if form.password1.errors %}
@@ -50,6 +62,9 @@
                     
                     <!-- Password confirmation field with potential error -->
                     <div class="login-input-box">
+                        <span class="local-icon">
+                            <img src="../../frontend/static/images/lock-closed-outline-1.svg" width="20" height="20"></img>
+                        </span>
                         <input type="password" id="password2" name="password2" required></input>
                         <label for="password2">Confirm Password</label>
                         {% if form.password2.errors %}
