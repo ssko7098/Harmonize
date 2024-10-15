@@ -149,15 +149,19 @@ background-attachment: fixed;
 }
 
 .navbar .nav-link {
-  margin: 0 15px;
+  /* margin: 0 15px; */
   text-decoration: none;
   color: var(--accent-color);
   font-weight: var(--font-weight-navbar);
-  transition: color 0.3s ease;
+  transition: color 0.3s ease, background-color 0.3s ease;
+  border-radius: 5px;
+  pointer-events: auto;
+  padding: 5px 5px; /* Initial padding */
 }
 
 .navbar .nav-link:hover {
-  color: var(--hover-color);
+  color: var(--primary-color);
+  background-color: var(--soft-white);
 }
 
 .navbar .nav-links a {
@@ -166,6 +170,24 @@ background-attachment: fixed;
   color: #ebebeb;
   font-weight: var(--font-weight-navbar);
 }
+
+.navbar .nav-link-btn {
+  /* margin: 0 15px; */
+  text-decoration: none;
+  color: var(--accent-color);
+  font-weight: var(--font-weight-navbar);
+  transition: color 0.3s ease, background-color 0.3s ease;
+  border-radius: 5px;
+  pointer-events: auto;
+  padding: 5px 5px; /* Initial padding */
+}
+
+.navbar .nav-link-btn:hover {
+  color: var(--primary-color);
+  background-color: var(--soft-white);
+}
+
+
 
 /* Flex container for the search form */
 .search-form {
@@ -230,7 +252,7 @@ background-attachment: fixed;
 /* Default (inactive) state of the input wrapper */
 .input-wrapper {
   border: 1px solid var(--soft-white); /* Subtle border when inactive */
-  background: var(--primary-color); /* Transparent background when inactive */
+  background: none;
 }
 
 /* Change background colour on hover */
@@ -301,26 +323,9 @@ h1 {
   display: block; /* Ensure block display */
 }
 
-/* Full-width button */
-.auth-form .btn {
-  width: 100%; /* Force full width for the button */
-  padding: 12px;
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 10px;
-}
-
-.auth-form .btn:hover {
-  background-color: var(--hover-color);
-}
-
 /* Center the heading */
 .auth-form h2 {
   text-align: center;
-  mar
   margin-bottom: 20px;
   color: #333;
 }
@@ -337,14 +342,15 @@ h1 {
   display: block;
 
 }
+
+
+
 /* ---------------------------------------------------------------- */
 /* ! Styling for Login Page Elements */
 .login-box {
   width: 100%; /* Ensure full width of the form inside container */
   text-align: left;
   background: none;
-  
-  
 }
 
 .login-input-box {
@@ -359,7 +365,7 @@ h1 {
 
 .login-input-box label {
   position: absolute;
-  top: 40%;
+  top: 50%;
   left: 5px;
   /* transform: translateY(-20%); */
   font-size: 1em;
@@ -371,8 +377,8 @@ h1 {
 
 .login-input-box input:focus~label,
 .login-input-box input:valid~label {
-  top: -2%;
-  font-size: 0.87em;
+  top: 10%;
+  font-size: 0.85em;
   color: var(--soft-white);
 }
 
@@ -382,7 +388,7 @@ h1 {
   background: transparent;
   border: none;
   outline: none;
-  font-size: 1em;
+  font-size: 1.2em;
   padding: 20px 40px 0px 0px; /* Increased top padding (T, R, B, L) */
   color: var(--soft-white);
 }
@@ -476,15 +482,20 @@ p {
 }
 
 /* Styling the checkbox with label */
-.auth-form-group.checkbox-group {
+.checkbox-group {
   display: inline-flex;
   align-items: center;
   margin-bottom: 20px;
 }
 
-.auth-form-group.checkbox-group input[type="checkbox"] {
+/* Initial state for the label and link */ 
+.checkbox-group a[href="#"] {
+    text-decoration: underline; /* Optional: remove underline */
+}
+
+.checkbox-group input[type="checkbox"] {
   margin-right: 10px;
-  transform: translateY(-2px);
+  /* transform: translateY(-2px); */
 }
 
 /* Admin Dashboard Layout */

@@ -30,7 +30,7 @@
         <div class="logo">
           <!-- Hamburger icon -->
           <span class="hamburger-icon" onclick="toggleSidebar()">&#9776;</span>
-          <img src="{% static 'images/logo.png' %}" alt="Harmonize Logo" />
+          <img src="{% static 'images/logo-no-middle.png' %}" alt="Harmonize Logo" />
         </div>
 
         {% if user.is_authenticated %}
@@ -78,11 +78,10 @@
           >
           {% endif %}
           {% endif %}
-
-          <a href="{% url 'logout' %}">Logout</a>
+          <a class="nav-link-btn" href="{% url 'logout' %}">Logout</a>
           {% else %}
-          <a href="{% url 'login' %}">Login</a>
-          <a href="{% url 'register' %}">Register</a>
+          <a class="nav-link-btn" href="{% url 'login' %}">Login</a>
+          <a class="nav-link-btn" href="{% url 'register' %}">Register</a>
           {% endif %}
         </div>
       </div>
