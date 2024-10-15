@@ -4,6 +4,11 @@ export function playAudio(url) {
     const audioPlayer = document.getElementById('audio-player');
     const audioSource = document.getElementById('audio-source');
 
+    if (!audioPlayer || !audioSource) {
+        console.warn('Audio player or source not found. Cannot play audio.');
+        return;
+    }
+
     if (audioSource.src === url) {
         audioPlayer.currentTime = 0;
         audioPlayer.play();
