@@ -323,22 +323,6 @@ h1 {
   display: block; /* Ensure block display */
 }
 
-/* Full-width button */
-.auth-form .btn {
-  width: 100%; /* Force full width for the button */
-  padding: 12px;
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 10px;
-}
-
-.auth-form .btn:hover {
-  background-color: var(--hover-color);
-}
-
 /* Center the heading */
 .auth-form h2 {
   text-align: center;
@@ -358,14 +342,15 @@ h1 {
   display: block;
 
 }
+
+
+
 /* ---------------------------------------------------------------- */
 /* ! Styling for Login Page Elements */
 .login-box {
   width: 100%; /* Ensure full width of the form inside container */
   text-align: left;
   background: none;
-  
-  
 }
 
 .login-input-box {
@@ -392,7 +377,7 @@ h1 {
 
 .login-input-box input:focus~label,
 .login-input-box input:valid~label {
-  top: -1%;
+  top: 10%;
   font-size: 0.85em;
   color: var(--soft-white);
 }
@@ -497,15 +482,20 @@ p {
 }
 
 /* Styling the checkbox with label */
-.auth-form-group.checkbox-group {
+.checkbox-group {
   display: inline-flex;
   align-items: center;
   margin-bottom: 20px;
 }
 
-.auth-form-group.checkbox-group input[type="checkbox"] {
+/* Initial state for the label and link */ 
+.checkbox-group a[href="#"] {
+    text-decoration: underline; /* Optional: remove underline */
+}
+
+.checkbox-group input[type="checkbox"] {
   margin-right: 10px;
-  transform: translateY(-2px);
+  /* transform: translateY(-2px); */
 }
 
 /* Admin Dashboard Layout */
