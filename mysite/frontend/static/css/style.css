@@ -971,23 +971,90 @@ li {
   background: none;
 }
 
-/* .profile-info p {
-  font-size: var(--font-size-base); /* placeholder size and colour until me and ethan decide */
-  /* font-family: "Montserrat", sans-serif;
-  margin-bottom: 10px; */
-/* } */
-
 .profile-row {
   display: flex;
-  justify-content: flex-start;
   align-items: center;
+  margin-bottom: 10px !important;
 }
 
 .profile-label {
-  min-width: 190px; /* forces profile values to be inline veritcally with text boxes */
-  text-align: right;
-  padding-right: 30px; /* pushes labels back from 190px to the right to be inline with bio and avatar url */
+  min-width: 120px;
+  text-align: left;
+  font-size: var(--font-size-medium); 
+  font-weight: 600;
+  color: var(--soft-white);
+  padding-right: 30px;
 }
+
+.profile-value {
+  flex: 1;
+  text-align: left;
+  font-size: var(--font-size-medium); 
+  color: var(--soft-white);
+
+}
+
+.form-group label {
+  text-align: left !important;
+  font-size: var(--font-size-medium); 
+  font-weight: 600;
+  color: var(--soft-white) !important;
+  margin-bottom: 10px !important;
+  width: 22% !important;
+}
+
+#id_bio {
+  background: transparent;
+  outline: 1px solid var(--soft-white);
+}
+
+#id_bio:focus {
+  outline: 2px solid var(--soft-white);
+}
+
+
+/* Flexbox for avatar upload section */
+.avatar-upload {
+  display: flex;
+  align-items: center;  /* Vertically center the items */
+  justify-content: center;
+  width: 100%
+
+}
+
+.avatar-container {
+  display: flex;
+  flex-direction: column;
+  /* Ensures elements (avatar preview and input) are stacked vertically */
+  align-items: left;     /* Centers the content (avatar and input) horizontally */
+  justify-content: center;
+  margin: 0 auto;
+}
+
+/* Avatar image styling */
+.avatar-preview {
+  margin-bottom: 10px;
+  object-fit: cover;  
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;  /* Make the image round */
+  border: 2px solid var(--soft-white);
+  display: block;
+}
+
+/* File input container styling */
+.file-input-container {
+  display: flex;
+  background: transparent !important;
+  justify-content: left;
+  margin: 0 auto;
+}
+
+#id_file_avatar {
+  background: transparent;
+}
+
+
 
 /* ---------------------------------------------------------------- */
 
@@ -1067,17 +1134,18 @@ textarea {
   text-align: right;
 }
 
+/* text box formatting. used in profile settings etc */
 :not(.auth-form) .form-group input,
 :not(.auth-form) .form-group textarea,
 :not(.auth-form) .form-group select {
   width: 65%;
   padding: 10px;
   font-family: "Montserrat", sans-serif;
-  border: 1px solid var(--accent-color);
+  border: 1px solid var(--soft-white);
   border-radius: var(--border-radius-textbox);
   box-sizing: border-box;
   background-color: #fff;
-  color: var(--accent-color);
+  color: var(--soft-white);
   
 }
 
@@ -1088,34 +1156,6 @@ textarea {
   border-radius: 50%; /* Makes it circular */
 }
 
-/* Flexbox for avatar upload section */
-.avatar-upload {
-  display: flex;
-  align-items: center;  /* Vertically center the items */
-  gap: 20px;  /* Space between the label and avatar preview */
-}
-
-/* Right-side container for avatar image and upload button */
-.avatar-upload-right {
-  display: flex;
-  align-items: center;  /* Vertically align the avatar and upload input */
-  gap: 15px;  /* Space between the avatar and file input */
-}
-
-/* Avatar image styling */
-.avatar-preview {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 50%;  /* Make the image round */
-  border: 2px solid #ddd;
-}
-
-/* File input container styling */
-.file-input-container {
-  display: flex;
-  flex-direction: column;
-}
 
 .cover-art-input-container {
   display: flex;

@@ -10,30 +10,26 @@
                     <h2>My Profile Information</h2>
                     <div class="profile-info">
                         <div class="profile-row">
-                            <p class="profile-label"><strong>Username:</strong></p>
+                            <p class="profile-label">Username</p>
                             <p class="profile-value">{{ user.username }}</p>
                         </div>
 
                         <div class="profile-row">
-                            <p class="profile-label"><strong>Full Name:</strong></p>
+                            <p class="profile-label">Full Name</p>
                             <p class="profile-value">{{ user.full_name }}</p>
                         </div>
 
                         <div class="profile-row">
-                            <p class="profile-label"><strong>Email:</strong></p>
+                            <p class="profile-label">Email</p>
                             <p class="profile-value">{{ user.email }}</p>
                         </div>
 
                         <form method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
                             
-                            <div class="form-group">
-                                <label for="bio">Bio:</label>
-                                {{ form.bio }}
-                            </div>
             
                             <div class="form-group avatar-upload">
-                                <label for="avatar_file">Avatar Upload:</label>
+                                <label for="avatar_file">Avatar</label>
 
                                 <div class="avatar-container">
                                     {% if user.profile.avatar_file %}
@@ -46,9 +42,14 @@
 
                                     <!-- File input for changing the avatar -->
                                     <div class="file-input-container">
-                                        <input type="file" name="avatar_file" id="id_avatar_file">
+                                        <input type="file" name="avatar_file" id="id_avatar_file">  
                                     </div>
                                 </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="bio">Biography</label>
+                                {{ form.bio }}
                             </div>
             
                             <button type="submit" class="submit-button">Update Profile</button>
