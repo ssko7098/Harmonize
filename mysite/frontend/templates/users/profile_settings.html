@@ -5,68 +5,70 @@
 {% block content %}
     <div id="profile-settings-page">
         <body>
-            <div class="container">
-                <h1>My Profile Information</h1>
-                <div class="profile-info">
-                    <div class="profile-row">
-                        <p class="profile-label"><strong>Username:</strong></p>
-                        <p class="profile-value">{{ user.username }}</p>
-                    </div>
-
-                    <div class="profile-row">
-                        <p class="profile-label"><strong>Full Name:</strong></p>
-                        <p class="profile-value">{{ user.full_name }}</p>
-                    </div>
-
-                    <div class="profile-row">
-                        <p class="profile-label"><strong>Email:</strong></p>
-                        <p class="profile-value">{{ user.email }}</p>
-                    </div>
-
-                    <form method="POST" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        
-                        <div class="form-group">
-                            <label for="bio">Bio:</label>
-                            {{ form.bio }}
+            <div class="container-alt"
+                <div class="profile-settings-box">
+                    <h2>My Profile Information</h2>
+                    <div class="profile-info">
+                        <div class="profile-row">
+                            <p class="profile-label"><strong>Username:</strong></p>
+                            <p class="profile-value">{{ user.username }}</p>
                         </div>
-        
-                        <div class="form-group avatar-upload">
-                            <label for="avatar_file">Avatar Upload:</label>
 
-                            <div class="avatar-container">
-                                {% if user.profile.avatar_file %}
-                                    <!-- Show the current avatar if available -->
-                                    <img src="{{ user.profile.avatar_file.url }}" alt="Profile Picture" class="avatar-preview">
-                                {% else %}
-                                    <p>No avatar uploaded</p>
-                                {% endif %}
+                        <div class="profile-row">
+                            <p class="profile-label"><strong>Full Name:</strong></p>
+                            <p class="profile-value">{{ user.full_name }}</p>
+                        </div>
+
+                        <div class="profile-row">
+                            <p class="profile-label"><strong>Email:</strong></p>
+                            <p class="profile-value">{{ user.email }}</p>
+                        </div>
+
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            
+                            <div class="form-group">
+                                <label for="bio">Bio:</label>
+                                {{ form.bio }}
+                            </div>
+            
+                            <div class="form-group avatar-upload">
+                                <label for="avatar_file">Avatar Upload:</label>
+
+                                <div class="avatar-container">
+                                    {% if user.profile.avatar_file %}
+                                        <!-- Show the current avatar if available -->
+                                        <img src="{{ user.profile.avatar_file.url }}" alt="Profile Picture" class="avatar-preview">
+                                    {% else %}
+                                        <p>No avatar uploaded</p>
+                                    {% endif %}
 
 
-                                <!-- File input for changing the avatar -->
-                                <div class="file-input-container">
-                                    <input type="file" name="avatar_file" id="id_avatar_file">
+                                    <!-- File input for changing the avatar -->
+                                    <div class="file-input-container">
+                                        <input type="file" name="avatar_file" id="id_avatar_file">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-        
-                        <button type="submit" class="submit-button">Update Profile</button>
+            
+                            <button type="submit" class="submit-button">Update Profile</button>
 
-                        {% if form.errors %}
-                            {% for field, errors in form.errors.items %}
-                                <p class="error">{{ errors|striptags }}</p>
+                            {% if form.errors %}
+                                {% for field, errors in form.errors.items %}
+                                    <p class="error">{{ errors|striptags }}</p>
+                                {% endfor %}
+                            {% endif %}
+                        </form>
+
+                        <ul class="messages">
+                            {% for message in messages %}
+                                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                                    {{ message }}
+                                </li>
                             {% endfor %}
-                        {% endif %}
-                    </form>
-
-                    <ul class="messages">
-                        {% for message in messages %}
-                            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
-                                {{ message }}
-                            </li>
-                        {% endfor %}
-                    </ul>
-                    
+                        </ul>
+                        
+                    </div>
                 </div>
             </div>
         </body>

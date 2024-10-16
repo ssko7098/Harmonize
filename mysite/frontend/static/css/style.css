@@ -885,6 +885,12 @@ p {
 
 /* -----------------    Profile Settings    ------------------- */
 
+.profile-settings-box {
+  width: 100%; /* Ensure full width of the form inside container */
+  text-align: left;
+  background: none;
+}
+
 .profile-info p {
   font-size: var(--font-size-base); /* placeholder size and colour until me and ethan decide */
   color: var(--accent-color);
