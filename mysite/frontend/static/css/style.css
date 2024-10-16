@@ -19,6 +19,7 @@
   --font-size-base: 16px;
   --font-size-large: 20px;
   --font-size-header: 32px;
+  --font-size-profile-name: 50px;
 
   /* Font weight variables */
   --font-weight-navbar: 500;
@@ -883,7 +884,86 @@ p {
   margin-right: auto;
 }
 
-/* -----------------    Profile Settings    ------------------- */
+
+/* ---------------------------------------------------------------- */
+/* ! Styling for My Profile Elements */
+
+.profile-box {
+  width: 100%; /* Ensure full width of the form inside container */
+  text-align: left;
+  background: none;
+}
+
+h3 { /* style elements for profile name */
+  text-align: left;
+  font-size: var(--font-size-profile-name);
+  margin-top: 0px;
+  margin-bottom: -7.5px;
+  color: var(--soft-white);
+}
+
+.user-fullname {
+  text-align: left;
+  font-size: var(--font-size-medium);
+  margin-top: 0px;
+  margin-bottom: 0px;
+  color: var(--soft-white);
+}
+
+.profile-box .profile-picture {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.profile-box .body-header {
+  text-align: left;
+  font-size: var(--font-size-medium); 
+  font-weight: 600;
+  color: var(--soft-white);
+  margin-top: 10px;
+  margin-bottom: 0px;
+}
+
+.profile-box .body {
+  text-align: left;
+  font-size: var(--font-size-medium); 
+  color: var(--soft-white);
+  margin-top: 0px;
+  margin-bottom: 30px;
+}
+
+.profile-box h2 {
+  text-align: left !important; 
+  margin-bottom: 0px !important;
+} 
+
+ul {
+  list-style-type: none; /* Removes bullet points */
+  padding: 0; /* Removes padding */
+  margin: 0; /* Removes margin */
+}
+
+li {
+  display: flex; /* Makes items horizontal */
+  align-items: center; /* Centers items vertically */
+  margin-bottom: 10px; /* Space between items */
+
+}
+
+.media-info p {
+  margin-left: 20px;
+  align-items: center;
+}
+
+.profile-info .button {
+  margin-left: auto;
+}
+
+/* ---------------------------------------------------------------- */
+
+
+/* ---------------------------------------------------------------- */
+/* ! Styling for Profile Settings Elements */
 
 .profile-settings-box {
   width: 100%; /* Ensure full width of the form inside container */
@@ -891,12 +971,11 @@ p {
   background: none;
 }
 
-.profile-info p {
+/* .profile-info p {
   font-size: var(--font-size-base); /* placeholder size and colour until me and ethan decide */
-  color: var(--accent-color);
-  font-family: "Montserrat", sans-serif;
-  margin-bottom: 10px;
-}
+  /* font-family: "Montserrat", sans-serif;
+  margin-bottom: 10px; */
+/* } */
 
 .profile-row {
   display: flex;
@@ -910,7 +989,7 @@ p {
   padding-right: 30px; /* pushes labels back from 190px to the right to be inline with bio and avatar url */
 }
 
-/* ------------------------------------------------------------ */
+/* ---------------------------------------------------------------- */
 
 
 /* Update profile info button */
