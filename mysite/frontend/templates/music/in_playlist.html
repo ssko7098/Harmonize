@@ -10,15 +10,24 @@
     <h1>Songs in "{{ playlist.name }}"</h1>
     <p>{{ playlist.description }}</p>
 
-<!-- Search bar for filtering songs in this playlist -->
-<form method="get" action="{% url 'view_playlist_songs' user.username playlist.pk %}">
-    <input type="text" name="search" placeholder="Search Songs in Playlist" value="{{ request.GET.search|default:'' }}">
-    <button type="submit">Search</button>
-    <a href="{% url 'view_playlist_songs' user.username playlist.pk %}">
-        <button type="button">Clear</button>
-    </a>
-</form>
+    <div>
+        <!-- Search bar for filtering songs in this playlist -->
+        <form method="get" action="{% url 'view_playlist_songs' user.username playlist.pk %}">
+            <input type="text" name="search" placeholder="Search Songs in Playlist" value="{{ request.GET.search|default:'' }}">
+            <button type="submit">Search</button>
+            <a href="{% url 'view_playlist_songs' user.username playlist.pk %}">
+                <button type="button">Clear</button>
+            </a>
+        </form>
 
+        <!-- Sorting buttons -->
+        <a href="?sort_by=title&order={{ next_order }}&search={{ search_query }}" class="btn-sort">
+            Title {% if sort_by == 'title' %}({{ order }}){% endif %}
+        </a>
+        <a href="?sort_by=user&order={{ next_order }}&search={{ search_query }}" class="btn-sort">
+            User {% if sort_by == 'user' %}({{ order }}){% endif %}
+        </a>
+    </div>
 
     {% if filtered_songs.exists %}
         <h3>Songs in this playlist:</h3>
