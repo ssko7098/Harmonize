@@ -144,7 +144,7 @@ def view_playlist_songs(request, username, playlist_id):
     search_query = request.GET.get('search', '')
 
     sort_by = request.GET.get('sort_by', 'title')  # Default sorting by title
-    order = request.GET.get('order', 'asc')  # Default order is ascending
+    order = request.GET.get('order', 'v')  # Default order is ascending
 
     # Apply search filter
     if search_query:
@@ -154,12 +154,12 @@ def view_playlist_songs(request, username, playlist_id):
 
     # Apply sorting based on query parameters
     if sort_by == 'title':
-        filtered_songs = filtered_songs.order_by('song__title' if order == 'asc' else '-song__title')
+        filtered_songs = filtered_songs.order_by('song__title' if order == 'v' else '-song__title')
     elif sort_by == 'user':
-        filtered_songs = filtered_songs.order_by('song__user__username' if order == 'asc' else '-song__user__username')
+        filtered_songs = filtered_songs.order_by('song__user__username' if order == 'v' else '-song__user__username')
 
     # Flip the order for the next toggle
-    next_order = 'desc' if order == 'asc' else 'asc'
+    next_order = '^' if order == 'v' else 'v'
 
     return render(request, 'music/in_playlist.html', {
         'playlist': playlist,
