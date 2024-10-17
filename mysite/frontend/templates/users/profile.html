@@ -23,10 +23,9 @@
                         {% for single in singles %}
                             <li>
                                
-                                <!-- ONLY WORKS IF TITLE IS IDENTICAL TO FILE NAME WHEN UPLOADED (AND JPG FILES ONLY)-->
                                 <!-- Album Cover as Play Button -->
                                 <a href="#" onclick="playAudio('{{ single.mp3_file.url }}'); return false;">
-                                <img src="/media/cover_art/{{ single.title }}.jpg" alt="{{ single.title }} Album Cover" style="width:100px; height:auto;">
+                                <img src="{% if single.cover_image_file %}{{ single.cover_image_file.url }}{% else %}{% static 'images/default_cover.png' %}{% endif %}" alt="{{ single.title }} Album Cover" style="width:100px; height:auto;">
                                 </a>
 
                                 <div class="media-info">
