@@ -10,35 +10,54 @@
     <h1>Songs in "{{ playlist.name }}"</h1>
     <p>{{ playlist.description }}</p>
 
-<!-- Search bar for filtering songs in this playlist -->
-<form method="get" action="{% url 'view_playlist_songs' user.username playlist.pk %}">
-    <input type="text" name="search" placeholder="Search Songs in Playlist" value="{{ request.GET.search|default:'' }}">
-    <button type="submit">Search</button>
-    <a href="{% url 'view_playlist_songs' user.username playlist.pk %}">
-        <button type="button">Clear</button>
-    </a>
-</form>
+    <div>
+        <!-- Search bar for filtering songs in this playlist -->
+        <form method="get" action="{% url 'view_playlist_songs' user.username playlist.pk %}">
+            <input type="text" name="search" placeholder="Search Songs in Playlist" value="{{ request.GET.search|default:'' }}">
+            <button type="submit">Search</button>
+            <a href="{% url 'view_playlist_songs' user.username playlist.pk %}">
+                <button type="button">Clear</button>
+            </a>
+        </form>
 
+    </div>
 
-    {% if filtered_songs.exists %}
-        <h3>Songs in this playlist:</h3>
-        <ul>
-            {% for playlist_song in filtered_songs %}
-                <li>
-                    {{ playlist_song.song.title }} by {{ playlist_song.song.user.username }}
-                    {% if playlist_song.song.mp3_file %}
-                        - <a href="#" onclick="playAudio('{{ playlist_song.song.mp3_file.url }}'); return false;">Listen</a>
-                    {% else %}
-                        - No audio file available
-                    {% endif %}
-                    <!-- Form to Delete Song from Playlist -->
-                    <form method="post" action="{% url 'delete_song_from_playlist' playlist.pk playlist_song.song.pk %}" class="inline-form">
-                        {% csrf_token %}
-                        <button type="submit" class="btn-delete">Remove</button>
-                    </form>
-                </li>
-            {% endfor %}
-        </ul>
+     {% if filtered_songs.exists %}
+        <!-- Table structure for displaying songs -->
+        <table class="song-table">
+            <thead>
+                <tr>
+                    <!-- Sortable column headers -->
+                    <th>
+                        <a href="?sort_by=title&order={{ next_order }}&search={{ search_query }}">Title {% if sort_by == 'title' %}({{ order }}){% endif %}</a>
+                    </th>
+                    <th>
+                        <a href="?sort_by=user&order={{ next_order }}&search={{ search_query }}">User {% if sort_by == 'user' %}({{ order }}){% endif %}</a>
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for playlist_song in filtered_songs %}
+                <tr>
+                    <!-- Clicking on the song title plays the song -->
+                    <td>
+                        <a href="#" onclick="playAudio('{{ playlist_song.song.mp3_file.url }}'); return false;">
+                            {{ playlist_song.song.title }}
+                        </a>
+                    </td>
+                    <td>{{ playlist_song.song.user.username }}</td>
+                    <td>
+                        <!-- Form to delete the song from the playlist -->
+                        <form method="post" action="{% url 'delete_song_from_playlist' playlist.pk playlist_song.song.pk %}" class="inline-form">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-delete">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     {% else %}
         <p>No songs in this playlist yet.</p>
     {% endif %}

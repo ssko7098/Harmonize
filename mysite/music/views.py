@@ -143,13 +143,32 @@ def view_playlist_songs(request, username, playlist_id):
 
     search_query = request.GET.get('search', '')
 
+    sort_by = request.GET.get('sort_by', 'title')  # Default sorting by title
+    order = request.GET.get('order', 'v')  # Default order is ascending
+
+    # Apply search filter
     if search_query:
         filtered_songs = PlaylistSong.objects.filter(playlist=playlist, song__title__icontains=search_query)
     else:
         filtered_songs = playlist.playlistsong_set.all()
 
-    # Render the in_playlist.html template with the playlist data
-    return render(request, 'music/in_playlist.html', {'playlist': playlist, 'filtered_songs': filtered_songs})
+    # Apply sorting based on query parameters
+    if sort_by == 'title':
+        filtered_songs = filtered_songs.order_by('song__title' if order == 'v' else '-song__title')
+    elif sort_by == 'user':
+        filtered_songs = filtered_songs.order_by('song__user__username' if order == 'v' else '-song__user__username')
+
+    # Flip the order for the next toggle
+    next_order = '^' if order == 'v' else 'v'
+
+    return render(request, 'music/in_playlist.html', {
+        'playlist': playlist,
+        'filtered_songs': filtered_songs,
+        'search_query': search_query,
+        'sort_by': sort_by,
+        'order': order,
+        'next_order': next_order,
+    })
 
 @login_required
 @user_passes_test(is_verified)
