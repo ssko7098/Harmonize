@@ -40,6 +40,7 @@ export function attachEventListeners() {
         avatarInput.addEventListener('change', previewAvatar);
     }
 
+    attachNavLinkActiveState();
 }
 
 function handleLinkClick(e) {
@@ -54,6 +55,9 @@ function handleSearchSubmit(e) {
     const formData = new FormData(this);
     const query = formData.get('query');
     const url = this.action + '?query=' + encodeURIComponent(query);
+
+    // Deselect any active nav links/buttons when search form is submitted
+    clearActiveNavLinks();
 
     fetch(url)
         .then(response => response.text())
@@ -193,5 +197,28 @@ function handleRegisterSubmit(e) {
         if (submitButton) {
             submitButton.disabled = false;
         }
+    });
+}
+// New function to manage "active" state of nav links
+function attachNavLinkActiveState() {
+    const navItems = document.querySelectorAll('.nav-link-btn, .nav-link');
+
+    navItems.forEach(navItem => {
+        // Add click event listener to each nav item
+        navItem.addEventListener('click', function () {
+            // Remove 'active' class from all nav items
+            navItems.forEach(item => item.classList.remove('active'));
+
+            // Add 'active' class to the clicked item
+            this.classList.add('active');
+        });
+    });
+}
+
+// Function to clear "active" class from nav links and buttons
+function clearActiveNavLinks() {
+    const navItems = document.querySelectorAll('.nav-link-btn, .nav-link');
+    navItems.forEach(item => {
+        item.classList.remove('active');
     });
 }

@@ -4,6 +4,11 @@ export function playAudio(url) {
     const audioPlayer = document.getElementById('audio-player');
     const audioSource = document.getElementById('audio-source');
 
+    if (!audioPlayer || !audioSource) {
+        console.warn('Audio player or source not found. Cannot play audio.');
+        return;
+    }
+
     if (audioSource.src === url) {
         audioPlayer.currentTime = 0;
         audioPlayer.play();
@@ -22,6 +27,11 @@ export function restoreAudioState() {
     const userDataElement = document.getElementById('user-data');
     const username = userDataElement ? userDataElement.getAttribute('data-username') : 'guest';
 
+    if (!audioPlayer || !audioSource) {
+        console.warn('Audio player or source not found. Cannot restore audio state.');
+        return;
+    }
+    
     const timeKey = `${username}_currentTrackTime`;
     const srcKey = `${username}_currentTrackSrc`;
 
@@ -54,6 +64,11 @@ export function persistAudioState() {
     const audioSource = document.getElementById('audio-source');
     const userDataElement = document.getElementById('user-data');
     const username = userDataElement ? userDataElement.getAttribute('data-username') : 'guest';
+
+    if (!audioPlayer || !audioSource) {
+        console.warn('Audio player or source not found. Cannot persist audio state.');
+        return;
+    }
 
     const timeKey = `${username}_currentTrackTime`;
     const srcKey = `${username}_currentTrackSrc`;

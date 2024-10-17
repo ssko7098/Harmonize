@@ -4,10 +4,71 @@
 {% load static %}
 
 {% block content %}
-    <div class="container">
-        <div>
-            <h1>{{ user_profile.user.username }}'s Profile</h1>
-            {% if not is_own_profile and not request.user.is_admin and is_verified %}
+    <div class="container-alt">
+        <div class="profile-box">
+            <h3>{{ user_profile.user.username }}</h3>
+            <p class="user-fullname">{{ user_profile.user.full_name }}</p>
+
+            <img src="{% if user_profile.avatar_file %}{{ user_profile.avatar_file.url }}{% else %}{% static 'images/default_cover.png' %}{% endif %}" 
+            alt="Profile Picture" 
+            id="cover-preview"
+            class="profile-picture">
+            <div class="profile-info">
+
+                <p class="body-header">Biography</p>
+                <p class="body">{{ user_profile.bio }}</p>
+
+                <h2>Singles</h2>
+                    <ul>
+                        {% for single in singles %}
+                            <li>
+                               
+                                <!-- Album Cover as Play Button -->
+                                <a href="#" onclick="playAudio('{{ single.mp3_file.url }}'); return false;">
+                                <img src="{% if single.cover_image_file %}{{ single.cover_image_file.url }}{% else %}{% static 'images/default_cover.png' %}{% endif %}" alt="{{ single.title }} Album Cover" style="width:100px; height:auto;">
+                                </a>
+
+                                <div class="media-info">
+                                    <p class="body-header">{{single.title }}</p>
+                                    <p class="body">{{user_profile.user.username }}</p>
+                                </div>
+
+                                <!-- <img src="/media/cover_art/{{ single.title }}.jpg" alt="{{ single.title }} Album Cover" style="width:100px; height:auto;">
+
+                                <a href="#" onclick="playAudio('{{ single.mp3_file.url }}'); return false;">{{ single.title }}</a> -->
+                                
+                                <div class="button">
+                                    {% if is_own_profile or request.user.is_admin %}
+                                        <form method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="song_id" value="{{ single.song_id }}">
+                                            <button type="submit" name="delete_song" onclick="return confirm('Are you sure you want to delete this song?');">Delete</button>
+                                        </form>
+                                    {% else %}
+                                        <form method="post" action="{% url 'report_song' single.pk %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="song_id" value="{{ single.pk }}">
+                                            <input type="hidden" name="from_profile" value="true">
+                                            <button type="submit" class="btn-report">Report</button>
+                                        </form>
+                                    {% endif %}
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+
+                <h2>Albums</h2>
+                <ul>
+                    {% for album in albums %}
+                        <li>{{ album.title }} - <a href="#">Listen</a></li>
+                    {% endfor %}
+                </ul>
+
+                <!-- Include the comment section here -->
+                {% include "comments/comments.html" %}
+
+                <!-- report button for other users profiles -->
+                {% if not is_own_profile and not request.user.is_admin and is_verified %}
                 <form method="post">
                     {% csrf_token %}
                     <button type="submit" name="report_profile" class="btn btn-report">Report Profile</button>
@@ -28,51 +89,6 @@
                     <button type="submit" name="delete_profile" class="btn btn-delete" onclick="return confirm('Are you sure you want to delete this user profile?');">Delete Profile</button>
                 </form>
             {% endif %}
-
-            <img src="{% if user_profile.avatar_file %}{{ user_profile.avatar_file.url }}{% else %}{% static 'images/default_cover.png' %}{% endif %}" 
-            alt="Profile Picture" 
-            id="cover-preview"
-            class="profile-picture">
-            <div class="profile-info">
-                <p><strong>Full Name:</strong> {{ user_profile.user.full_name }}</p>
-                <p><strong>Bio:</strong> {{ user_profile.bio }}</p>
-
-                <h2>Singles</h2>
-                    <ul>
-                        {% for single in singles %}
-                            <li>
-                                <a href="#" onclick="playAudio('{{ single.mp3_file.url }}'); return false;">{{ single.title }}</a>
-
-                                {% if is_own_profile or request.user.is_admin %}
-                                    <!-- Delete Button -->
-                                    <form method="post" style="display:inline;">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="song_id" value="{{ single.song_id }}">
-                                        <button type="submit" name="delete_song" onclick="return confirm('Are you sure you want to delete this song?');">Delete</button>
-                                    </form>
-                                {% else %}
-                                     <!-- Report Button -->
-                                    <form method="post" action="{% url 'report_song' single.pk %}" style="display:inline;">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="song_id" value="{{ single.pk }}">
-                                        <input type="hidden" name="from_profile" value="true">
-                                        <button type="submit" class="btn-report">Report</button>
-                                    </form>
-                                {% endif %}
-                                    
-                            </li>
-                        {% endfor %}
-                    </ul>
-
-                <h2>Albums</h2>
-                <ul>
-                    {% for album in albums %}
-                        <li>{{ album.title }} - <a href="#">Listen</a></li>
-                    {% endfor %}
-                </ul>
-
-                <!-- Include the comment section here -->
-                {% include "comments/comments.html" %}
             </div>
 
         </div>

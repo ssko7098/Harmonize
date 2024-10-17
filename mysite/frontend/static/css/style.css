@@ -19,6 +19,7 @@
   --font-size-base: 16px;
   --font-size-large: 20px;
   --font-size-header: 32px;
+  --font-size-profile-name: 50px;
 
   /* Font weight variables */
   --font-weight-navbar: 500;
@@ -32,11 +33,99 @@
 /* Body and global styling */
 body {
   font-family: "Montserrat", sans-serif;
-  background-color: #f3f4f6;
+  /* background-color: #f3f4f6; */
   color: #333;
   margin: 0;
   padding: 0;
   line-height: 1.6;
+}
+
+/* Background */
+.background {
+  position: fixed; /* Fix it to the viewport */
+  overflow: auto;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh; /* Full height of the viewport */
+  z-index: -2; /* Ensure it's behind other content */
+  background: linear-gradient(315deg, 
+    #4c2478 0%,  /* Dark Purple */
+    #7b4bd4 25%, /* Softer Lavender (Primary Color) */
+    #a482c7 50%, /* Slightly Darker Lavender (Hover Color) */
+    #8e44ad 75%  /* Rich Purple */
+  );
+  animation: gradient 15s ease infinite;
+  background-size: 400% 400%; /* Adjust to allow animation */
+}
+
+/* margin: auto;
+font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+overflow: auto;
+background: linear-gradient(315deg, rgba(101,0,94,1) 3%, rgba(60,132,206,1) 38%, rgba(48,238,226,1) 68%, rgba(255,25,25,1) 98%);
+animation: gradient 15s ease infinite;
+background-size: 400% 400%;
+background-attachment: fixed;
+} */
+
+/* Gradient animation keyframes */
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Adjust wave elements separately */
+.wave {
+  background: rgb(255 255 255 / 25%);
+  border-radius: 1000% 1000% 0 0;
+  position: fixed;
+  width: 200%;
+  height: 12em;
+  animation: wave 35s -3s linear infinite;
+  transform: translate3d(0, 0, 0);
+  opacity: 0.5;
+  bottom: 0em;
+  left: 0;
+  z-index: -1;
+}
+
+.wave:nth-of-type(2) {
+  bottom: 0em;
+  height: 30em;
+  animation: wave 35s linear ease-in infinite;
+  opacity: 0.7;
+}
+
+.wave:nth-of-type(3) {
+  bottom: 0em;
+  height: 20em;
+  animation: wave 40s -1s reverse infinite;
+  opacity: 0.9;
+}
+
+@keyframes wave {
+  2% {
+      transform: translateX(1);
+  }
+  25% {
+      transform: translateX(-25%);
+  }
+  50% {
+      transform: translateX(-50%);
+  }
+  75% {
+      transform: translateX(-25%);
+  }
+  100% {
+      transform: translateX(1);
+  }
 }
 
 /* Navbar styling */
@@ -45,7 +134,10 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  background-color: var(--primary-color);
+  /* border-bottom: 2px solid var(--primary-color); */
+  background-color: rgba(201, 150, 255, 0.05);;
+  /* background-color: rgba(120, 2, 246, 0.05); */
+  /* backdrop-filter: blur(100%);  */
   color: var(--accent-color);
 }
 
@@ -61,15 +153,24 @@ body {
 }
 
 .navbar .nav-link {
-  margin: 0 15px;
+  /* margin: 0 15px; */
   text-decoration: none;
   color: var(--accent-color);
   font-weight: var(--font-weight-navbar);
-  transition: color 0.3s ease;
+  transition: color 0.3s ease, background-color 0.3s ease;
+  border-radius: 5px;
+  pointer-events: auto;
+  padding: 5px 5px; /* Initial padding */
 }
 
 .navbar .nav-link:hover {
-  color: var(--hover-color);
+  color: var(--primary-color);
+  background-color: var(--soft-white);
+}
+
+.navbar .nav-link.active {
+  color: var(--primary-color);
+  background-color: var(--soft-white);
 }
 
 .navbar .nav-links a {
@@ -78,6 +179,28 @@ body {
   color: #ebebeb;
   font-weight: var(--font-weight-navbar);
 }
+
+.navbar .nav-link-btn {
+  /* margin: 0 15px; */
+  text-decoration: none;
+  color: var(--accent-color);
+  font-weight: var(--font-weight-navbar);
+  transition: color 0.3s ease, background-color 0.3s ease;
+  border-radius: 5px;
+  pointer-events: auto;
+  padding: 5px 5px; /* Initial padding */
+}
+
+.navbar .nav-link-btn:hover {
+  color: var(--primary-color);
+  background-color: var(--soft-white);
+}
+
+.navbar .nav-link-btn.active {
+  color: var(--primary-color);
+  background-color: var(--soft-white);
+}
+
 
 /* Flex container for the search form */
 .search-form {
@@ -142,7 +265,7 @@ body {
 /* Default (inactive) state of the input wrapper */
 .input-wrapper {
   border: 1px solid var(--soft-white); /* Subtle border when inactive */
-  background: var(--primary-color); /* Transparent background when inactive */
+  background: none;
 }
 
 /* Change background colour on hover */
@@ -170,9 +293,21 @@ body {
   min-width: 600px;
   margin: 50px auto;
   padding: 30px;
-  background-color: #ffffff;
+  /* background-color: #ffffff; */
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Container styling */
+.container-alt {
+  max-width: 600px;
+  min-width: 600px;
+  margin: 50px auto;
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.1);; /* Slight transparent gray background */
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.2); /* Light border for definition */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  backdrop-filter: blur(15px); /* Optional blur effect */
 }
 
 h1 {
@@ -201,22 +336,6 @@ h1 {
   display: block; /* Ensure block display */
 }
 
-/* Full-width button */
-.auth-form .btn {
-  width: 100%; /* Force full width for the button */
-  padding: 12px;
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 10px;
-}
-
-.auth-form .btn:hover {
-  background-color: var(--hover-color);
-}
-
 /* Center the heading */
 .auth-form h2 {
   text-align: center;
@@ -234,13 +353,118 @@ h1 {
   font-weight: normal;
   margin-bottom: 5px;
   display: block;
+
+}
+
+
+
+/* ---------------------------------------------------------------- */
+/* ! Styling for Login Page Elements */
+.login-box {
+  width: 100%; /* Ensure full width of the form inside container */
+  text-align: left;
+  background: none;
+}
+
+.login-input-box {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  margin: 30px 0;
+  border-bottom: 2px solid var(--soft-white);
+  font-size: var(--font-size-medium);
+  
+}
+
+.login-input-box label {
+  position: absolute;
+  top: 50%;
+  left: 5px;
+  /* transform: translateY(-20%); */
+  font-size: 1em;
+  pointer-events: none;
+  transition: .5s;
+  color: var(--soft-white);
+  
+}
+
+.login-input-box input:focus~label,
+.login-input-box input:valid~label {
+  top: 10%;
+  font-size: 0.85em;
+  color: var(--soft-white);
+}
+
+.login-input-box input {
+  width: 100%;
+  height: 60px;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 1.2em;
+  padding: 20px 40px 0px 0px; /* Increased top padding (T, R, B, L) */
+  color: var(--soft-white);
+}
+
+.login-input-box .icon {
+  position: absolute;
+  bottom: 11px;
+  right: 2px;
+  font-size: 1.2em;
+  line-height: 1px;
+}
+
+.login-input-box .local-icon {
+  position: absolute;
+  bottom: 11px;
+  right: 2px;
+  font-size: 1.2em;
+  line-height: 1px;
+}
+
+.login-box .btn {
+  width: 100%; /* Force full width for the button */
+  padding: 12px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius-button);
+  cursor: pointer;
+  margin-top: 10px;
+  font-size: var(--font-size-medium);
+  transition: .3s;
+  font-weight: 600;
+}
+
+.login-box .btn:hover {
+  background-color: #fff;
+  color: var(--primary-color);
+  font-size: calc(var(--font-size-medium) * 1.2);
+}
+/* Full-width button */
+
+.auth-form .btn:hover {
+  background-color: var(--hover-color);
+}
+
+
+h2 {
+  text-align: center;
+  font-size: var(--font-size-header);
+  margin-top: 0px;
+  margin-bottom: 20px;
+  color: var(--soft-white);
 }
 
 /* Error message styling */
 .error {
+  position: absolute;
+  left: 0; /* Align to the left of the input box */
+  bottom: -40px; /* Move the error message below the input field */
+  width: 100%;
+  text-align: center;
   color: red;
   font-size: 0.875em;
-  margin-top: 5px;
 }
 
 .error-border input {
@@ -251,6 +475,21 @@ h1 {
 .register-link {
   text-align: center;
   margin-top: 10px;
+  font-size: var(--font-size-small);
+  color: var(--soft-white)
+}
+
+.register-link-text {
+  color: var(--soft-white);
+  transition: color 0.3s ease;
+  text-decoration: underline;
+}
+
+.register-link-text:hover {
+  text-align: center;
+  margin-top: 10px;
+  color: #ffffff;
+  font-weight: calc(var(--font-weight-button) * 1.1);
 }
 
 /* Adjust margins and center text in paragraphs */
@@ -260,15 +499,21 @@ p {
 }
 
 /* Styling the checkbox with label */
-.auth-form-group.checkbox-group {
+.checkbox-group {
   display: inline-flex;
   align-items: center;
   margin-bottom: 20px;
+  margin-top: 20px;
 }
 
-.auth-form-group.checkbox-group input[type="checkbox"] {
+/* Initial state for the label and link */ 
+.checkbox-group a[href="#"] {
+    text-decoration: underline; /* Optional: remove underline */
+}
+
+.checkbox-group input[type="checkbox"] {
   margin-right: 10px;
-  transform: translateY(-2px);
+  /* transform: translateY(-2px); */
 }
 
 /* Admin Dashboard Layout */
@@ -428,7 +673,7 @@ p {
 
 #upload-page .upload-button {
   padding: 10px 20px;
-  background-color: #f5f5f5;
+  background-color: #f2f0f0;
   border: none;
   margin: 0 5px;
   border-radius: 5px;
@@ -509,15 +754,43 @@ p {
   background-color: var(--hover-color);
 }
 
+#upload-page .upload-btn {
+  width: 40%; /* Force full width for the button */
+  padding: 12px;
+  background: transparent;
+  color: white;
+  border: 2px solid var(--soft-white);
+  border-radius: var(--border-radius-button);
+  cursor: pointer;
+  margin-top: 10px;
+  font-size: var(--font-size-medium);
+  transition: .3s;
+  font-weight: 600;
+  margin-right: 10px; /* Add space between the buttons */
+}
+
+#upload-page .upload-btn:hover {
+  background-color: #fff;
+  color: var(--primary-color);
+}
+
+#upload-page .upload-btn.active {
+  background-color: #fff;
+  color: var(--primary-color);
+}
+
+#upload-page .upload-btn:last-child {
+  margin-right: 0; /* Ensure no extra margin on the last button */
+}
+
 /* Ensure the audio player stays fixed at the bottom of the viewport */
 .audio-player-container {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: var(--primary-color);
+  background-color: rgba(120, 2, 246, 0.05);
   padding: 10px;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
   z-index: 999;
   display: flex;
   justify-content: center;
@@ -611,55 +884,193 @@ p {
   margin-right: auto;
 }
 
-/* -----------------    Profile Settings    ------------------- */
 
-.profile-info p {
-  font-size: var(--font-size-base); /* placeholder size and colour until me and ethan decide */
-  color: var(--accent-color);
-  font-family: "Montserrat", sans-serif;
-  margin-bottom: 10px;
+/* ---------------------------------------------------------------- */
+/* ! Styling for My Profile Elements */
+
+.profile-box {
+  width: 100%; /* Ensure full width of the form inside container */
+  text-align: left;
+  background: none;
+}
+
+h3 { /* style elements for profile name */
+  text-align: left;
+  font-size: var(--font-size-profile-name);
+  margin-top: 0px;
+  margin-bottom: -7.5px;
+  color: var(--soft-white);
+}
+
+.user-fullname {
+  text-align: left;
+  font-size: var(--font-size-medium);
+  margin-top: 0px;
+  margin-bottom: 0px;
+  color: var(--soft-white);
+}
+
+.profile-box .profile-picture {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.profile-box .body-header {
+  text-align: left;
+  font-size: var(--font-size-medium); 
+  font-weight: 600;
+  color: var(--soft-white);
+  margin-top: 10px;
+  margin-bottom: 0px;
+}
+
+.profile-box .body {
+  text-align: left;
+  font-size: var(--font-size-medium); 
+  color: var(--soft-white);
+  margin-top: 0px;
+  margin-bottom: 30px;
+}
+
+.profile-box h2 {
+  text-align: left !important; 
+  margin-bottom: 0px !important;
+} 
+
+ul {
+  list-style-type: none; /* Removes bullet points */
+  padding: 0; /* Removes padding */
+  margin: 0; /* Removes margin */
+}
+
+li {
+  display: flex; /* Makes items horizontal */
+  align-items: center; /* Centers items vertically */
+  margin-bottom: 10px; /* Space between items */
+
+}
+
+.media-info p {
+  margin-left: 20px;
+  align-items: center;
+}
+
+.profile-info .button {
+  margin-left: auto;
+}
+
+/* ---------------------------------------------------------------- */
+
+
+/* ---------------------------------------------------------------- */
+/* ! Styling for Profile Settings Elements */
+
+.profile-settings-box {
+  width: 100%; /* Ensure full width of the form inside container */
+  text-align: left;
+  background: none;
 }
 
 .profile-row {
   display: flex;
-  justify-content: flex-start;
   align-items: center;
+  margin-bottom: 10px !important;
 }
 
 .profile-label {
-  min-width: 190px; /* forces profile values to be inline veritcally with text boxes */
-  text-align: right;
-  padding-right: 30px; /* pushes labels back from 190px to the right to be inline with bio and avatar url */
+  min-width: 120px;
+  text-align: left;
+  font-size: var(--font-size-medium); 
+  font-weight: 600;
+  color: var(--soft-white);
+  padding-right: 30px;
 }
 
-/* ------------------------------------------------------------ */
+.profile-value {
+  flex: 1;
+  text-align: left;
+  font-size: var(--font-size-medium); 
+  color: var(--soft-white);
+
+}
+
+.form-group label {
+  text-align: left !important;
+  font-size: var(--font-size-medium); 
+  font-weight: 600;
+  color: var(--soft-white) !important;
+  margin-bottom: 10px !important;
+  width: 20% !important;
+}
+
+/* Flexbox for avatar upload section */
+.avatar-upload {
+  display: flex;
+  align-items: center;  /* Vertically center the items */
+  justify-content: center;
+  width: 100%
+
+}
+
+.avatar-container {
+  display: flex;
+  flex-direction: column;
+  /* Ensures elements (avatar preview and input) are stacked vertically */
+  align-items: left;     /* Centers the content (avatar and input) horizontally */
+  justify-content: center;
+  margin: 0 auto;
+}
+
+/* Avatar image styling */
+.avatar-preview {
+  margin-bottom: 10px;
+  object-fit: cover;  
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;  /* Make the image round */
+  border: 2px solid var(--soft-white);
+  display: block;
+}
+
+.form-group-bio label{
+
+}
+
+#id_bio {
+  background: transparent;
+  outline: 1px solid var(--soft-white);
+  align-items: left;
+}
+
+#id_bio:focus {
+  outline: 2px solid var(--soft-white);
+}
+
+
+/* ---------------------------------------------------------------- */
 
 
 /* Update profile info button */
 #profile-settings-page .submit-button {
+  width: 100%;
   align-items: center;
   border-radius: var(--border-radius-button);
-  display: flex;
-  padding: 5px 15px;
-  background: var(--soft-white);
-  font-family: "Montserrat", sans-serif;
-  font-weight: var(--font-weight-button);
-  font-size: var(--font-size-medium);
-  border: var(--accent-color);
-  border-width: 1.5px;
-  border-style: solid;
-}
-
-/* highlights button when cursor is hovering over it */
-#profile-settings-page .submit-button:hover {
-  background-color: var(--hover-color);
-  border-color: var(--hover-color);
-}
-
-/* makes button flash when clicked */
-#profile-settings-page .submit-button:active {
   background-color: var(--primary-color);
-  border-color: var(--primary-color);
+  color: white;
+  padding: 12px;
+  cursor: pointer;
+  font-family: "Montserrat", sans-serif;
+  font-size: var(--font-size-medium);
+  border: none;
+  margin-top: 10px;
+  transition: .3s;
+  font-weight: 600;
+}
+
+#profile-settings-page .submit-button:hover {
+  background-color: white;
+  color: var(--primary-color);
+  font-size: calc(var(--font-size-medium) * 1.2);
 }
 
 /* Messages Styling */
@@ -671,11 +1082,11 @@ ul.messages {
 
 ul.messages li {
   background-color: #f8f8f8;
-  padding: 10px;
-  border-radius: 5px;
-  margin-bottom: 10px;
+  padding: 12px;
   color: #333;
-  font-size: 0.95em;
+  font-size: var(--font-size-medium);
+  border-radius: var(--border-radius-button);
+  margin-bottom: 0 !important;
 }
 
 ul.messages li.error {
@@ -686,7 +1097,6 @@ ul.messages li.error {
 ul.messages li.success {
   background-color: #ddffdd;
   color: #5cb85c;
-  border-radius: 10px;
 }
 
 /* Textarea Styling */
@@ -710,17 +1120,18 @@ textarea {
   text-align: right;
 }
 
+/* text box formatting. used in profile settings etc */
 :not(.auth-form) .form-group input,
 :not(.auth-form) .form-group textarea,
 :not(.auth-form) .form-group select {
   width: 65%;
   padding: 10px;
   font-family: "Montserrat", sans-serif;
-  border: 1px solid var(--accent-color);
+  border: 1px solid var(--soft-white);
   border-radius: var(--border-radius-textbox);
   box-sizing: border-box;
   background-color: #fff;
-  color: var(--accent-color);
+  color: var(--soft-white);
   
 }
 
@@ -731,34 +1142,6 @@ textarea {
   border-radius: 50%; /* Makes it circular */
 }
 
-/* Flexbox for avatar upload section */
-.avatar-upload {
-  display: flex;
-  align-items: center;  /* Vertically center the items */
-  gap: 20px;  /* Space between the label and avatar preview */
-}
-
-/* Right-side container for avatar image and upload button */
-.avatar-upload-right {
-  display: flex;
-  align-items: center;  /* Vertically align the avatar and upload input */
-  gap: 15px;  /* Space between the avatar and file input */
-}
-
-/* Avatar image styling */
-.avatar-preview {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 50%;  /* Make the image round */
-  border: 2px solid #ddd;
-}
-
-/* File input container styling */
-.file-input-container {
-  display: flex;
-  flex-direction: column;
-}
 
 .cover-art-input-container {
   display: flex;

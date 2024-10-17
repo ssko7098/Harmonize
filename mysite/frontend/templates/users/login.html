@@ -3,25 +3,34 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-    <div class="container">
-        <div class="auth-form">
+    <div class="container-alt">
+        <div class="login-box">
+            <img src="../../frontend/static/images/logo-temp.png"
+            width="120" height="120" style="display: block; margin: 0 auto;margin-bottom: 40px;"></img>
             <h2>Login</h2>
             <form method="post">
                 {% csrf_token %}
 
                 <!-- Username field with potential error -->
-                <div class="auth-form-group {% if form.username.errors %}error-border{% endif %}">
+                <div class="login-input-box {% if form.username.errors %}error-border{% endif %}">
+                    <span class="local-icon">
+                        <img src="../../frontend/static/images/person-circle-outline-white.png" width="20" height="20"></img>
+                    </span>
+                    <input type="text" id="username" name="username" required></input>
                     <label for="username">Username</label>
-                    {{ form.username }}
                     {% if form.username.errors %}
                         <p class="error">{{ form.username.errors.0 }}</p>
                     {% endif %}
                 </div>
-
+                
                 <!-- Password field with potential error -->
-                <div class="auth-form-group {% if form.password.errors %}error-border{% endif %}">
+                <div class="login-input-box {% if form.password.errors %}error-border{% endif %}">
+                    <span class="local-icon">
+                        <img src="../../frontend/static/images/lock-closed-outline-1.svg" width="20" height="20"></img>
+                    </span>
+                    <input type="password" id="password" name="password" required></input>
                     <label for="password">Password</label>
-                    {{ form.password }}  <!-- Render password input from form -->
+
                     {% if form.password.errors %}
                         <p class="error">{{ form.password.errors.0 }}</p>
                     {% endif %}
@@ -40,10 +49,14 @@
                 {% endif %}
 
                 <button type="submit" class="btn">Sign In</button>
-                <p><a>Forgot Password?</a></p>
+                <div class="register-link">
+                    <!-- Need to link the below -->
+                    <a hef="#" class="register-link-text">Forgot Password?</a>
+                </div>
             </form>
             <div class="register-link">
-                <p>Don't have an account? <a href="{% url 'register' %}">Register here</a></p>
+                <a>Don't have an account?</a>
+                <a href="{% url 'register' %}" class="register-link-text">Register here</a></a>
             </div>
         </div>
     </div>
