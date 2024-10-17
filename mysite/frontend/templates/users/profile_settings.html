@@ -25,7 +25,7 @@
                             <p class="profile-value">{{ user.email }}</p>
                         </div>
 
-                        <form method="POST" enctype="multipart/form-data">
+                        <form method="POST" enctype="multipart/form-data" id="profile-settings-form">
                             {% csrf_token %}
                             
             
@@ -35,7 +35,7 @@
                                 <div class="avatar-container">
                                     {% if user.profile.avatar_file %}
                                         <!-- Show the current avatar if available -->
-                                        <img src="{{ user.profile.avatar_file.url }}" alt="Profile Picture" class="avatar-preview">
+                                        <img src="{{ user.profile.avatar_file.url }}" id="avatar-preview" alt="Profile Picture" class="avatar-preview">
                                     {% else %}
                                         <p>No avatar uploaded</p>
                                     {% endif %}
@@ -43,7 +43,7 @@
 
                                     <!-- File input for changing the avatar -->
                                     <div class="file-input-container">
-                                        <input type="file" name="avatar_file" id="id_avatar_file">  
+                                        <input type="file" name="avatar_file" id="avatar_file">  
                                     </div>
                                 </div>
                             </div>
@@ -62,13 +62,15 @@
                             {% endif %}
                         </form>
 
-                        <ul class="messages">
-                            {% for message in messages %}
-                                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
-                                    {{ message }}
-                                </li>
-                            {% endfor %}
-                        </ul>
+                        <div id="message-container">
+                            <ul class="messages">
+                                {% for message in messages %}
+                                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                                        {{ message }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
                         
                     </div>
                 </div>
