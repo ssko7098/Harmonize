@@ -12,7 +12,6 @@ export function attachEventListeners() {
         searchForm.removeEventListener('submit', handleSearchSubmit);
         searchForm.addEventListener('submit', handleSearchSubmit);
     }
-<<<<<<< HEAD
 
     // For the registration form
     const registerForm = document.getElementById('register-form');
@@ -41,9 +40,7 @@ export function attachEventListeners() {
         avatarInput.addEventListener('change', previewAvatar);
     }
 
-=======
     attachNavLinkActiveState();
->>>>>>> c3d1c62e2c850f630dd1206d1fcd1f4c6b562a18
 }
 
 function handleLinkClick(e) {
@@ -75,7 +72,6 @@ function handleSearchSubmit(e) {
         .catch(error => console.error('Error during search:', error));
 }
 
-<<<<<<< HEAD
 // Handle profile settings form submission (for profile picture and bio updates)
 function handleProfileSubmit(e) {
     e.preventDefault();
@@ -203,7 +199,6 @@ function handleRegisterSubmit(e) {
         }
     });
 }
-=======
 // New function to manage "active" state of nav links
 function attachNavLinkActiveState() {
     const navItems = document.querySelectorAll('.nav-link-btn, .nav-link');
@@ -227,4 +222,3 @@ function clearActiveNavLinks() {
         item.classList.remove('active');
     });
 }
->>>>>>> c3d1c62e2c850f630dd1206d1fcd1f4c6b562a18

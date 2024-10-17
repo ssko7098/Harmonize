@@ -1,4 +1,5 @@
 // contentLoader.js
+import { attachEventListeners } from './eventHandlers.js'; 
 
 import { attachEventListeners } from './eventHandlers.js';
 
