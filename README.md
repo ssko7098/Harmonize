@@ -68,7 +68,7 @@ __NOTE:__ Before running the below code in the terminal, make sure to `cd` into 
 
 Run the following code to access the CLI for sqlite:
 ```bash
-sqlite3 -init config.sql db.sqlite3
+sqlite3 db.sqlite3
 ```
 
 ## Configuration and Environment Setup
