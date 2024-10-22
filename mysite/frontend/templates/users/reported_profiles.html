@@ -1,9 +1,9 @@
-{% extends '../base.html' %}
+{% extends './admin_dashboard.html' %}
 
 {% block title %}Reported Profiles{% endblock %}
 
-{% block content %}
-<div class="container">
+{% block admin_content %}
+<div class="admin-dashboard">
     <h1>Reported Profiles</h1>
     
     {% if reported_profiles.exists %}
@@ -34,14 +34,14 @@
     {% else %}
     <p>No reported profiles found.</p>
     {% endif %}
-</div>
 
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+</div>
 {% endif %}
 
 {% endblock %}

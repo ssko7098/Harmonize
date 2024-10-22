@@ -120,7 +120,7 @@
 
                 <!-- Report button for other users profiles -->
                 {% if not is_own_profile and not request.user.is_admin and is_verified %}
-                <form method="post" id="custom-form">
+                <form method="post">
                     {% csrf_token %}
                     <button type="submit" name="report_profile" class="btn btn-report">Report Profile</button>
                 </form>
