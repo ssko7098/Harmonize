@@ -48,6 +48,21 @@ def admin_dashboard(request):
     total_users = User.objects.filter(is_active=True, is_admin=False).count()  # Count total users not including admins and inactive
     total_songs = Song.objects.count()  # Count total songs
 
+    if request.method == 'POST':
+        if 'clear_reports' in request.POST:
+            profile_id = request.POST.get('profile_id')
+
+            if not profile_id:
+                messages.error(request, 'No Profile selected for clearing.')
+                return redirect('reported_profiles')
+            
+            profile = get_object_or_404(Profile, pk=profile_id)
+
+            profile.report_count = 0
+            profile.reported_by.clear()
+            profile.save()
+            messages.success(request, f"Profile reports have been cleared for {profile.user.username}.")
+
     return render(request, 'users/manage_profiles.html', {
         'users': users,
         'total_users': total_users,
@@ -124,26 +139,6 @@ def manage_songs(request):
             messages.success(request, f"Song reports have been cleared for {song.title}.")
 
     return render(request, 'users/manage_songs.html', {'songs': songs})
-
-@user_passes_test(is_admin)
-def manage_reported_profiles(request):
-    reported_profiles = Profile.objects.filter(report_count__gt=0, user__is_active=True).order_by('-report_count')
-    if request.method == 'POST':
-        if 'clear_reports' in request.POST:
-            profile_id = request.POST.get('profile_id')
-
-            if not profile_id:
-                messages.error(request, 'No Profile selected for clearing.')
-                return redirect('reported_profiles')
-            
-            profile = get_object_or_404(Profile, pk=profile_id)
-
-            profile.report_count = 0
-            profile.reported_by.clear()
-            profile.save()
-            messages.success(request, f"Profile reports have been cleared for {profile.user.username}.")
-    
-    return render(request, 'users/reported_profiles.html', {'reported_profiles': reported_profiles})
 
 @user_passes_test(is_admin)
 def manage_reported_comments(request):
