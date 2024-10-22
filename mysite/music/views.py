@@ -17,7 +17,7 @@ from django.http import JsonResponse
 from django.middleware.csrf import get_token
 from rest_framework.permissions import IsAuthenticated
 
-
+# ------------------------- REST API FUNCTIONS ------------------------- #
 def get_csrf(request):
     token = get_token(request)
     return JsonResponse({'csrfToken': token})
@@ -77,6 +77,19 @@ class UpdatePlaylistView(generics.RetrieveUpdateDestroyAPIView):
             return Response({'message': 'Playlist updated successfully.'}, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class ViewPlaylistSongs(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, playlist_id):
+        playlist = get_object_or_404(Playlist, pk=playlist_id, user=request.user)
+        playlist_songs = PlaylistSong.objects.filter(playlist=playlist)
+        songs = [ps.song for ps in playlist_songs]  # Get the list of songs in the playlist
+        song_serializer = SongSerializer(songs, many=True)
+
+        return Response(song_serializer.data, status=status.HTTP_200_OK)
+
+# ------------------------- END REST API FUNCTIONS ------------------------- #
 
 @login_required
 @user_passes_test(is_verified)
