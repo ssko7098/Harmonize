@@ -15,6 +15,8 @@ from .serializers import PlaylistSerializer, SongSerializer
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django.middleware.csrf import get_token
+from rest_framework.permissions import IsAuthenticated
+
 
 
 def get_csrf(request):
@@ -24,7 +26,7 @@ def get_csrf(request):
 class PlaylistListCreateView(generics.ListCreateAPIView):
     queryset = Playlist.objects.all()
     serializer_class = PlaylistSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -36,33 +38,33 @@ class ViewUserPlaylists(generics.ListAPIView):
 
     def get_queryset(self):
         username = self.kwargs.get('username')
+        
+        if self.request.user.username != username:
+            raise Http404("You are not allowed to view this user's playlists.")
         return Playlist.objects.filter(user__username=username)
 
 
-class AddSongToPlaylistView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
 
-    def post(self, request, playlist_id, song_id):
+class RemovePlaylistView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, playlist_id):
         playlist = get_object_or_404(Playlist, pk=playlist_id, user=request.user)
-        song = get_object_or_404(Song, pk=song_id)
 
-        if not PlaylistSong.objects.filter(playlist=playlist, song=song).exists():
-            PlaylistSong.objects.create(playlist=playlist, song=song)
-            return Response({'message': 'Song added to playlist successfully.'}, status=status.HTTP_201_CREATED)
+        playlist.delete()
+        return Response({'message': 'Playlist removed successfully.'}, status=status.HTTP_204_NO_CONTENT)
+
+class AddPlaylistView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = PlaylistSerializer(data=request.data, context={'request': request})
+
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response({'message': 'Playlist created successfully.'}, status=status.HTTP_201_CREATED)
         
-        return Response({'message': 'Song already in playlist.'}, status=status.HTTP_400_BAD_REQUEST)
-
-class RemoveSongFromPlaylistView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-
-    def delete(self, request, playlist_id, song_id):
-        playlist = get_object_or_404(Playlist, pk=playlist_id, user=request.user)
-        song = get_object_or_404(Song, pk=song_id)
-
-        playlist_song = get_object_or_404(PlaylistSong, playlist=playlist, song=song)
-        playlist_song.delete()
-
-        return Response({'message': 'Song removed from playlist successfully.'}, status=status.HTTP_204_NO_CONTENT)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 def album_list(request):

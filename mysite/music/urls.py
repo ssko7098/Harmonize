@@ -1,11 +1,11 @@
 from django.urls import path
 from . import views
-from .views import PlaylistListCreateView, ViewUserPlaylists, AddSongToPlaylistView, RemoveSongFromPlaylistView, get_csrf
+from .views import PlaylistListCreateView, ViewUserPlaylists, AddPlaylistView, RemovePlaylistView, get_csrf
 urlpatterns = [
     path('playlists/', PlaylistListCreateView.as_view(), name='playlist-list-create'),
     path('playlists/<str:username>/', ViewUserPlaylists.as_view(), name='playlist-detail'),
-    path('playlists/<int:playlist_id>/songs/<int:song_id>/add/', AddSongToPlaylistView.as_view(), name='add-song-to-playlist'),
-    path('playlists/<int:playlist_id>/songs/<int:song_id>/remove/', RemoveSongFromPlaylistView.as_view(), name='remove-song-from-playlist'),
+    path('playlists/create/', AddPlaylistView.as_view(), name='add-playlist'),
+    path('playlists/<int:playlist_id>/remove/', RemovePlaylistView.as_view(), name='remove-playlist'),
     path('albums/', views.album_list, name='album_list'),
     path('<str:username>/playlists/', views.view_playlists, name='view_playlists'),  
     path('upload/', views.upload_song, name='upload_song'),
