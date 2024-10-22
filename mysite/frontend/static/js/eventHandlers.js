@@ -7,6 +7,12 @@ export function attachEventListeners() {
         link.addEventListener('click', handleLinkClick);
     });
 
+    const button = document.getElementById('button');
+    if (button) {
+        button.removeEventListener('click', handleLinkClick);
+        button.addEventListener('click', handleLinkClick);
+    }
+
     const searchForm = document.getElementById('search-form');
     if (searchForm) {
         searchForm.removeEventListener('submit', handleSearchSubmit);
@@ -46,7 +52,16 @@ export function attachEventListeners() {
 function handleLinkClick(e) {
     e.preventDefault();
     const url = this.href;
-    loadPageContent(url);
+    
+    // Load content via AJAX and only update #content-container
+    loadPageContent(url)
+        .then(data => {
+            // Update the #content-container without affecting other elements
+            document.getElementById('content-container').innerHTML = data;
+            attachEventListeners(); // Reattach event listeners to new content
+        });
+
+    // Push new URL to the browser history without reloading the page
     window.history.pushState({}, '', url);
 }
 
