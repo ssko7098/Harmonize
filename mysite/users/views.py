@@ -263,8 +263,13 @@ def profile_view(request, username):
     profile = Profile.objects.get(user=user)
     singles = Song.objects.filter(user=user)
     albums = Album.objects.filter(user=user)
+    show_all = request.GET.get('show_all', 'false') == 'true'
 
-    # Check if the logged-in user is viewing their own profile
+    if show_all:
+        top_singles = singles.annotate(likes_count=Count('liked_by')).order_by('-likes_count')[:5]
+    else:
+        top_singles = singles.annotate(likes_count=Count('liked_by')).order_by('-likes_count')[:5]
+
     is_own_profile = (user == request.user)
     is_admin = request.user.is_admin
     is_verified = request.user.is_verified
@@ -298,6 +303,8 @@ def profile_view(request, username):
 
     return render(request, 'users/profile.html', {
         'user_profile': profile,
+        'top_singles': top_singles,
+        'show_all': show_all,         
         'singles': singles,
         'albums': albums,
         'is_own_profile': is_own_profile,
