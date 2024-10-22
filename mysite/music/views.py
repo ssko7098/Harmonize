@@ -18,10 +18,22 @@ from django.middleware.csrf import get_token
 from rest_framework.permissions import IsAuthenticated
 
 
-
 def get_csrf(request):
     token = get_token(request)
     return JsonResponse({'csrfToken': token})
+
+
+class ViewUserPlaylists(generics.ListAPIView):
+    serializer_class = PlaylistSerializer
+    permission_classes = [permissions.IsAuthenticated] 
+
+    def get_queryset(self):
+        username = self.kwargs.get('username')
+        
+        if self.request.user.username != username:
+            raise Http404("You are not allowed to view this user's playlists.")
+        return Playlist.objects.filter(user__username=username)
+    
 
 class PlaylistListCreateView(generics.ListCreateAPIView):
     queryset = Playlist.objects.all()
@@ -32,19 +44,6 @@ class PlaylistListCreateView(generics.ListCreateAPIView):
         serializer.save(user=self.request.user)
 
 
-class ViewUserPlaylists(generics.ListAPIView):
-    serializer_class = PlaylistSerializer
-    permission_classes = [permissions.IsAuthenticated]  # Only allow authenticated users
-
-    def get_queryset(self):
-        username = self.kwargs.get('username')
-        
-        if self.request.user.username != username:
-            raise Http404("You are not allowed to view this user's playlists.")
-        return Playlist.objects.filter(user__username=username)
-
-
-
 class RemovePlaylistView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -53,18 +52,6 @@ class RemovePlaylistView(APIView):
 
         playlist.delete()
         return Response({'message': 'Playlist removed successfully.'}, status=status.HTTP_204_NO_CONTENT)
-
-class AddPlaylistView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request):
-        serializer = PlaylistSerializer(data=request.data, context={'request': request})
-
-        if serializer.is_valid():
-            serializer.save(user=request.user)
-            return Response({'message': 'Playlist created successfully.'}, status=status.HTTP_201_CREATED)
-        
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 def album_list(request):
