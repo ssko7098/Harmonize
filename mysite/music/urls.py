@@ -1,9 +1,19 @@
 from django.urls import path
 from . import views
+from .api import PlaylistListCreateView, ViewUserPlaylists, RemovePlaylistView, UpdatePlaylistView, get_csrf
+from .api import ViewPlaylistSongs, AddSongToPlaylistView, RemoveSongFromPlaylistView
+from .api import get_csrf 
 
 urlpatterns = [
+    path('playlists/create/', PlaylistListCreateView.as_view(), name='playlist-list-create'),
+    path('playlists/<str:username>/', ViewUserPlaylists.as_view(), name='playlist-detail'),
+    path('playlists/<int:playlist_id>/remove/', RemovePlaylistView.as_view(), name='remove-playlist'),
+    path('playlists/<int:playlist_id>/update/', UpdatePlaylistView.as_view(), name='update-playlist'),
+    path('playlists/<int:playlist_id>/songs/', ViewPlaylistSongs.as_view(), name='view-playlist-songs'),
+    path('playlists/<int:playlist_id>/songs/<int:song_id>/add/', AddSongToPlaylistView.as_view(), name='add-song-to-playlist'),
+    path('playlists/<int:playlist_id>/songs/<int:song_id>/remove/', RemoveSongFromPlaylistView.as_view(), name='remove-song-from-playlist'),
     path('albums/', views.album_list, name='album_list'),
-    path('playlists/<str:username>/', views.view_playlists, name='view_playlists'),  
+    path('<str:username>/playlists/', views.view_playlists, name='view_playlists'),  
     path('upload/', views.upload_song, name='upload_song'),
     path('create_playlist/', views.create_playlist, name='create_playlist'),
     path('delete_playlist/<int:playlist_id>/', views.delete_playlist, name='delete_playlist'),
@@ -15,5 +25,6 @@ urlpatterns = [
     path('song/<int:song_id>/', views.song_details, name='song_details'),
     path('playlists/<str:username>/liked/', views.liked_songs, name='liked_songs'),
     path('add_to_liked_songs/<int:song_id>/', views.add_to_liked_songs, name='add_to_liked_songs'),
-    path('remove_liked_song/<int:song_id>/', views.remove_liked_song, name='remove_liked_song')
-]
+    path('remove_liked_song/<int:song_id>/', views.remove_liked_song, name='remove_liked_song'),
+    path('get-csrf/', get_csrf, name='get-csrf')
+] 
