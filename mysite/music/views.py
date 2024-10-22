@@ -103,6 +103,17 @@ class AddSongToPlaylistView(APIView):
         PlaylistSong.objects.create(playlist=playlist, song=song)
         return Response({'message': 'Song added to playlist successfully.'}, status=status.HTTP_201_CREATED)
 
+class RemoveSongFromPlaylistView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, playlist_id, song_id):
+        playlist = get_object_or_404(Playlist, pk=playlist_id, user=request.user)
+        song = get_object_or_404(Song, pk=song_id)
+
+        playlist_song = get_object_or_404(PlaylistSong, playlist=playlist, song=song)
+        playlist_song.delete()
+
+        return Response({'message': 'Song removed from playlist successfully.'}, status=status.HTTP_204_NO_CONTENT)
 
 # ------------------------- END REST API FUNCTIONS ------------------------- #
 
