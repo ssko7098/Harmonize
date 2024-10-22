@@ -25,8 +25,8 @@ class Song(models.Model):
     cover_image_file = models.FileField(upload_to='cover_art/', null=True, blank=True)
     report_count = models.PositiveIntegerField(default=0)
     liked_by = models.ManyToManyField(User, related_name='liked_songs', blank=True)
-
     reported_by = models.ManyToManyField(User, related_name='reported_songs', blank=True)
+    lyrics = models.TextField(null=True, blank=True)
 
 
     def clean(self):

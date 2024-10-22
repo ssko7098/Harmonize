@@ -264,6 +264,7 @@ def profile_view(request, username):
     singles = Song.objects.filter(user=user)
     albums = Album.objects.filter(user=user)
     show_all = request.GET.get('show_all', 'false') == 'true'
+    show_lyrics = request.GET.get('show_lyrics', 'false') == 'true'
 
     if show_all:
         top_singles = singles.annotate(likes_count=Count('liked_by')).order_by('-likes_count')[:5]
@@ -311,7 +312,8 @@ def profile_view(request, username):
         'is_admin': is_admin,
         'comments': comments,
         'comment_form': comment_form,
-        'is_verified': is_verified
+        'is_verified': is_verified,
+        'show_lyrics': show_lyrics,
     })
 
 

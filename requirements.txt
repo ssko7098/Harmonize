@@ -3,3 +3,4 @@ django-allauth==64.2.1
 mutagen==1.47.0
 djangorestframework
 djangorestframework-simplejwt
+requests
