@@ -42,7 +42,7 @@ def admin_dashboard(request):
     total_users = User.objects.filter(is_active=True, is_admin=False).count()  # Count total users not including admins and inactive
     total_songs = Song.objects.count()  # Count total songs
 
-    return render(request, 'users/admin_dashboard.html', {
+    return render(request, 'users/manage_profiles.html', {
         'users': users,
         'total_users': total_users,
         'total_songs': total_songs
@@ -80,8 +80,14 @@ def delete_user(request, user_id):
         return redirect('admin_dashboard')
 
 @user_passes_test(is_admin)
-def manage_reported_songs(request):
-    reported_songs = Song.objects.filter(report_count__gt=0).order_by('-report_count')  # Fetch songs with reports
+def manage_songs(request):
+
+    search_query = request.GET.get('search', '')
+
+    if search_query:
+        songs = Song.objects.filter(title__icontains=search_query)
+    else:
+        songs = Song.objects.all()
     
     if request.method == 'POST':
         # Handle song deletion
@@ -90,19 +96,19 @@ def manage_reported_songs(request):
             
             if not song_id:
                 messages.error(request, 'No song selected for deletion.')
-                return redirect('reported_songs')
+                return redirect('manage_songs')
             
             song = get_object_or_404(Song, pk=song_id)
             song.delete()
             messages.success(request, 'Song deleted successfully.')
-            return redirect('reported_songs')
+            return redirect('manage_songs')
         
         if 'clear_reports' in request.POST:
             song_id = request.POST.get('song_id')
 
             if not song_id:
                 messages.error(request, 'No song selected for clearing.')
-                return redirect('reported_songs')
+                return redirect('manage_songs')
             
             song = get_object_or_404(Song, pk=song_id)
 
@@ -111,7 +117,7 @@ def manage_reported_songs(request):
             song.save()
             messages.success(request, f"Song reports have been cleared for {song.title}.")
 
-    return render(request, 'users/reported_songs.html', {'reported_songs': reported_songs})
+    return render(request, 'users/manage_songs.html', {'songs': songs})
 
 @user_passes_test(is_admin)
 def manage_reported_profiles(request):
