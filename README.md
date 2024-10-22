@@ -67,7 +67,9 @@ python3 manage.py runserver
 __NOTE:__ Before running the below code in the terminal, make sure to `cd` into the `mysite` directory.
 
 Run the following code to access the CLI for sqlite:
-* `sqlite3 -init config.sql db.sqlite3`
+```bash
+sqlite3 -init config.sql db.sqlite3
+```
 
 ## Configuration and Environment Setup
 ### Environment Variables
