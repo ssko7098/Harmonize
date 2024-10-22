@@ -89,6 +89,21 @@ class ViewPlaylistSongs(APIView):
 
         return Response(song_serializer.data, status=status.HTTP_200_OK)
 
+class AddSongToPlaylistView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, playlist_id, song_id):
+        playlist = get_object_or_404(Playlist, pk=playlist_id, user=request.user)
+        song = get_object_or_404(Song, pk=song_id)
+
+        # Check if the song is already in the playlist
+        if PlaylistSong.objects.filter(playlist=playlist, song=song).exists():
+            return Response({'message': 'Song already in the playlist.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        PlaylistSong.objects.create(playlist=playlist, song=song)
+        return Response({'message': 'Song added to playlist successfully.'}, status=status.HTTP_201_CREATED)
+
+
 # ------------------------- END REST API FUNCTIONS ------------------------- #
 
 @login_required
