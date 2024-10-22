@@ -7,11 +7,10 @@ export function attachEventListeners() {
         link.addEventListener('click', handleLinkClick);
     });
 
-    const button = document.getElementById('button');
-    if (button) {
-        button.removeEventListener('click', handleLinkClick);
-        button.addEventListener('click', handleLinkClick);
-    }
+    document.querySelectorAll('a#button').forEach(link => {
+        link.removeEventListener('click', handleLinkClick);
+        link.addEventListener('click', handleLinkClick);
+    });
 
     const searchForm = document.getElementById('search-form');
     if (searchForm) {
@@ -46,6 +45,11 @@ export function attachEventListeners() {
         avatarInput.addEventListener('change', previewAvatar);
     }
 
+    document.querySelectorAll('#custom-form').forEach(form => {
+        form.removeEventListener('submit', handleFormSubmit);
+        form.addEventListener('submit', handleFormSubmit);
+    });
+
     attachNavLinkActiveState();
 }
 
@@ -63,6 +67,37 @@ function handleLinkClick(e) {
 
     // Push new URL to the browser history without reloading the page
     window.history.pushState({}, '', url);
+}
+
+// Function to handle form submission via AJAX
+function handleFormSubmit(e) {
+    e.preventDefault();  // Prevent the default form submission
+
+    const form = this;
+    const url = form.action;  // Form action URL
+    const formData = new FormData(form);  // Collect form data
+
+    fetch(url, {
+        method: 'POST',  // Use POST for form submissions
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',  // Indicate this is an AJAX request
+        },
+    })
+    .then(response => response.text())  // Assuming the server returns HTML
+    .then(data => {
+        // Update the #content-container with the response data
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(data, 'text/html');
+        const newContent = doc.querySelector('#content-container').innerHTML;
+        document.getElementById('content-container').innerHTML = newContent;
+
+        // Reattach event listeners for the new content
+        attachEventListeners();
+    })
+    .catch(error => {
+        console.error('Error submitting form:', error);
+    });
 }
 
 function handleSearchSubmit(e) {
