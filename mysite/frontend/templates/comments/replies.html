@@ -14,7 +14,7 @@
 
                 <!-- Reply Form for each reply -->
                 {% if is_verified %}
-                <form method="post" action="{% url 'add_comment' user_profile.user.username %}">
+                <form method="post" id="custom-form" action="{% url 'add_comment' user_profile.user.username %}">
                     {% csrf_token %}
                     <textarea name="message" placeholder="Write a reply" required></textarea>
                     <input type="hidden" name="parent_comment_id" value="{{ reply.comment_id }}">
