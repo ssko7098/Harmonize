@@ -50,7 +50,46 @@ export function attachEventListeners() {
         form.addEventListener('submit', handleFormSubmit);
     });
 
+    document.querySelectorAll('select#filter').forEach(filter => {
+        filter.removeEventListener('change', handleFilter);
+        filter.addEventListener('change', handleFilter);
+    });
+
     attachNavLinkActiveState();
+}
+
+function handleFilter(e) {
+    e.preventDefault();  // Prevent default form submission
+
+    const form = e.target.form;  // Get the form related to the select element
+    const formData = new FormData(form);  // Collect the form data
+
+    const url = new URL(form.action || window.location.href);  // Build URL with form action or current page
+    formData.forEach((value, key) => {
+        url.searchParams.set(key, value);  // Add form data as query parameters
+    });
+
+    // Send AJAX request to filter results
+    fetch(url, {
+        method: 'GET',  // GET request for filtering
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',  // Indicate that this is an AJAX request
+        },
+    })
+    .then(response => response.text())
+    .then(data => {
+        // Update the content-container with the new filtered data
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(data, 'text/html');
+        const newContent = doc.querySelector('#content-container').innerHTML;
+        document.getElementById('content-container').innerHTML = newContent;
+
+        // Reattach event listeners to the new content if necessary
+        attachEventListeners();
+    })
+    .catch(error => {
+        console.error('Error during AJAX request:', error);
+    });
 }
 
 function handleLinkClick(e) {
