@@ -38,7 +38,13 @@ def is_verified(user):
 
 @user_passes_test(is_admin)
 def admin_dashboard(request):
-    users = User.objects.filter(is_active=True, is_admin=False)  # Only fetch active users
+    search_query = request.GET.get('search', '')
+
+    if search_query:
+        users = User.objects.filter(username__icontains=search_query, is_active=True, is_admin=False).select_related('profile')
+    else:
+        users = User.objects.filter(is_active=True, is_admin=False).select_related('profile')
+
     total_users = User.objects.filter(is_active=True, is_admin=False).count()  # Count total users not including admins and inactive
     total_songs = Song.objects.count()  # Count total songs
 
