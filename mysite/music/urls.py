@@ -1,8 +1,8 @@
 from django.urls import path
 from . import views
-from .views import PlaylistListCreateView, ViewUserPlaylists, RemovePlaylistView, UpdatePlaylistView, get_csrf
-from .views import ViewPlaylistSongs, AddSongToPlaylistView, RemoveSongFromPlaylistView
-from .views import get_csrf 
+from .api import PlaylistListCreateView, ViewUserPlaylists, RemovePlaylistView, UpdatePlaylistView, get_csrf
+from .api import ViewPlaylistSongs, AddSongToPlaylistView, RemoveSongFromPlaylistView
+from .api import get_csrf 
 
 urlpatterns = [
     path('playlists/create/', PlaylistListCreateView.as_view(), name='playlist-list-create'),
