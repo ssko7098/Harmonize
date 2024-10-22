@@ -58,6 +58,26 @@ def album_list(request):
     albums = Album.objects.all()
     return render(request, 'music/album_list.html', {'albums': albums})
 
+class UpdatePlaylistView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Playlist.objects.all()
+    serializer_class = PlaylistSerializer
+    permission_classes = [IsAuthenticated]
+    lookup_field = 'playlist_id'  
+
+    def get_queryset(self):
+        return Playlist.objects.filter(user=self.request.user)  
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+
+        if serializer.is_valid():
+            serializer.save(user=self.request.user) 
+            return Response({'message': 'Playlist updated successfully.'}, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 @login_required
 @user_passes_test(is_verified)
 def view_playlists(request, username):
