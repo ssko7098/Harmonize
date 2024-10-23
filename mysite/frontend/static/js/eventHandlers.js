@@ -1,7 +1,7 @@
 // eventHandlers.js
 import { loadPageContent } from './contentLoader.js';
 
-import { playAudio, playFromPlaylist, setCurrentIndex, getCurrentIndex, queue } from './audioControl.js';
+import { playAudio, playFromQueue, setCurrentIndex, getCurrentIndex, queue } from './audioControl.js';
 
 export function attachEventListeners() {
     document.querySelectorAll('a.nav-link').forEach(link => {
@@ -132,7 +132,7 @@ function handleNextClick(e) {
         setCurrentIndex(currentIndex + 1);  // Use the setter to update the current index
         const nextUrl = queue[getCurrentIndex()];  // Get the next song URL
         console.log("Playing next song, index:", getCurrentIndex());
-        playAudio(nextUrl, getCurrentIndex());  // Call playAudio for the next song
+        playFromQueue(nextUrl);  // Call playAudio for the next song
     } else {
         console.log("You are at the last song in the queue.");
     }
@@ -147,7 +147,7 @@ function handlePreviousClick(e) {
         setCurrentIndex(currentIndex - 1);  // Use the setter to update the current index
         const previousUrl = queue[getCurrentIndex()];  // Get the previous song URL
         console.log("Playing previous song, index:", getCurrentIndex());
-        playAudio(previousUrl, getCurrentIndex());  // Call playAudio for the previous song
+        playFromQueue(previousUrl);  // Call playAudio for the previous song
     } else {
         console.log("You are at the first song in the queue.");
     }

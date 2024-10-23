@@ -6,10 +6,9 @@ export let currentIndex = 0;
 export function playAudio(url) {
     const audioPlayer = document.getElementById('audio-player');
     const audioSource = document.getElementById('audio-source');
-    const songElements = document.querySelectorAll('.song-table tbody tr a');  // Get all song links in the playlist
 
-
-    //currentIndex = index;  // Set the current index to the clicked song
+    currentIndex = 0;
+    queue.length = 0;
     console.log("Current song index:", currentIndex);
     console.log('Queue:', queue);
 
@@ -69,6 +68,31 @@ export function playFromPlaylist(url) {
 }
 
 window.playFromPlaylist = playFromPlaylist;
+
+export function playFromQueue(url){
+    const audioPlayer = document.getElementById('audio-player');
+    const audioSource = document.getElementById('audio-source');
+
+    //currentIndex = index;  // Set the current index to the clicked song
+    console.log("Current song index:", currentIndex);
+    console.log('Queue:', queue);
+
+    // Check if the audio player elements exist
+    if (!audioPlayer || !audioSource) {
+        console.warn('Audio player or source not found. Cannot play audio.');
+        return;
+    }
+
+    // Play the selected song
+    if (audioSource.src !== url) {
+        audioSource.src = url;  // Set the new song URL
+        audioPlayer.load();  // Reload the audio player with the new song
+    }
+
+    audioPlayer.play().catch(error => {
+        console.error('Error trying to play audio:', error);
+    });
+}
 
 function shuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {
