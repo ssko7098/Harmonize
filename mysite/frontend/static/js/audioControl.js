@@ -1,25 +1,65 @@
 // audioControl.js
 
-export function playAudio(url) {
+export let queue = [];
+export let currentIndex = 0;
+
+export function playAudio(url, index) {
     const audioPlayer = document.getElementById('audio-player');
     const audioSource = document.getElementById('audio-source');
+    const songElements = document.querySelectorAll('.song-table tbody tr a');  // Get all song links in the playlist
 
+    const isInPlaylist = window.location.pathname.includes('playlists'); 
+
+    // Build the queue from the list of song URLs
+    if (isInPlaylist) {
+        queue = shuffle(Array.from(songElements).map(songElement => songElement.getAttribute('onclick').match(/'(.*?)'/)[1]));
+
+        // Ensure the current song starts from the correct index in the shuffled queue
+        currentIndex = queue.indexOf(url);
+    } else {
+        // If outside the playlist, only this song is in the queue
+        currentIndex = 0;
+        queue = [url];
+    }
+
+    //currentIndex = index;  // Set the current index to the clicked song
+    console.log("Current song index:", currentIndex);
+    console.log('Queue:', queue);
+
+    // Check if the audio player elements exist
     if (!audioPlayer || !audioSource) {
         console.warn('Audio player or source not found. Cannot play audio.');
         return;
     }
 
-    if (audioSource.src === url) {
-        audioPlayer.currentTime = 0;
-        audioPlayer.play();
-    } else {
-        audioSource.src = url;
-        audioPlayer.load();
-        audioPlayer.play();
+    // Play the selected song
+    if (audioSource.src !== url) {
+        audioSource.src = url;  // Set the new song URL
+        audioPlayer.load();  // Reload the audio player with the new song
     }
+
+    audioPlayer.play().catch(error => {
+        console.error('Error trying to play audio:', error);
+    });
 }
 
 window.playAudio = playAudio;
+
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];  // Swap elements
+    }
+    return array;
+}
+
+export function setCurrentIndex(index) {
+    currentIndex = index;
+}
+
+export function getCurrentIndex() {
+    return currentIndex;
+}
 
 export function restoreAudioState() {
     const audioPlayer = document.getElementById('audio-player');

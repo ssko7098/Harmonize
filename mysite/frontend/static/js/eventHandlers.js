@@ -1,6 +1,8 @@
 // eventHandlers.js
 import { loadPageContent } from './contentLoader.js';
 
+import { playAudio, setCurrentIndex, getCurrentIndex, queue } from './audioControl.js';
+
 export function attachEventListeners() {
     document.querySelectorAll('a.nav-link').forEach(link => {
         link.removeEventListener('click', handleLinkClick);
@@ -11,6 +13,18 @@ export function attachEventListeners() {
         link.removeEventListener('click', handleLinkClick);
         link.addEventListener('click', handleLinkClick);
     });
+
+    const nextButton = document.getElementById('next-button');
+    if (nextButton) {
+        nextButton.removeEventListener('click', handleNextClick);
+        nextButton.addEventListener('click', handleNextClick);
+    }
+
+    const previousButton = document.getElementById('previous-button');
+    if (previousButton) {
+        previousButton.removeEventListener('click', handlePreviousClick);
+        previousButton.addEventListener('click', handlePreviousClick);
+    }
 
     const searchForm = document.getElementById('search-form');
     if (searchForm) {
@@ -106,6 +120,35 @@ function handleLinkClick(e) {
 
     // Push new URL to the browser history without reloading the page
     window.history.pushState({}, '', url);
+}
+function handleNextClick(e) {
+    e.preventDefault();
+    
+    let currentIndex = getCurrentIndex(); // Get the current index
+
+    if (currentIndex < queue.length - 1) {  // Check if there is a next song
+        setCurrentIndex(currentIndex + 1);  // Use the setter to update the current index
+        const nextUrl = queue[getCurrentIndex()];  // Get the next song URL
+        console.log("Playing next song, index:", getCurrentIndex());
+        playAudio(nextUrl, getCurrentIndex());  // Call playAudio for the next song
+    } else {
+        console.log("You are at the last song in the queue.");
+    }
+}
+
+function handlePreviousClick(e) {
+    e.preventDefault();
+
+    let currentIndex = getCurrentIndex();  // Get the current index
+
+    if (currentIndex > 0) {  // Check if there is a previous song
+        setCurrentIndex(currentIndex - 1);  // Use the setter to update the current index
+        const previousUrl = queue[getCurrentIndex()];  // Get the previous song URL
+        console.log("Playing previous song, index:", getCurrentIndex());
+        playAudio(previousUrl, getCurrentIndex());  // Call playAudio for the previous song
+    } else {
+        console.log("You are at the first song in the queue.");
+    }
 }
 
 // Function to handle form submission via AJAX
