@@ -77,7 +77,8 @@
                         <li>
                             <!-- Album Cover as Play Button -->
                             <a href="#" onclick="playAudio('{{ single.mp3_file.url }}'); return false;">
-                                <img src="{% if single.cover_image_file %}{{ single.cover_image_file.url }}{% else %}{% static 'images/default_cover.png' %}{% endif %}" alt="{{ single.title }} Album Cover" style="width:100px; height:auto;">
+                                <img src="{% if single.cover_image_file %}{{ single.cover_image_file.url }}{% else %}{% static 'images/default_cover.png' %}{% endif %}"
+                                 alt="{{ single.title }} Album Cover" style="width:100px; height:auto;">
                             </a>
 
                             <div class="media-info">

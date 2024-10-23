@@ -901,6 +901,9 @@ p {
   margin-right: auto;
 }
 
+
+
+
 /* ---------------------------------------------------------------- */
 /* ! Styling for Comments Elements */
 
@@ -942,6 +945,8 @@ option {
 }
 
 /* ---------------------------------------------------------------- */
+
+
 
 /* ---------------------------------------------------------------- */
 /* ! Styling for My Profile Elements */
@@ -1051,9 +1056,9 @@ li {
 /* ---------------------------------------------------------------- */
 
 
-
 /* ---------------------------------------------------------------- */
 /* ! Styling for Profile Settings Elements */
+
 .profile-settings-box {
   width: 100%; /* Ensure full width of the form inside container */
   text-align: left;
@@ -1176,6 +1181,139 @@ input#avatar_file {
 
 /* ---------------------------------------------------------------- */
 
+
+
+/* ---------------------------------------------------------------- */
+/* ! Styling for Liked Songs Elements */
+
+#search-bar {
+  display: flex;  /* Aligns child elements in a row */
+  flex-direction: column;
+  align-items: center; 
+  margin-top: -20px;
+  padding: 10px;  
+  border-radius: var(--border-radius-button);  
+}
+
+#search-bar input {
+  border-radius: var(--border-radius-button);
+  background: transparent; 
+  outline: none;
+  width: 100%; 
+  font-size: var(--font-size-medium);
+  font-family: "Montserrat", sans-serif;
+  color: var(--soft-white); 
+  height: 30px;
+  flex-grow: 1;
+  transition: all 0.3s ease;
+}
+
+#search-bar:hover input,
+#search-bar:focus-within input {
+  color: var(--accent-color);
+}
+
+.button-row {
+  display: flex;
+  justify-content: right;
+  width: 100%;
+}
+
+.search-button, .clear-button {
+  background: transparent;
+  font-family: "Montserrat", sans-serif;
+  color: var(--soft-white);
+  border: 0;
+  font-size: var(--font-size-medium);
+  text-decoration: underline;
+  transition: font-size 0.3s, transform 0.3s;
+  cursor: pointer;
+  margin-top: 10px;
+  text-align: right;
+}
+
+.clear-button:hover {
+  font-size: calc(var(--font-size-medium) * 1.1);
+}
+
+.back-to-playlist {
+  text-align: right;
+  margin-top: -10px;
+  padding: 10px 0;
+}
+
+#button.btn-back {
+  background: transparent;
+  color: var(--soft-white);
+  border: 0;
+  font-size: var(--font-size-medium);
+  text-decoration: underline;
+  margin-top: -30px;
+  margin-bottom: 0px;
+  transition: font-size 0.3s, ease 0.3s;
+}
+
+#button.btn-back:hover {
+  font-size: calc(var(--font-size-medium) * 1.1);
+}
+
+.liked-songs-list {
+  margin-top: 10px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.song-info {
+  max-height: 50px;
+  padding: 0 10px;
+}
+
+.liked-songs-list .song-title-single a {
+  font-family: "Montserrat", sans-serif;
+  font-size: var(--font-size-medium);
+  color: var(--soft-white) !important;
+  font-weight: 500;
+}
+
+.liked-songs-list .artist-name-single a {
+  font-family: "Montserrat", sans-serif;
+  font-size: var(--font-size-medium);
+  color: var(--soft-white) !important;
+  /* font-weight: 500; */
+}
+
+a.cover-play-button {
+  max-width: 50px;
+  max-height: 50px;
+}
+
+img.song-cover-image {
+  height: 50px;
+  width: 50px;
+}
+
+.remove-liked-song {
+  margin-left: auto;
+}
+
+.no-songs-found {
+  font-family: "Montserrat", sans-serif;
+  font-size: var(--font-size-medium);
+  color: var(--soft-white) !important;
+}
+
+/* ---------------------------------------------------------------- */
+
+
+
+
+/* ---------------------------------------------------------------- */
+/* ! Styling for Library Elements */
+
+
+
+/* ---------------------------------------------------------------- */
 
 /* Messages Styling */
 ul.messages {
