@@ -34,7 +34,7 @@
         </div>
 
         {% if user.is_authenticated %}
-        <form id="search-form" action="{% url 'search' %}" method="GET" class="search-form">
+        <form id="search-form" action="{% url 'search' %}" method="GET" class="search-form" autocomplete="off">
           <div class="input-wrapper">
             <span class="search-icon">
               <i class="fas fa-search"></i>
