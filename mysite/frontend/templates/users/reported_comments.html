@@ -1,10 +1,10 @@
-{% extends 'base.html' %}
+{% extends './admin_dashboard.html' %}
 {% load static %}
 
 {% block title %}Reported Comments{% endblock %}
 
-{% block content %}
-<div class="container">
+{% block admin_content %}
+<div class="admin-dashboard">
     <h1>Reported Comments</h1>
 
     {% if reported_comments %}
@@ -46,14 +46,13 @@
     {% else %}
         <p>No comments have been reported.</p>
     {% endif %}
+
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
 </div>
-
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-
 {% endblock %}

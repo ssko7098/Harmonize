@@ -5,15 +5,15 @@
 {% block content %}
 <div class="container">
     <!-- Back Button to Playlists -->
-    <a href="{% url 'view_playlists' request.user.username %}" class="btn-back">← Back to My Playlists</a>
+    <a href="{% url 'view_playlists' request.user.username %}" id="button" class="btn-back">← Back to My Playlists</a>
 
     <h1>{{ user.username }}'s Liked Songs</h1>
 
     <!-- Search bar for filtering liked songs -->
-    <form method="get" action="{% url 'liked_songs' user.username %}">
+    <form method="get" id="search-bar" action="{% url 'liked_songs' user.username %}">
         <input type="text" name="search" placeholder="Search Liked Songs" value="{{ request.GET.search|default:'' }}">
         <button type="submit">Search</button>
-        <a href="{% url 'liked_songs' user.username %}">
+        <a id="button" href="{% url 'liked_songs' user.username %}">
             <button type="button">Clear</button>
         </a>
     </form>

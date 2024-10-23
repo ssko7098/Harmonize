@@ -38,11 +38,32 @@ def is_verified(user):
 
 @user_passes_test(is_admin)
 def admin_dashboard(request):
-    users = User.objects.filter(is_active=True, is_admin=False)  # Only fetch active users
+    search_query = request.GET.get('search', '')
+
+    if search_query:
+        users = User.objects.filter(username__icontains=search_query, is_active=True, is_admin=False).select_related('profile')
+    else:
+        users = User.objects.filter(is_active=True, is_admin=False).select_related('profile')
+
     total_users = User.objects.filter(is_active=True, is_admin=False).count()  # Count total users not including admins and inactive
     total_songs = Song.objects.count()  # Count total songs
 
-    return render(request, 'users/admin_dashboard.html', {
+    if request.method == 'POST':
+        if 'clear_reports' in request.POST:
+            profile_id = request.POST.get('profile_id')
+
+            if not profile_id:
+                messages.error(request, 'No Profile selected for clearing.')
+                return redirect('reported_profiles')
+            
+            profile = get_object_or_404(Profile, pk=profile_id)
+
+            profile.report_count = 0
+            profile.reported_by.clear()
+            profile.save()
+            messages.success(request, f"Profile reports have been cleared for {profile.user.username}.")
+
+    return render(request, 'users/manage_profiles.html', {
         'users': users,
         'total_users': total_users,
         'total_songs': total_songs
@@ -80,8 +101,14 @@ def delete_user(request, user_id):
         return redirect('admin_dashboard')
 
 @user_passes_test(is_admin)
-def manage_reported_songs(request):
-    reported_songs = Song.objects.filter(report_count__gt=0).order_by('-report_count')  # Fetch songs with reports
+def manage_songs(request):
+
+    search_query = request.GET.get('search', '')
+
+    if search_query:
+        songs = Song.objects.filter(title__icontains=search_query)
+    else:
+        songs = Song.objects.all()
     
     if request.method == 'POST':
         # Handle song deletion
@@ -90,19 +117,19 @@ def manage_reported_songs(request):
             
             if not song_id:
                 messages.error(request, 'No song selected for deletion.')
-                return redirect('reported_songs')
+                return redirect('manage_songs')
             
             song = get_object_or_404(Song, pk=song_id)
             song.delete()
             messages.success(request, 'Song deleted successfully.')
-            return redirect('reported_songs')
+            return redirect('manage_songs')
         
         if 'clear_reports' in request.POST:
             song_id = request.POST.get('song_id')
 
             if not song_id:
                 messages.error(request, 'No song selected for clearing.')
-                return redirect('reported_songs')
+                return redirect('manage_songs')
             
             song = get_object_or_404(Song, pk=song_id)
 
@@ -111,27 +138,7 @@ def manage_reported_songs(request):
             song.save()
             messages.success(request, f"Song reports have been cleared for {song.title}.")
 
-    return render(request, 'users/reported_songs.html', {'reported_songs': reported_songs})
-
-@user_passes_test(is_admin)
-def manage_reported_profiles(request):
-    reported_profiles = Profile.objects.filter(report_count__gt=0, user__is_active=True).order_by('-report_count')
-    if request.method == 'POST':
-        if 'clear_reports' in request.POST:
-            profile_id = request.POST.get('profile_id')
-
-            if not profile_id:
-                messages.error(request, 'No Profile selected for clearing.')
-                return redirect('reported_profiles')
-            
-            profile = get_object_or_404(Profile, pk=profile_id)
-
-            profile.report_count = 0
-            profile.reported_by.clear()
-            profile.save()
-            messages.success(request, f"Profile reports have been cleared for {profile.user.username}.")
-    
-    return render(request, 'users/reported_profiles.html', {'reported_profiles': reported_profiles})
+    return render(request, 'users/manage_songs.html', {'songs': songs})
 
 @user_passes_test(is_admin)
 def manage_reported_comments(request):
@@ -263,8 +270,13 @@ def profile_view(request, username):
     profile = Profile.objects.get(user=user)
     singles = Song.objects.filter(user=user)
     albums = Album.objects.filter(user=user)
+    show_all = request.GET.get('show_all', 'false') == 'true'
 
-    # Check if the logged-in user is viewing their own profile
+    if show_all:
+        top_singles = singles.annotate(likes_count=Count('liked_by')).order_by('-likes_count')[:5]
+    else:
+        top_singles = singles.annotate(likes_count=Count('liked_by')).order_by('-likes_count')[:5]
+
     is_own_profile = (user == request.user)
     is_admin = request.user.is_admin
     is_verified = request.user.is_verified
@@ -298,6 +310,8 @@ def profile_view(request, username):
 
     return render(request, 'users/profile.html', {
         'user_profile': profile,
+        'top_singles': top_singles,
+        'show_all': show_all,         
         'singles': singles,
         'albums': albums,
         'is_own_profile': is_own_profile,

@@ -6,6 +6,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404
 from django.contrib import messages
 from users.views import is_verified
+from .models import Playlist, PlaylistSong, Song
+from django.shortcuts import get_object_or_404
+
 
 def album_list(request):
     albums = Album.objects.all()
