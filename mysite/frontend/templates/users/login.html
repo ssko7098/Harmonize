@@ -16,7 +16,7 @@
                     <span class="local-icon">
                         <img src="../../frontend/static/images/person-circle-outline-white.png" width="20" height="20"></img>
                     </span>
-                    <input type="text" id="username" name="username" required></input>
+                    <input type="text" id="username" name="username" required autocomplete="off"></input>
                     <label for="username">Username</label>
                     {% if form.username.errors %}
                         <p class="error">{{ form.username.errors.0 }}</p>
