@@ -339,7 +339,7 @@ def profile_settings_view(request):
             # Check if a new profile picture is uploaded
             if 'avatar_file' in request.FILES:
                 # If there is an old avatar, delete it from the file system
-                if old_avatar:
+                if os.path.isfile(old_avatar.path):
                     os.remove(old_avatar.path)
 
             form.save()
