@@ -9,10 +9,12 @@
 
     <h2>Your Liked Songs</h2>
 
+    <div class="back-to-playlist-buffer">
         <!-- Back Button to Playlists -->
         <div class="back-to-playlist">
             <a href="{% url 'view_playlists' request.user.username %}" id="button" class="btn-back">← Back to My Playlists</a>
         </div>
+    </div>
 
     <!-- Search bar for filtering liked songs -->
     <form method="get" id="search-bar" action="{% url 'liked_songs' user.username %}" class="search-form" autocomplete="off">

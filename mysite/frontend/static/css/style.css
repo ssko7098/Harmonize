@@ -1199,7 +1199,7 @@ input#avatar_file {
   display: flex;  /* Aligns child elements in a row */
   flex-direction: column;
   align-items: center; 
-  margin-top: -20px;
+  /* margin-top: -20px; */
   padding: 10px;  
   border-radius: var(--border-radius-button);  
 }
@@ -1226,6 +1226,7 @@ input#avatar_file {
   display: flex;
   justify-content: right;
   width: 100%;
+  margin-top: 10px;
 }
 
 .search-button, .clear-button {
@@ -1237,7 +1238,6 @@ input#avatar_file {
   text-decoration: underline;
   transition: font-size 0.3s, transform 0.3s;
   cursor: pointer;
-  margin-top: 10px;
   text-align: right;
 }
 
@@ -1245,13 +1245,17 @@ input#avatar_file {
   font-size: calc(var(--font-size-medium) * 1.1);
 }
 
-.back-to-playlist {
-  text-align: right;
-  margin-top: -10px;
-  padding: 10px 0;
+.back-to-playlist-buffer {
+  display: flex;
+  margin-bottom: 10px;
+  justify-content: right;
 }
 
-#button.btn-back {
+.back-to-playlist {
+  text-align: right;
+}
+
+a#button.btn-back {
   background: transparent;
   color: var(--soft-white);
   border: 0;
@@ -1260,6 +1264,7 @@ input#avatar_file {
   margin-top: -30px;
   margin-bottom: 0px;
   transition: font-size 0.3s, ease 0.3s;
+  padding: 0 15px;
 }
 
 #button.btn-back:hover {
