@@ -962,9 +962,9 @@ li {
 /* ---------------------------------------------------------------- */
 
 
+
 /* ---------------------------------------------------------------- */
 /* ! Styling for Profile Settings Elements */
-
 .profile-settings-box {
   width: 100%; /* Ensure full width of the form inside container */
   text-align: left;
@@ -1032,23 +1032,29 @@ li {
   display: block;
 }
 
-.form-group-bio label{
+.form-group.bio label{
+  min-width: 120px !important;
+  margin-right: 0px !important;
+}
 
+.form-group.bio {
+  padding: 0;
+  margin: 0;
+  width: 100%; /* Ensure it uses the full width available */
+  display: block; /* To ensure it's rendered as a block element */
+  justify-content: flex-start !important;
 }
 
 #id_bio {
   background: transparent;
   outline: 1px solid var(--soft-white);
   align-items: left;
+  width: 75% !important;
 }
 
 #id_bio:focus {
   outline: 2px solid var(--soft-white);
 }
-
-
-/* ---------------------------------------------------------------- */
-
 
 /* Update profile info button */
 #profile-settings-page .submit-button {
@@ -1072,6 +1078,9 @@ li {
   color: var(--primary-color);
   font-size: calc(var(--font-size-medium) * 1.2);
 }
+
+/* ---------------------------------------------------------------- */
+
 
 /* Messages Styling */
 ul.messages {
