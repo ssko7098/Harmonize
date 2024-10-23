@@ -6,23 +6,48 @@
 <div class="container-alt">
     <h2>Your Library</h2>
 
-    <!-- Link to view Liked Songs -->
-    <div style="margin-top: 30px; margin-bottom: 30px;">
-        <a href="{% url 'liked_songs' user.username %}" id="button" class="btn-view-liked">View Liked Songs</a>
+    <div class="to-liked-songs-buffer">
+        <!-- Link to view Liked Songs -->
+        <div class="to-liked-songs">
+            <a href="{% url 'liked_songs' user.username %}" id="button" class="btn-view-liked">View Liked Songs →</a>
+        </div>
     </div>
 
     <!-- Search bar for filtering playlists -->
-    <form method="get" id="search-bar" action="{% url 'view_playlists' user.username %}">
+    <!-- <form method="get" id="search-bar" action="{% url 'view_playlists' user.username %}" autocomplete="off">
         <input type="text" name="search_query" placeholder="Search Playlists" value="{{ request.GET.search_query|default:'' }}">
         <button type="submit">Search</button>
         <a id="button" href="{% url 'view_playlists' user.username %}">
             <button id="button" type="button">Clear</button>
         </a>
+    </form> -->
+
+    <!-- Search bar for filtering playlists -->
+    <form method="get" id="search-bar" action="{% url 'view_playlists' user.username %}" class="search-form" autocomplete="off">
+        <div class="input-wrapper">
+            <span class="search-icon">
+                <i class="fas fa-search"></i>
+            </span>
+            <input
+                type="text"
+                name="search_query"
+                placeholder="Search Playlists"
+                value="{{ request.GET.search_query|default:'' }}"
+                required
+            />
+        </div>
+
+        <div class="button-row">
+            <!-- ENTER IS NOW USED MAKES IT LOOK A LOT CLEANER -->
+            <a id="button" href="{% url 'view_playlists' user.username %}">
+                <button type="button" class="clear-button">Clear Search</button>
+            </a>
+        </div>
     </form>
 
 
     <!-- Form for creating a new playlist -->
-    <form method="post" id="custom-form" action="{% url 'view_playlists' user.username %}">
+    <form method="post" id="custom-form" action="{% url 'view_playlists' user.username %}" autocomplete="off">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" id="button" class="btn-submit">Create Playlist</button>

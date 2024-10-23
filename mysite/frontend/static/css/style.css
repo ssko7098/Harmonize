@@ -1325,7 +1325,31 @@ img.song-cover-image {
 /* ---------------------------------------------------------------- */
 /* ! Styling for Library Elements */
 
+.to-liked-songs-buffer {
+  display: flex;
+  margin-bottom: 10px;
+  justify-content: right;  
+}
 
+.to-liked-songs {
+  text-align: right;
+}
+
+a#button.btn-view-liked {
+  background: transparent;
+  color: var(--soft-white);
+  border: 0;
+  font-size: var(--font-size-medium);
+  text-decoration: underline;
+  margin-top: -30px;
+  margin-bottom: 0px;
+  transition: font-size 0.3s, ease 0.3s;
+  padding: 0 15px;
+}
+
+a#button.btn-view-liked:hover {
+  font-size: calc(var(--font-size-medium) * 1.1);
+}
 
 /* ---------------------------------------------------------------- */
 
