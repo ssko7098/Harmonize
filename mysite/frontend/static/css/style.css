@@ -1353,6 +1353,37 @@ a#button.btn-view-liked:hover {
 
 /* ---------------------------------------------------------------- */
 
+
+
+/* ---------------------------------------------------------------- */
+/* ! Styling for In Playlist Elements */
+
+.playlist-description {
+  font-family: "Montserrat", sans-serif;
+  font-size: var(--font-size-medium);
+  color: var(--soft-white) !important;
+  font-weight: 500;
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.songs-in-playlist-search .search-form {
+  display: flex;
+  flex-direction: column; /* Stack elements vertically */
+  gap: 10px; /* Add some space between the elements */
+}
+
+.songs-in-playlist-search .button-row {
+  margin-top: 0px;
+}
+
+
+
+
+/* ---------------------------------------------------------------- */
+
+
+
 /* Messages Styling */
 ul.messages {
   margin-top: 20px;

@@ -3,15 +3,19 @@
 {% block title %}Songs in "{{ playlist.name }}"{% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="container-alt">
     <!-- Back Button -->
-    <a href="{% url 'view_playlists' request.user.username %}" id="button" class="btn-back">← Back to My Playlists</a>
-
-    <h1>Songs in "{{ playlist.name }}"</h1>
-    <p>{{ playlist.description }}</p>
+    <div class="back-to-playlist-buffer">
+        <div class="back-to-playlist">
+            <a href="{% url 'view_playlists' request.user.username %}" id="button" class="btn-back">← Back to My Playlists</a>
+        </div>
+    </div>
 
     <div>
-        <!-- Search bar for filtering songs in this playlist -->
+        <h2>{{ playlist.name }}</h2>
+        <p class="playlist-description">{{ playlist.description }}</p>
+    </div>
+    <!-- <div>
         <form method="get" action="{% url 'view_playlist_songs' user.username playlist.pk %}">
             <input type="text" name="search" placeholder="Search Songs in Playlist" value="{{ request.GET.search|default:'' }}">
             <button type="submit">Search</button>
@@ -20,7 +24,33 @@
             </a>
         </form>
 
+    </div> -->
+
+    <div class="songs-in-playlist-search">
+        <!-- Search bar for filtering songs in this playlist -->
+        <form method="get" action="{% url 'view_playlist_songs' user.username playlist.pk %}" class="search-form" autocomplete="off">
+            <div class="input-wrapper">
+                <span class="search-icon">
+                    <i class="fas fa-search"></i>
+                </span>
+                <input
+                    type="text"
+                    name="search"
+                    placeholder="Search Songs in Playlist"
+                    value="{{ request.GET.search|default:'' }}"
+                    required
+                />
+            </div>
+            
+            <div class="button-row">
+                <!-- ENTER IS NOW USED MAKES IT LOOK A LOT CLEANER -->
+                <a href="{% url 'view_playlist_songs' user.username playlist.pk %}">
+                    <button type="button" class="clear-button">Clear Search</button>
+                </a>
+            </div>
+        </form>
     </div>
+
 
      {% if filtered_songs.exists %}
         <!-- Table structure for displaying songs -->
@@ -63,7 +93,7 @@
     {% endif %}
 </div>
 
-<style>
+<!-- <style>
     .btn-back {
         display: inline-block;
         margin-bottom: 20px;
@@ -77,8 +107,6 @@
     .btn-back:hover {
         background-color: #e0e0e0;
     }
-    .inline-form {
-        display: inline;
-    }
-</style>
+
+</style> -->
 {% endblock %}
