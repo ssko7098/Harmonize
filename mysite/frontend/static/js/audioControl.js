@@ -3,24 +3,11 @@
 export let queue = [];
 export let currentIndex = 0;
 
-export function playAudio(url, index) {
+export function playAudio(url) {
     const audioPlayer = document.getElementById('audio-player');
     const audioSource = document.getElementById('audio-source');
     const songElements = document.querySelectorAll('.song-table tbody tr a');  // Get all song links in the playlist
 
-    const isInPlaylist = window.location.pathname.includes('playlists'); 
-
-    // Build the queue from the list of song URLs
-    if (isInPlaylist) {
-        queue = shuffle(Array.from(songElements).map(songElement => songElement.getAttribute('onclick').match(/'(.*?)'/)[1]));
-
-        // Ensure the current song starts from the correct index in the shuffled queue
-        currentIndex = queue.indexOf(url);
-    } else {
-        // If outside the playlist, only this song is in the queue
-        currentIndex = 0;
-        queue = [url];
-    }
 
     //currentIndex = index;  // Set the current index to the clicked song
     console.log("Current song index:", currentIndex);
@@ -44,6 +31,44 @@ export function playAudio(url, index) {
 }
 
 window.playAudio = playAudio;
+
+export function playFromPlaylist(url) {
+    const audioPlayer = document.getElementById('audio-player');
+    const audioSource = document.getElementById('audio-source');
+    const songElements = document.querySelectorAll('.song-table tbody tr a');  // Get all song links in the playlist
+
+    const songUrls = Array.from(songElements).map(songElement => songElement.getAttribute('onclick').match(/'(.*?)'/)[1]);
+    
+    const clickedSongIndex = songUrls.indexOf(url);
+    // Extract clicked song and create the queue
+    const clickedSong = songUrls.splice(clickedSongIndex, 1);  // Remove the clicked song from the array
+    const shuffledSongs = shuffle(songUrls);  // Shuffle the remaining songs
+    queue = clickedSong.concat(shuffledSongs); 
+
+    currentIndex = 0;
+
+    //currentIndex = index;  // Set the current index to the clicked song
+    console.log("Current song index:", currentIndex);
+    console.log('Queue:', queue);
+
+    // Check if the audio player elements exist
+    if (!audioPlayer || !audioSource) {
+        console.warn('Audio player or source not found. Cannot play audio.');
+        return;
+    }
+
+    // Play the selected song
+    if (audioSource.src !== url) {
+        audioSource.src = url;  // Set the new song URL
+        audioPlayer.load();  // Reload the audio player with the new song
+    }
+
+    audioPlayer.play().catch(error => {
+        console.error('Error trying to play audio:', error);
+    });
+}
+
+window.playFromPlaylist = playFromPlaylist;
 
 function shuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {

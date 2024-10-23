@@ -1,7 +1,7 @@
 // eventHandlers.js
 import { loadPageContent } from './contentLoader.js';
 
-import { playAudio, setCurrentIndex, getCurrentIndex, queue } from './audioControl.js';
+import { playAudio, playFromPlaylist, setCurrentIndex, getCurrentIndex, queue } from './audioControl.js';
 
 export function attachEventListeners() {
     document.querySelectorAll('a.nav-link').forEach(link => {
@@ -14,13 +14,15 @@ export function attachEventListeners() {
         link.addEventListener('click', handleLinkClick);
     });
 
+
+
     const nextButton = document.getElementById('next-button');
     if (nextButton) {
         nextButton.removeEventListener('click', handleNextClick);
         nextButton.addEventListener('click', handleNextClick);
     }
 
-    const previousButton = document.getElementById('previous-button');
+    const previousButton = document.getElementById('prev-button');
     if (previousButton) {
         previousButton.removeEventListener('click', handlePreviousClick);
         previousButton.addEventListener('click', handlePreviousClick);
@@ -138,7 +140,7 @@ function handleNextClick(e) {
 
 function handlePreviousClick(e) {
     e.preventDefault();
-
+    console.log("Playing previous song");
     let currentIndex = getCurrentIndex();  // Get the current index
 
     if (currentIndex > 0) {  // Check if there is a previous song
