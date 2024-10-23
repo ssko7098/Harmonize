@@ -9,7 +9,7 @@ class SongForm(forms.ModelForm):
 
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
-            'mp3_file': forms.FileInput(attrs={'class': 'form-control-file'}),
+            'mp3_file': forms.FileInput(attrs={'class': 'form-control-file', 'accept': '.mp3'}),
             'cover_image_file': forms.ClearableFileInput(attrs={'required': False}),
         }
 
