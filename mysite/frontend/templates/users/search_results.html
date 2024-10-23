@@ -18,9 +18,9 @@
                     </span>
 
                     <!-- Add to Liked Songs Button -->
-                    <form method="post" action="{% url 'add_to_liked_songs' single.pk %}">
+                    <form method="post" id="custom-form" action="{% url 'add_to_liked_songs' single.pk %}">
                         {% csrf_token %}
-                        <button type="submit" class="btn-submit" style="margin-top: 10px; padding: 5px 15px; background-color: #28a745; color: white; border: none; border-radius: 5px;">
+                        <button type="submit" id="button" class="btn-submit" style="margin-top: 10px; padding: 5px 15px; background-color: #28a745; color: white; border: none; border-radius: 5px;">
                             Add to Liked Songs
                         </button>
                     </form>
@@ -37,7 +37,7 @@
                 </div>
 
                 <!-- Inline dropdown form to add to playlist -->
-                <form method="post" action="{% url 'add_to_playlist' %}">
+                <form method="post" id="custom-form" action="{% url 'add_to_playlist' %}">
                     {% csrf_token %}
                     <select name="playlist" id="playlist-{{ single.pk }}" required>
                         <option value="" disabled selected>Select a Playlist</option>
@@ -47,7 +47,7 @@
                     </select>
                     <input type="hidden" name="song_id" value="{{ single.pk }}">
 
-                    <button type="submit" class="btn-submit">Add to Playlist</button>
+                    <button type="submit" id="button" class="btn-submit">Add to Playlist</button>
                 </form>
             </li>
         {% endfor %}
