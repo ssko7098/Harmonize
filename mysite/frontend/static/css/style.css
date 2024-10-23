@@ -979,19 +979,30 @@ li {
 .delete-icon {
   width: 24px;
   height: 24px;
-}
-
-.delete-icon:hover {
   cursor: pointer;
 }
 
 .report-icon {
   width: 24px;
   height: 24px;
+  cursor: pointer;
 }
 
-.report-icon:hover {
+#button.btn.btn-secondary {
+  background-color: transparent;
+  color: var(--soft-white); 
+  border: none; 
+  text-decoration: underline; 
+  font-size: var(--font-size-base); 
   cursor: pointer;
+  padding: 0 0;
+  border: 0 0;
+}
+
+.toggle-singles {
+  align-items: right;
+  text-align: right;
+  margin-top: -10px;
 }
 
 /* ---------------------------------------------------------------- */

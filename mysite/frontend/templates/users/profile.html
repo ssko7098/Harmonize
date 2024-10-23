@@ -49,7 +49,7 @@
                                         {% csrf_token %}
                                         <input type="hidden" name="song_id" value="{{ single.pk }}">
                                         <input type="hidden" name="from_profile" value="true">
-                                        <button type="submit" class="btn-report" style="background: none; border: none; padding: 0;">
+                                        <button type="submit" class="btn-report" onclick="return confirm('Are you sure you want to report this song?');" style="background: none; border: none; padding: 0;">
                                             <img src="{% static 'images/reportflag.png' %}" alt="Report" class="report-icon" />
                                         </button>
                                     </form>
@@ -62,7 +62,7 @@
                 <!-- Toggle between viewing top 5 and all singles -->
                 <div class="toggle-singles">
                     {% if show_all %}
-                        <a href="?show_all=false" id="button" class="btn btn-secondary">Show Top 5 Singles</a>
+                        <a href="?show_all=false" id="button" class="btn btn-secondary">Hide Other Singles</a>
                     {% else %}
                         <a href="?show_all=true" id="button" class="btn btn-secondary">View All Singles</a>
                     {% endif %}
