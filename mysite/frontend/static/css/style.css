@@ -1119,6 +1119,16 @@ li {
   display: block;
 }
 
+.file-input-container {
+  align-items: center;
+}
+
+input#avatar_file {
+  background-color: transparent;
+  border: transparent;
+  font-family: "Montserrat", sans-serif;
+}
+
 .form-group.bio label{
   min-width: 120px !important;
   margin-right: 0px !important;
