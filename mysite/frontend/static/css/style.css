@@ -971,7 +971,9 @@ h3 { /* style elements for profile name */
 .profile-box .profile-picture {
   margin-top: 30px;
   margin-bottom: 30px;
+  border: 2px solid var(--soft-white);
 }
+
 
 .profile-box .body-header {
   text-align: left;
@@ -1117,10 +1119,6 @@ li {
   border-radius: 50%;  /* Make the image round */
   border: 2px solid var(--soft-white);
   display: block;
-}
-
-.file-input-container {
-  align-items: center;
 }
 
 input#avatar_file {
