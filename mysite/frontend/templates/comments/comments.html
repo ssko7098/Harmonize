@@ -2,7 +2,8 @@
 
 <!-- Filter switch: Sort by Timestamp or Likes -->
 <form method="get" action="{% url 'profile' user_profile.user.username %}">
-    <label for="filter">Sort comments by:</label>
+    <label for="filter" class="sort-comments-label"></label>
+    <!-- <label for="filter" class="sort-comments-label">Sort Comments By:</label> -->
     <select name="filter" id="filter">
         <option value="timestamp" {% if request.GET.filter == "timestamp" %}selected{% endif %}>Most Recent</option>
         <option value="likes" {% if request.GET.filter == "likes" %}selected{% endif %}>Most Liked</option>
@@ -38,7 +39,7 @@
         {% endfor %}
     </ul>
 {% else %}
-    <p>No comments yet!</p>
+    <p class="comments-placeholder">No comments yet!</p>
 {% endif %}
 
 {% if not is_own_profile and is_verified %}

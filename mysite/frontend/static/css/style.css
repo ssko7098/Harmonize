@@ -901,6 +901,47 @@ p {
   margin-right: auto;
 }
 
+/* ---------------------------------------------------------------- */
+/* ! Styling for Comments Elements */
+
+.sort-comments-label {
+  font-family: "Montserrat", sans-serif;
+  font-size: var(--font-size-base);
+  color: var(--soft-white);
+  font-weight: 500;
+  align-items: right;
+  align-content: right;
+}
+
+select#filter {
+  background: transparent;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  width: 120px;
+  cursor: pointer;
+  color: var(--soft-white);
+  font-size: var(--font-size-small);
+  border-radius: var(--border-radius-textbox);
+  border: 1px solid var(--soft-white);
+  padding: 2px 2px;
+  align-items: right;
+}
+
+option {
+  color: var(--accent-color);
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: var(--font-size-small);
+}
+
+.comments-placeholder {
+  font-family: "Montserrat", sans-serif;
+  text-align: left;
+  font-size: var(--font-size-medium);
+  color: var(--soft-white);
+}
+
+/* ---------------------------------------------------------------- */
 
 /* ---------------------------------------------------------------- */
 /* ! Styling for My Profile Elements */
@@ -993,7 +1034,7 @@ li {
   color: var(--soft-white); 
   border: none; 
   text-decoration: underline; 
-  font-size: var(--font-size-base); 
+  font-size: var(--font-size-medium); 
   cursor: pointer;
   padding: 0 0;
   border: 0 0;
@@ -1002,7 +1043,7 @@ li {
 .toggle-singles {
   align-items: right;
   text-align: right;
-  margin-top: -10px;
+  margin-top: 10px;
 }
 
 /* ---------------------------------------------------------------- */
