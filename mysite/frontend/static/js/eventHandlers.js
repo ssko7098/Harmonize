@@ -1,7 +1,7 @@
 // eventHandlers.js
 import { loadPageContent } from './contentLoader.js';
 
-import { playAudio, playFromQueue, setCurrentIndex, getCurrentIndex, queue } from './audioControl.js';
+import { playAudio, playFromQueue, setCurrentIndex, getCurrentIndex, queue, currentIndex } from './audioControl.js';
 
 export function attachEventListeners() {
     document.querySelectorAll('a.nav-link').forEach(link => {
@@ -14,8 +14,14 @@ export function attachEventListeners() {
         link.addEventListener('click', handleLinkClick);
     });
 
-
-
+    const addToQueueButtons = document.querySelectorAll('.add-to-queue'); // Select all buttons with the class "add-to-queue"
+    addToQueueButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const url = this.dataset.url; // Retrieve the URL from the data-url attribute of the clicked button
+            addToQueue(url);
+        });
+    });
+    
     const nextButton = document.getElementById('next-button');
     if (nextButton) {
         nextButton.removeEventListener('click', handleNextClick);
@@ -123,6 +129,14 @@ function handleLinkClick(e) {
     // Push new URL to the browser history without reloading the page
     window.history.pushState({}, '', url);
 }
+
+function addToQueue(url) {
+    let currentIndex = getCurrentIndex();
+
+    queue.splice(currentIndex+1, 0, url); // Add the URL in front of the current song
+    console.log("Song added to queue:", queue);
+}
+
 function handleNextClick(e) {
     e.preventDefault();
     

@@ -9,6 +9,7 @@ export function playAudio(url) {
 
     currentIndex = 0;
     queue.length = 0;
+    queue.push(url);
     console.log("Current song index:", currentIndex);
     console.log('Queue:', queue);
 

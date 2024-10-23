@@ -25,6 +25,9 @@
                         </button>
                     </form>
 
+                    <!-- Add to Queue button -->
+                    <button class="add-to-queue" data-url="{{ single.mp3_file.url }}">Add to Queue</button>
+
                     {% if request.user != single.user %}
                     <!-- Report Button -->
                     <form method="post" action="{% url 'report_song' single.pk %}" style="display:inline;">
@@ -49,6 +52,7 @@
 
                     <button type="submit" class="btn-submit">Add to Playlist</button>
                 </form>
+                
             </li>
         {% endfor %}
     </ul>
