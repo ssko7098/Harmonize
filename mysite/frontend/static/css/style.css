@@ -976,6 +976,24 @@ li {
   margin-left: auto;
 }
 
+.delete-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.delete-icon:hover {
+  cursor: pointer;
+}
+
+.report-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.report-icon:hover {
+  cursor: pointer;
+}
+
 /* ---------------------------------------------------------------- */
 
 
