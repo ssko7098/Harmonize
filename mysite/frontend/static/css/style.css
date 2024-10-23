@@ -447,6 +447,23 @@ h1 {
   background-color: var(--hover-color);
 }
 
+/* autocomplete for login details turned off in html as autocomplete ruins styling, 
+alternatively, turning autocomplete on and using this means we can autocomplete with hover color highlight
+but the animation will not be present 
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  background-color: transparent !important;
+  -webkit-box-shadow: 0 0 0px 1000px var(--hover-color) inset !important;
+  box-shadow: 0 0 0px 1000px var(--hover-color) inset !important;
+  color: #fff !important; 
+  font-family: "Montserrat", sans-serif !important;
+  font-size: 1.1em !important;
+  font-weight: 500 !important;
+  -webkit-text-fill-color: #fff !important; 
+  -webkit-background-clip: text !important; 
+} */
 
 h2 {
   text-align: center;
