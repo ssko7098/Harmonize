@@ -1045,6 +1045,11 @@ li {
   cursor: pointer;
   padding: 0 0;
   border: 0 0;
+  transition: all 0.3s ease;
+}
+
+#button.btn.btn-secondary:hover {
+  font-size: calc(var(--font-size-medium) * 1.1);
 }
 
 .toggle-singles {
@@ -1150,11 +1155,15 @@ input#avatar_file {
   outline: 1px solid var(--soft-white);
   align-items: left;
   width: 75% !important;
+  transition: all 0.3s ease;
 }
 
 #id_bio:focus {
-  outline: 2px solid var(--soft-white);
+  background-color: var(--soft-white);
+  color: var(--accent-color);
 }
+
+
 
 /* Update profile info button */
 #profile-settings-page .submit-button {
