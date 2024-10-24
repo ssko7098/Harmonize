@@ -940,6 +940,16 @@ h2 {
 /* ---------------------------------------------------------------- */
 /* ! Styling for Search Elements */
 
+
+h5{
+  font-family: "Montserrat", sans-serif;
+  font-size: 24px;
+  color: var(--soft-white) !important;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 10px;
+} 
+
 .song-details .topbar {
   display: flex;
   justify-content: space-between; 
@@ -949,6 +959,23 @@ h2 {
 
 .song-details {
   width: 100%
+}
+
+.cover-art-title {
+  display: flex;
+  flex-direction: row;
+}
+
+.cover-art-title .text-infomation {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.cover-art-title a img.song-cover {
+  margin-right: 20px;
+  height: 100px;
+  width: 100px;
 }
 
 .cover-art-title span a{
@@ -973,8 +1000,17 @@ h2 {
   margin-bottom: 20px; 
 }
 
+.cover-art-title .text-infomation a.nav-link,
+.cover-art-title .text-infomation a {
+  font-family: "Montserrat", sans-serif;
+  font-size: var(--font-size-medium);
+  color: var(--soft-white);
+  font-weight: 500;
+}
+
 .users-list ul li a.nav-link,
-.albums-list ul li a.nav-link {
+.albums-list ul li a.nav-link,
+.messages-list .messages li {
   font-family: "Montserrat", sans-serif;
   font-size: var(--font-size-medium);
   color: var(--soft-white);
@@ -989,16 +1025,20 @@ h2 {
   margin-left: auto;
 }
 
+.text-infomation {
+  max-height: 100px;
+}
+
 .sort-comments-label {
   font-family: "Montserrat", sans-serif;
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-medium);
   color: var(--soft-white);
   font-weight: 500;
   align-items: right;
   align-content: right;
 }
 
-select#playlist-2 {
+.add-to-playlist-container form select {
   background: transparent;
   font-family: "Montserrat", sans-serif;
   font-weight: 500;
@@ -1012,6 +1052,28 @@ select#playlist-2 {
   align-items: right;
   margin-bottom: 20px;
 }
+
+.artist-container img.user-avatar {
+  height: 100px;
+  width: 100px;
+  margin-right: 20px;
+  border-radius: 50%; 
+  border: 1px solid var(--soft-white);
+}
+
+.artist-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+}
+
+.artist-container a.nav-link {
+  text-align: center;
+  font-weight: 500;
+  font-size: var(--font-size-base) !important;
+}
+
 
 /* ---------------------------------------------------------------- */
 

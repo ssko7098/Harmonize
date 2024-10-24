@@ -6,7 +6,7 @@
 
 {% block content %}
 <div class="container-alt">
-    <h2>Search Results for "{{ query }}"</h2>
+    <h5>Search Results for "{{ query }}"</h5>
 
     <div class="songs-list">
     {% if singles.exists %}
@@ -17,10 +17,14 @@
                 <div class="song-details">
                     <div class="topbar">
                         <div class="cover-art-title">
-                            <span>
-                                <a href="#" onclick="playAudio('{{ single.mp3_file.url }}'); return false;">{{ single.title }}</a> 
-                                <a href="{% url 'profile' single.user.username %}" class="nav-link">{{ single.user.username }}</a>
-                            </span>
+                                <a href="#" onclick="playAudio('{{ single.mp3_file.url }}'); return false;">
+                                    <img src="{% if single.cover_image_file %}{{ single.cover_image_file.url }}{% else %}{% static 'images/default_cover.png' %}{% endif %}" 
+                                        alt="{{ single.title }} Cover" class="song-cover" width="50" height="50">
+                                </a>
+                                <div class="text-infomation">
+                                    <a href="#" onclick="playAudio('{{ single.mp3_file.url }}'); return false;">{{ single.title }}</a> 
+                                    <a href="{% url 'profile' single.user.username %}" class="nav-link">{{ single.user.username }}</a>
+                                </div>
                         </div>
 
                         
@@ -29,7 +33,7 @@
                             <form method="post" action="{% url 'add_to_liked_songs' single.pk %}">
                                 {% csrf_token %}
                                 <div class="liked-song-button">
-                                    <button type="submit" class="btn-submit" style=" padding: 5px 15px; background-color: #28a745; color: white; border: none; border-radius: 5px;">
+                                    <button type="submit" class="btn-submit" style=" padding: 5px 15px; background-color: transparent: white; border: none; border-radius: 5px;">
                                         Add to Liked Songs
                                     </button>
                                 </div>
@@ -53,7 +57,7 @@
                         <form method="post" action="{% url 'add_to_playlist' %}">
                             {% csrf_token %}
                             <select name="playlist" id="playlist-{{ single.pk }}" required>
-                                <option value="" disabled selected>Select a Playlist</option>
+                                <option value="" disabled selected>Select Playlist</option>
                                 {% for playlist in playlists %}
                                     <option value="{{ playlist.pk }}">{{ playlist.name }}</option>
                                 {% endfor %}
@@ -76,7 +80,10 @@
             <ul>
                 {% for user in users %}
                     <li>
-                        <a href="{% url 'profile' user.username %}" class="nav-link">{{ user.username }}</a>
+                        <div class="artist-container">
+                            <img src="{{ user.profile.avatar_file.url }}" alt="{{ user.username }}'s avatar" class="user-avatar">
+                            <a href="{% url 'profile' user.username %}" class="nav-link">{{ user.username }}</a>
+                        </div>
                     </li>
                 {% endfor %}
             </ul>
@@ -94,14 +101,15 @@
         {% endif %}
     </div>
 
-
-    {% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
+    <div class="messages-list">
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
 </div>
 
 {% endblock %}
