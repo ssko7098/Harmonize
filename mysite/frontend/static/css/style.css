@@ -937,6 +937,84 @@ h2 {
 
 
 
+/* ---------------------------------------------------------------- */
+/* ! Styling for Search Elements */
+
+.song-details .topbar {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center; 
+  width: 100%;
+}
+
+.song-details {
+  width: 100%
+}
+
+.cover-art-title span a{
+  font-family: "Montserrat", sans-serif;
+  font-size: var(--font-size-medium);
+  color: var(--soft-white);
+  font-weight: 500;
+}
+
+.topbar {
+  margin-bottom: 10px;
+}
+
+.like-song-button {
+  margin-left: auto;
+}
+
+.songs-list li,
+.users-list li,
+.albums-list li {
+  margin-top: 10px;
+  margin-bottom: 20px; 
+}
+
+.users-list ul li a.nav-link,
+.albums-list ul li a.nav-link {
+  font-family: "Montserrat", sans-serif;
+  font-size: var(--font-size-medium);
+  color: var(--soft-white);
+  font-weight: 500;
+}
+
+.cover-art-title {
+  flex-grow: 1;
+}
+
+.like-song-button-container {
+  margin-left: auto;
+}
+
+.sort-comments-label {
+  font-family: "Montserrat", sans-serif;
+  font-size: var(--font-size-base);
+  color: var(--soft-white);
+  font-weight: 500;
+  align-items: right;
+  align-content: right;
+}
+
+select#playlist-2 {
+  background: transparent;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  width: 120px;
+  cursor: pointer;
+  color: var(--soft-white);
+  font-size: var(--font-size-small);
+  border-radius: var(--border-radius-textbox);
+  border: 1px solid var(--soft-white);
+  padding: 2px 2px;
+  align-items: right;
+  margin-bottom: 20px;
+}
+
+/* ---------------------------------------------------------------- */
+
 
 /* ---------------------------------------------------------------- */
 /* ! Styling for Comments Elements */
