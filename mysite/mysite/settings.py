@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     "django.contrib.sites",
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',  
 ]
 
 MIDDLEWARE = [
@@ -181,3 +183,22 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
 }
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': '495519054195-scsi06ue47de7ru3om4k9pnqcm3vqt72.apps.googleusercontent.com',
+            'secret': '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',
+            'key': ''
+        },
+        'SCOPE': ['profile', 'email'],
+        'AUTH_PARAMS': {'access_type': 'online'},
+    }
+}
+
+SOCIALACCOUNT_LOGIN_ON_GET = True
+SOCIALACCOUNT_EMAIL_VERIFICATION = False
+
+SOCIALACCOUNT_ADAPTER = 'users.adapters.MySocialAccountAdapter'
+
+SOCIALACCOUNT_SIGNUP_REDIRECT_URL = 'users/'

@@ -1,4 +1,5 @@
 {% extends '../base.html' %}
+{% load socialaccount %}
 
 {% block title %}Login{% endblock %}
 
@@ -51,7 +52,7 @@
                 <button type="submit" class="btn">Sign In</button>
                 <div class="register-link">
                     <!-- Need to link the below -->
-                    <a hef="#" class="register-link-text">Forgot Password?</a>
+                    <a href="#" class="register-link-text">Forgot Password?</a>
                 </div>
             </form>
             <div class="register-link">
@@ -59,5 +60,14 @@
                 <a href="{% url 'register' %}" class="register-link-text">Register here</a></a>
             </div>
         </div>
+
+        <!-- Google login button -->
+        <div class="google-login-container">
+            <a href="{% provider_login_url 'google' %}" class="google-login-btn">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1920px-Google_%22G%22_logo.svg.png" alt="Google icon">
+                <span>Sign in with Google</span>
+            </a>
+        </div>
+        
     </div>
 {% endblock %}
