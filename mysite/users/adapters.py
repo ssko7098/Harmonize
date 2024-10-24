@@ -1,8 +1,8 @@
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth import get_user_model, login
-from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
+from allauth.exceptions import ImmediateHttpResponse
 
 class MySocialAccountAdapter(DefaultSocialAccountAdapter):
     def pre_social_login(self, request, sociallogin):
@@ -26,11 +26,18 @@ class MySocialAccountAdapter(DefaultSocialAccountAdapter):
                 login(request, existing_user, backend=backend)
 
                 # Redirect the user to the home page immediately after login
-                return HttpResponseRedirect('/')  # <-- Force redirect here
+                return HttpResponseRedirect('/') 
 
             except User.DoesNotExist:
-                # If the user does not exist, proceed as usual
-                pass
+                # If the user does not exist, redirect to the registration page
+                return HttpResponseRedirect('/users/register/')
+            
+        # If email is not available, redirect to registration
+        return HttpResponseRedirect('/users/register/')
+    
+    # Override the is_auto_signup_allowed to prevent automatic signup of users
+    def is_open_for_signup(self, request, sociallogin):
+        raise ImmediateHttpResponse(HttpResponseRedirect('/users/register/'))
 
     def get_login_redirect_url(self, request):
         # Redirect users to the home page after login
