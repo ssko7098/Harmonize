@@ -16,7 +16,7 @@ from django.core.exceptions import ValidationError
 import users.urls
 from django.http import JsonResponse
 import os
-from django.conf import settings
+from allauth.socialaccount.models import SocialAccount
 
 # Create your views here.
 def home(request):
@@ -223,8 +223,13 @@ def login_view(request):
             user = authenticate(username=username, password=password)
             
             if user is not None:
+                # Check if the user has a social account (e.g., Google OAuth login)
+                if SocialAccount.objects.filter(user=user).exists():
+                    # If the user logged in via a social account, bypass email verification
+                    login(request, user)
+                    return redirect('home')
 
-                # Check if the email address is verified
+                # Check if the email address is verified for non-social users
                 email_address = EmailAddress.objects.filter(user=user, verified=True).first()
                 
                 if email_address and not user.is_verified:
