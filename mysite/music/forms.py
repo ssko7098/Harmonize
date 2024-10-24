@@ -28,6 +28,12 @@ class PlaylistForm(forms.ModelForm):
         fields = ['name', 'description']
 
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control'}),
-            'description': forms.Textarea(attrs={'class': 'form-control'}),
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Playlist Name',  
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Description',  
+            }),
         }

@@ -961,7 +961,7 @@ h3 { /* style elements for profile name */
   text-align: left;
   font-size: var(--font-size-profile-name);
   margin-top: 0px;
-  margin-bottom: -7.5px;
+  margin-bottom: 5px;
   color: var(--soft-white);
 }
 
@@ -1003,15 +1003,15 @@ h3 { /* style elements for profile name */
 } 
 
 ul {
-  list-style-type: none; /* Removes bullet points */
-  padding: 0; /* Removes padding */
-  margin: 0; /* Removes margin */
+  list-style-type: none; 
+  padding: 0; 
+  margin: 0; 
 }
 
 li {
-  display: flex; /* Makes items horizontal */
-  align-items: center; /* Centers items vertically */
-  margin-bottom: 10px; /* Space between items */
+  display: flex; 
+  align-items: center; 
+  margin-bottom: 10px; 
 
 }
 
@@ -1351,20 +1351,59 @@ a#button.btn-view-liked:hover {
   font-size: calc(var(--font-size-medium) * 1.1);
 }
 
-.playlist-form-container {
-  width: 100%; /* Full width of the parent container */
-  max-width: 400px; /* Optional: limit max width */
-  margin: 0 auto; /* Center the form horizontally */
-  padding: 20px; /* Add some padding */
-  border-radius: 8px; /* Rounded corners */
+.create-new-playlist {
+  max-width: 400px; 
+  margin: 0 auto; 
+  border-radius: 5px;
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
 }
 
-.input-wrapper {
-  display: flex; /* Use flexbox for layout */
-  margin-bottom: 15px; /* Space between inputs */
+.form-group {
+  width: 100%; 
+  display: flex; 
+  justify-content: center; 
 }
 
+.form-control {
+  box-sizing: border-box;
+} 
 
+.create-new-playlist input#id_name.form-control {
+  width: 100%;
+  background: transparent;
+  outline: 1px solid var(--soft-white);
+  border-radius: var(--border-radius-button);
+  border: 1px solid var(--soft-white);
+  transition: all 0.4s ease;
+}
+
+.create-new-playlist input#id_name.form-control::placeholder {
+  color: var(--soft-white);
+}
+
+.create-new-playlist input#id_name.form-control:focus {
+  background: var(--soft-white);
+  color: var(--accent-color);
+}
+.create-new-playlist textarea#id_description.form-control {
+  width: 100%;
+  background: transparent;
+  outline: 1px solid var(--soft-white);
+  border-radius: var(--border-radius-button);
+  border: 1px solid var(--soft-white);
+  transition: all 0.4s ease;
+}
+
+.create-new-playlist textarea#id_description.form-control::placeholder {
+  color: var(--soft-white);
+}
+
+.create-new-playlist textarea#id_description.form-control:focus {
+  background: var(--soft-white);
+  color: var(--accent-color);
+}
 
 button.btn-submit {
   background-color: transparent; 
@@ -1372,14 +1411,12 @@ button.btn-submit {
   color: var(--soft-white); 
   padding: 0px 0px;
   border: none; 
-  cursor: pointer; /* Pointer cursor on hover */
-  font-size: var(--font-size-medium); /* Font size for button */
+  cursor: pointer; 
+  font-size: var(--font-size-medium); 
   transition: font-size 0.3s, ease 0.3s;
   text-decoration: underline;
-  
 }
 
-/* Button hover effect */
 .btn-submit:hover {
   font-size: calc(var(--font-size-medium) * 1.1);
 }
@@ -1408,11 +1445,11 @@ h4{
 
 .playlist-name {
   font-family: "Montserrat", sans-serif;
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-medium);
   color: var(--soft-white) !important;
   font-weight: 600;
   text-align: left !important;
-  width: 150px;
+  width: 300px;
   margin: 0 0 !important;
 }
 

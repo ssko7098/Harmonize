@@ -47,46 +47,31 @@
         </div>
     </form>
 
-    <div class="create-new-playlist">
+    <!-- Form for creating a new playlist -->
+    <!-- <div class="create-new-playlist">
         <h4>Create Playlist</h4>
-        <!-- Form for creating a new playlist -->
         <form method="post" id="custom-form" action="{% url 'view_playlists' user.username %}" autocomplete="off">
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit" id="button" class="btn-submit">Create</button>
         </form>
-        
-            <!-- <form method="post" id="playlist-form" action="{% url 'view_playlists' user.username %}" class="search-form" autocomplete="off">
-                {% csrf_token %}
-                <div class="playlist-form-container">
-                    <div class="input-wrapper">
-                        <span class="search-icon">
-                            <i class="fas fa-music"></i> 
-                        </span>
-                        <input
-                            type="{{ form.name.field.widget.type }}" 
-                            name="{{ form.name.name }}"
-                            value="{{ form.name.value|default:'' }}"
-                            class="playlist-input"
-                            placeholder="Playlist Name"
-                            required
-                        />
-                    </div>
-                    <div class="input-wrapper">
-                        <span class="search-icon">
-                            <i class="fas fa-pencil-alt"></i> 
-                        </span>
-                            <textarea
-                            name="description"
-                            id="description"
-                            class="playlist-description-input"
-                            placeholder="Description"
-                            required
-                            ></textarea>
-                    </div>
-                    <button type="submit" id="button" class="btn-submit">Create Playlist</button>
-                </div>
-            </form> -->
+    </div> -->
+
+    <div class="create-new-playlist">
+        <h4>Create Playlist</h4>
+        <!-- Form for creating a new playlist -->
+        <form method="post" id="custom-form" action="{% url 'view_playlists' user.username %}" autocomplete="off">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.name }} <!-- Renders the input for 'name' with a placeholder -->
+            </div>
+            <div class="form-group">
+                {{ form.description }} <!-- Renders the textarea for 'description' with a placeholder -->
+            </div>
+            <div class="button-container">
+                <button type="submit" id="button" class="btn-submit">Create</button>
+            </div>
+        </form>
     </div>
 
     <div class="playlists-list">

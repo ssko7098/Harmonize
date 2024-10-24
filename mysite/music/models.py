@@ -60,7 +60,7 @@ class Song(models.Model):
 class Playlist(models.Model):
     playlist_id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=30)
     description = models.TextField(null=True, blank=True)
     report_count = models.PositiveIntegerField(default=0)
 
