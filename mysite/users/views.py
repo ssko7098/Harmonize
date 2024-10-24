@@ -47,6 +47,8 @@ def admin_dashboard(request):
     else:
         users = User.objects.filter(is_active=True, is_admin=False).select_related('profile')
 
+    users = users.order_by('-profile__report_count')
+
     total_users = User.objects.filter(is_active=True, is_admin=False).count()  # Count total users not including admins and inactive
     total_songs = Song.objects.count()  # Count total songs
 
