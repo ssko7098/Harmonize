@@ -928,6 +928,7 @@ select#filter {
   border: 1px solid var(--soft-white);
   padding: 2px 2px;
   align-items: right;
+  margin-bottom: 20px;
 }
 
 option {
@@ -944,12 +945,142 @@ option {
   color: var(--soft-white);
 }
 
-/* ---------------------------------------------------------------- */
+.comments-section li {
+
+}
+
+.individual-comment {
+  display: flex;
+  flex-direction: column;
+  margin-top: 5px;
+  width: 100%
+}
+
+.individual-comment-top-line {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.individual-comment-top-line p{
+  font-family: "Montserrat", sans-serif;
+  font-size: var(--font-size-medium);
+  color: var(--soft-white);
+  width: 100%;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.commenter p{
+  font-weight: 600;
+}
+
+.timestamp p{
+  font-size: var(--font-size-small) !important;
+}
+
+.comment-line {
+  font-family: "Montserrat", sans-serif;
+  font-size: var(--font-size-medium);
+  color: var(--soft-white);
+  width: 100%;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.individual-comment-react-line {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.like-icon,
+.dislike-icon,
+.delete-icon-comments,
+.report-icon-comments {
+  height: 20px;
+  width: 20px;
+  cursor: pointer;
+}
+
+.like-and-dislike-comment {
+  container: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+span.like-counter,
+span.dislike-counter {
+    display: inline-block; /* Ensures counts are inline with the button */
+    margin-left: 5px; /* Optional: Space between button and count */
+    text-align: center;
+    font-family: "Montserrat", sans-serif;
+    font-size: var(--font-size-medium);
+    color: var(--soft-white);
+    margin-right: 10px;
+}
+
+.individual-comment-react-line .delete-or-report-comment {
+  margin-left: auto;
+}
+
+.individual-comment-reply-line {
+  display: flex;
+  flex-direction: row;
+}
+
+.new-comment {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+textarea.new-comment-textbox{
+  background: var(--soft-white);
+  width: 100%;
+  outline: 1px solid var(--soft-white);
+  border-radius: var(--border-radius-button);
+  border: 1px solid var(--soft-white);
+  font-family: "Montserrat", sans-serif;
+  padding: 10px 10px;
+  color: var(--accent-color);
+  min-height: 35px !important;
+}
+
+.button-container {
+  text-align: right;
+  margin-bottom: 20px;
+}
+
+.submit-comment {
+  background: transparent;
+  font-family: "Montserrat", sans-serif;
+  border: transparent;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: underline;
+  color: var(--soft-white);
+  transition: all 0.4s ease;
+}
+
+.submit-comment:hover {
+  font-size: calc(var(--font-size-medium) * 1.2);
+}
 
 
 
 /* ---------------------------------------------------------------- */
-/* ! Styling for My Profile Elements */
+
+
+
+/* ---------------------------------------------------------------- */
+/* ! Styling for Profile Elements */
 
 .profile-box {
   width: 100%; /* Ensure full width of the form inside container */
@@ -999,7 +1130,7 @@ h3 { /* style elements for profile name */
 
 .profile-box h2 {
   text-align: left !important; 
-  margin-bottom: 0px !important;
+  margin-bottom: 10px !important;
 } 
 
 ul {
@@ -1056,6 +1187,24 @@ li {
   align-items: right;
   text-align: right;
   margin-top: 10px;
+}
+
+.profile-info .btn.btn-report {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  color: var(--soft-white);
+  background-color: rgb(202, 81, 81);
+}
+
+.profile-info .btn.btn-delete {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  color: var(--soft-white);
+  background-color: rgb(202, 81, 81);
+}
+
+.profile-info .btn.btn-report:hover {
+  background-color: red;
 }
 
 /* ---------------------------------------------------------------- */

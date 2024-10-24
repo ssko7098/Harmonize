@@ -1,27 +1,48 @@
-{% if comment.replies.exists %}
-    <ul>
-        {% for reply in comment.replies.all %}
-            <li>
-                <strong>{{ reply.user.username }}:</strong> {{ reply.message }}
-                <br>
-                <small>{{ reply.created_at }}</small>
+<div class="comments-section" style="margin-left: 40px;">
+    {% if comment.replies.exists %}
+        <ul>
+            {% for reply in comment.replies.all %}
+                <li>
+                    <div class="individual-comment">
+                        <div class="individual-comment-top-line">
+                            <div class="commenter">
+                                <p>{{ reply.user.username }}:</p> 
+                            </div>
 
-                <!-- Like, Dislike, Delete, Report, etc. for replies -->
-                {% include "comments/comment_actions.html" with comment=reply %}
+                            <div class="timestamp">
+                                <p>{{ reply.created_at }}</p>
+                            </div>
+                        </div>
 
-                <!-- Recursive inclusion for replies to replies -->
-                {% include "comments/replies.html" with comment=reply %}
+                        <div class="comment-line">
+                            <p>{{ reply.message }} </p>
 
-                <!-- Reply Form for each reply -->
-                {% if is_verified %}
-                <form method="post" id="custom-form" action="{% url 'add_comment' user_profile.user.username %}">
-                    {% csrf_token %}
-                    <textarea name="message" placeholder="Write a reply" required></textarea>
-                    <input type="hidden" name="parent_comment_id" value="{{ reply.comment_id }}">
-                    <button type="submit">Reply</button>
-                </form>
-                {% endif %}
-            </li>
-        {% endfor %}
-    </ul>
-{% endif %}
+                        <div class="individual-comment-react-line">
+                            <!-- Like, Dislike, Delete, Report, etc. for replies -->
+                            {% include "comments/comment_actions.html" with comment=reply %}
+                        </div>
+                        
+                        <div class="reply-comments">
+                            <!-- Recursive inclusion for replies to replies -->
+                            {% include "comments/replies.html" with comment=reply %}
+                        </div>
+                        
+                        <!-- <div class="individual-comment-reply-line"> -->
+                        <div class="new-comment">
+                        <!-- Reply Form for each reply -->
+                            {% if is_verified %}
+                            <form method="post" id="custom-form" action="{% url 'add_comment' user_profile.user.username %}">
+                                {% csrf_token %}
+                                <textarea class="new-comment-textbox "name="message" placeholder="Reply" required></textarea>
+                                <input type="hidden" name="parent_comment_id" value="{{ reply.comment_id }}">
+                                <div class="button-container">
+                                    <button class="submit-comment" type="submit">Reply</button>
+                                </div>
+                            </form>
+                        {% endif %}
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</div>
