@@ -8,11 +8,6 @@
         <main>
             <div class="container-alt">
                 <h2>Upload a New Song</h2>
-                
-                <div class="upload-options">
-                    <button class="upload-btn">Upload Single</button>
-                    <button class="upload-btn">Upload Album</button>
-                </div>
 
                 <form method="post" enctype="multipart/form-data" class="upload-form">
                     {% csrf_token %}
@@ -30,7 +25,7 @@
                     <div class="form-group cover-art-input-container">
                         <label for="cover_image">Choose Single Cover</label>
 
-                        <input type="file" name="cover_image_file" id="cover_image_file" class="form-control">
+                        <input type="file" name="cover_image_file" id="cover_image_file" accept=".jpg, .jpeg" class="form-control">
                         
                         <div class="cover-preview">
                             <img src="{% static 'images/default_cover.png' %}" alt="Single Cover" id="cover-preview">

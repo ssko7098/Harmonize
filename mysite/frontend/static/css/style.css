@@ -447,6 +447,23 @@ h1 {
   background-color: var(--hover-color);
 }
 
+/* autocomplete for login details turned off in html as autocomplete ruins styling, 
+alternatively, turning autocomplete on and using this means we can autocomplete with hover color highlight
+but the animation will not be present 
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  background-color: transparent !important;
+  -webkit-box-shadow: 0 0 0px 1000px var(--hover-color) inset !important;
+  box-shadow: 0 0 0px 1000px var(--hover-color) inset !important;
+  color: #fff !important; 
+  font-family: "Montserrat", sans-serif !important;
+  font-size: 1.1em !important;
+  font-weight: 500 !important;
+  -webkit-text-fill-color: #fff !important; 
+  -webkit-background-clip: text !important; 
+} */
 
 h2 {
   text-align: center;
@@ -959,12 +976,30 @@ li {
   margin-left: auto;
 }
 
+.delete-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.delete-icon:hover {
+  cursor: pointer;
+}
+
+.report-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.report-icon:hover {
+  cursor: pointer;
+}
+
 /* ---------------------------------------------------------------- */
+
 
 
 /* ---------------------------------------------------------------- */
 /* ! Styling for Profile Settings Elements */
-
 .profile-settings-box {
   width: 100%; /* Ensure full width of the form inside container */
   text-align: left;
@@ -1032,23 +1067,29 @@ li {
   display: block;
 }
 
-.form-group-bio label{
+.form-group.bio label{
+  min-width: 120px !important;
+  margin-right: 0px !important;
+}
 
+.form-group.bio {
+  padding: 0;
+  margin: 0;
+  width: 100%; /* Ensure it uses the full width available */
+  display: block; /* To ensure it's rendered as a block element */
+  justify-content: flex-start !important;
 }
 
 #id_bio {
   background: transparent;
   outline: 1px solid var(--soft-white);
   align-items: left;
+  width: 75% !important;
 }
 
 #id_bio:focus {
   outline: 2px solid var(--soft-white);
 }
-
-
-/* ---------------------------------------------------------------- */
-
 
 /* Update profile info button */
 #profile-settings-page .submit-button {
@@ -1072,6 +1113,9 @@ li {
   color: var(--primary-color);
   font-size: calc(var(--font-size-medium) * 1.2);
 }
+
+/* ---------------------------------------------------------------- */
+
 
 /* Messages Styling */
 ul.messages {

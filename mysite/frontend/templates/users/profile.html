@@ -28,10 +28,16 @@
                                 <img src="{% if single.cover_image_file %}{{ single.cover_image_file.url }}{% else %}{% static 'images/default_cover.png' %}{% endif %}" alt="{{ single.title }} Album Cover" style="width:100px; height:auto;">
                             </a>
 
+
                             <div class="media-info">
                                 <p class="body-header">{{ single.title }}</p>
                                 <p class="body">{{ user_profile.user.username }}</p>
                                 <p class="body">Likes: {{ single.likes_count }}</p>
+                            </div>
+                            
+                            <div>
+                                <!-- Add to Queue button -->
+                                <button class="add-to-queue" data-url="{{ single.mp3_file.url }}">Add to Queue</button>
                             </div>
                             <!-- View Lyrics Button -->
                             <div>
@@ -57,14 +63,18 @@
                                     <form method="post" id="custom-form">
                                         {% csrf_token %}
                                         <input type="hidden" name="song_id" value="{{ single.song_id }}">
-                                        <button type="submit" name="delete_song" id="button" onclick="return confirm('Are you sure you want to delete this song?');">Delete</button>
+                                        <button type="submit" name="delete_song" onclick="return confirm('Are you sure you want to delete this song?');" style="background: none; border: none; padding: 0;">
+                                            <img src="{% static 'images/trashcan.png' %}" alt="Delete" class="delete-icon" />
+                                        </button>
                                     </form>
                                 {% else %}
                                     <form method="post" id="custom-form" action="{% url 'report_song' single.pk %}">
                                         {% csrf_token %}
                                         <input type="hidden" name="song_id" value="{{ single.pk }}">
                                         <input type="hidden" name="from_profile" value="true">
-                                        <button type="submit" id="button" class="btn-report">Report</button>
+                                        <button type="submit" class="btn-report" style="background: none; border: none; padding: 0;">
+                                            <img src="{% static 'images/reportflag.png' %}" alt="Report" class="report-icon" />
+                                        </button>
                                     </form>
                                 {% endif %}
                             </div>
@@ -92,6 +102,16 @@
                             <a href="#" onclick="playAudio('{{ single.mp3_file.url }}'); return false;">
                                 <img src="{% if single.cover_image_file %}{{ single.cover_image_file.url }}{% else %}{% static 'images/default_cover.png' %}{% endif %}" alt="{{ single.title }} Album Cover" style="width:100px; height:auto;">
                             </a>
+                            
+                            <div>
+                                <!-- Add to Queue button -->
+                                <button class="add-to-queue" data-url="{{ single.mp3_file.url }}">Add to Queue</button>
+
+                                <div class="media-info">
+                                    <p class="body-header">{{ single.title }}</p>
+                                    <p class="body">{{ user_profile.user.username }}</p>
+                                    <p class="body">Likes: {{ single.likes_count }}</p>
+                                </div>
 
                             <div class="media-info">
                                 <p class="body-header">{{ single.title }}</p>
@@ -101,24 +121,6 @@
                                         <!-- <img src="/media/cover_art/{{ single.title }}.jpg" alt="{{ single.title }} Album Cover" style="width:100px; height:auto;">
                                         <a href="#" onclick="playAudio('{{ single.mp3_file.url }}'); return false;">{{ single.title }}</a> -->
 
-                            <!-- Lyrics Display -->
-                            <div>
-                                {% if not show_lyrics %}
-                                <a href="?show_lyrics=true" class="btn btn-info">View Lyrics</a>
-                            {% else %}
-                                <a href="?show_lyrics=false" class="btn btn-secondary">Hide Lyrics</a>
-                            {% endif %}
-
-                            <!-- Display Lyrics Conditionally -->
-                            {% if show_lyrics %}
-                                <div class="lyrics-section">
-                                    {% if single.lyrics %}
-                                        <pre>{{ single.lyrics }}</pre>
-                                    {% else %}
-                                        <p>No lyrics available.</p>
-                                    {% endif %}
-                                </div>
-                            {% endif %}
 
                             <!-- Delete or Report Button -->
                             <div class="button">
@@ -126,14 +128,18 @@
                                     <form method="post" id="custom-form">
                                         {% csrf_token %}
                                         <input type="hidden" name="song_id" value="{{ single.song_id }}">
-                                        <button type="submit" name="delete_song" onclick="return confirm('Are you sure you want to delete this song?');">Delete</button>
+                                        <button type="submit" name="delete_song" onclick="return confirm('Are you sure you want to delete this song?');" style="background: none; border: none; padding: 0;">
+                                                <img src="{% static 'images/trashcan.png' %}" alt="Delete" class="delete-icon" />
+                                            </button>
                                     </form>
                                 {% else %}
                                     <form method="post" id="custom-form" action="{% url 'report_song' single.pk %}">
                                         {% csrf_token %}
                                         <input type="hidden" name="song_id" value="{{ single.pk }}">
                                         <input type="hidden" name="from_profile" value="true">
-                                        <button type="submit" class="btn-report">Report</button>
+                                        <button type="submit" class="btn-report" style="background: none; border: none; padding: 0;">
+                                                <img src="{% static 'images/reportflag.png' %}" alt="Report" class="report-icon" />
+                                            </button>
                                     </form>
                                 {% endif %}
                             </div>

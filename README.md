@@ -15,7 +15,7 @@ Our project `Harmonize` aims to develop a robust and user-friendly music streami
 * __User Authentication:__ Critical for distinguishing between normal and admin users. This feature enables customized experiences and account-specific functions like profile pages with user interactions through comments.
 * __Music Library Access:__ Users can browse and listen to a database of songs, forming the foundation of the platform's identity as a music streaming service.
 * __Playlist Management:__ Users can create, manage, and organize personal playlists, making music discovery and enjoyment seamless.
-*Playback Controls: Standard controls like rewind, skip, and pause ensure a smooth listening experience.
+* __Playback Controls:__ Standard controls like rewind, skip, and pause ensure a smooth listening experience.
 * __Profile Comment Section:__ A unique feature where users can leave and receive comments, fostering community engagement around their favorite artists.
 * __Admin Privileges:__ Admins can manage content by adding, deleting, and updating songs and user accounts, essential for platform curation.
 

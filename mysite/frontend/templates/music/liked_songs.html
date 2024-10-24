@@ -10,10 +10,10 @@
     <h1>{{ user.username }}'s Liked Songs</h1>
 
     <!-- Search bar for filtering liked songs -->
-    <form method="get" action="{% url 'liked_songs' user.username %}">
+    <form method="get" id="search-bar" action="{% url 'liked_songs' user.username %}">
         <input type="text" name="search" placeholder="Search Liked Songs" value="{{ request.GET.search|default:'' }}">
         <button type="submit">Search</button>
-        <a href="{% url 'liked_songs' user.username %}">
+        <a id="button" href="{% url 'liked_songs' user.username %}">
             <button type="button">Clear</button>
         </a>
     </form>
@@ -32,9 +32,9 @@
                         - No audio file available
                     {% endif %}
                     <!-- Form to Remove (Unlike) the Song -->
-                    <form method="post" action="{% url 'remove_liked_song' song.pk %}" class="inline-form">
+                    <form method="post" id="custom-form" action="{% url 'remove_liked_song' song.pk %}" class="inline-form">
                         {% csrf_token %}
-                        <button type="submit" class="btn-delete">Remove from Liked Songs</button>
+                        <button type="submit" id="button" class="btn-delete">Remove from Liked Songs</button>
                     </form>
                 </li>
             {% endfor %}

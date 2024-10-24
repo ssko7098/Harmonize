@@ -15,6 +15,8 @@ from music.models import Song, Album, Playlist
 from django.core.exceptions import ValidationError
 import users.urls
 from django.http import JsonResponse
+import os
+from django.conf import settings
 
 # Create your views here.
 def home(request):
@@ -47,6 +49,21 @@ def admin_dashboard(request):
 
     total_users = User.objects.filter(is_active=True, is_admin=False).count()  # Count total users not including admins and inactive
     total_songs = Song.objects.count()  # Count total songs
+
+    if request.method == 'POST':
+        if 'clear_reports' in request.POST:
+            profile_id = request.POST.get('profile_id')
+
+            if not profile_id:
+                messages.error(request, 'No Profile selected for clearing.')
+                return redirect('reported_profiles')
+            
+            profile = get_object_or_404(Profile, pk=profile_id)
+
+            profile.report_count = 0
+            profile.reported_by.clear()
+            profile.save()
+            messages.success(request, f"Profile reports have been cleared for {profile.user.username}.")
 
     return render(request, 'users/manage_profiles.html', {
         'users': users,
@@ -124,26 +141,6 @@ def manage_songs(request):
             messages.success(request, f"Song reports have been cleared for {song.title}.")
 
     return render(request, 'users/manage_songs.html', {'songs': songs})
-
-@user_passes_test(is_admin)
-def manage_reported_profiles(request):
-    reported_profiles = Profile.objects.filter(report_count__gt=0, user__is_active=True).order_by('-report_count')
-    if request.method == 'POST':
-        if 'clear_reports' in request.POST:
-            profile_id = request.POST.get('profile_id')
-
-            if not profile_id:
-                messages.error(request, 'No Profile selected for clearing.')
-                return redirect('reported_profiles')
-            
-            profile = get_object_or_404(Profile, pk=profile_id)
-
-            profile.report_count = 0
-            profile.reported_by.clear()
-            profile.save()
-            messages.success(request, f"Profile reports have been cleared for {profile.user.username}.")
-    
-    return render(request, 'users/reported_profiles.html', {'reported_profiles': reported_profiles})
 
 @user_passes_test(is_admin)
 def manage_reported_comments(request):
@@ -334,16 +331,24 @@ def profile_view(request, username):
 def profile_settings_view(request):
     profile = request.user.profile  # Get the profile of the logged-in user
     user = request.user  # Get the current logged-in user
+    old_avatar = profile.avatar_file
 
     # if the user wants to change the profile, check if this is valid and save 
     if request.method == 'POST':
         form = ProfileForm(request.POST, request.FILES, instance=profile)
 
         if form.is_valid():
+            # Check if a new profile picture is uploaded
+            if 'avatar_file' in request.FILES:
+                # If there is an old avatar, delete it from the file system
+                if os.path.isfile(old_avatar.path):
+                    os.remove(old_avatar.path)
+
             form.save()
             
             # Check if it's an AJAX request
             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+
                 # Return JSON response for AJAX
                 return JsonResponse({'status': 'success', 'message': 'Profile updated successfully!'})
             else:

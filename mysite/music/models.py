@@ -33,7 +33,7 @@ class Song(models.Model):
         if not self.mp3_file.name.endswith('.mp3'):
             raise ValidationError('Only .mp3 files are allowed.')
         
-        if not self.cover_image_file.name.endswith(('.jpg', '.jpeg')):
+        if self.cover_image_file and not self.cover_image_file.name.endswith(('.jpg', '.jpeg')):
             raise ValidationError('Only JPEG files are allowed.')
 
     def save(self, *args, **kwargs):

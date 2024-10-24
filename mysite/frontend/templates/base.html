@@ -106,11 +106,15 @@
         <source id="audio-source" src="" type="audio/mpeg" />
         Your browser does not support the audio element.
       </audio>
+      <!-- Playback control buttons -->
+      <button  id="prev-button"><<</button>
+      <button id="next-button">>></button>
     </div>
     {% endif %}
 
     <!-- Link to the external JavaScript file -->
     <script type="module" src="{% static 'js/main.js' %}"></script>
+    <script type="module" src="{% static 'js/audioControl.js' %}"></script>
 
     <!-- JavaScript for toggling sidebar -->
     <script src="{% static 'js/sidebar.js' %}"></script>

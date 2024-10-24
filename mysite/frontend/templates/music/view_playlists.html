@@ -12,11 +12,11 @@
     </div>
 
     <!-- Search bar for filtering playlists -->
-    <form method="get" action="{% url 'view_playlists' user.username %}">
+    <form method="get" id="search-bar" action="{% url 'view_playlists' user.username %}">
         <input type="text" name="search_query" placeholder="Search Playlists" value="{{ request.GET.search_query|default:'' }}">
         <button type="submit">Search</button>
-        <a href="{% url 'view_playlists' user.username %}">
-            <button type="button">Clear</button>
+        <a id="button" href="{% url 'view_playlists' user.username %}">
+            <button id="button" type="button">Clear</button>
         </a>
     </form>
 
