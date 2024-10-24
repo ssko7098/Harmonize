@@ -77,7 +77,46 @@ export function attachEventListeners() {
         filter.addEventListener('change', handleFilter);
     });
 
+    document.querySelectorAll('#search-bar').forEach(form => {
+        form.removeEventListener('submit', handleSearchFilterSubmit);
+        form.addEventListener('submit', handleSearchFilterSubmit);
+    });
+
     attachNavLinkActiveState();
+}
+
+function handleSearchFilterSubmit(e) {
+    e.preventDefault();  // Prevent the default form submission
+
+    const form = e.target;  // Get the form element that triggered the event
+    const formData = new FormData(form);  // Collect the form data
+
+    const url = new URL(form.action || window.location.href);  // Build URL with form action or current page
+    formData.forEach((value, key) => {
+        url.searchParams.set(key, value);  // Add form data as query parameters
+    });
+
+    // Send AJAX request for the search results
+    fetch(url, {
+        method: 'GET',  // Use GET for search queries
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',  // Indicate that this is an AJAX request
+        },
+    })
+    .then(response => response.text())
+    .then(data => {
+        // Update the content-container with the new filtered data
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(data, 'text/html');
+        const newContent = doc.querySelector('#content-container').innerHTML;
+        document.getElementById('content-container').innerHTML = newContent;
+
+        // Reattach event listeners to the new content if necessary
+        attachEventListeners();
+    })
+    .catch(error => {
+        console.error('Error during AJAX request:', error);
+    });
 }
 
 function handleFilter(e) {
