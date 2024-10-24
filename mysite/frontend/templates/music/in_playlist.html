@@ -42,7 +42,7 @@
                 <tr>
                     <!-- Clicking on the song title plays the song -->
                     <td>
-                        <a href="#" onclick="playAudio('{{ playlist_song.song.mp3_file.url }}'); return false;">
+                        <a href="#" onclick="playFromPlaylist('{{ playlist_song.song.mp3_file.url }}'); return false;">
                             {{ playlist_song.song.title }}
                         </a>
                     </td>

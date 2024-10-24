@@ -28,10 +28,16 @@
                                 <img src="{% if single.cover_image_file %}{{ single.cover_image_file.url }}{% else %}{% static 'images/default_cover.png' %}{% endif %}" alt="{{ single.title }} Album Cover" style="width:100px; height:auto;">
                             </a>
 
+
                             <div class="media-info">
                                 <p class="body-header">{{ single.title }}</p>
                                 <p class="body">{{ user_profile.user.username }}</p>
                                 <p class="body">Likes: {{ single.likes_count }}</p>
+                            </div>
+                            
+                            <div>
+                                <!-- Add to Queue button -->
+                                <button class="add-to-queue" data-url="{{ single.mp3_file.url }}">Add to Queue</button>
                             </div>
 
                             <!-- Delete or Report Button -->
@@ -79,15 +85,22 @@
                             <a href="#" onclick="playAudio('{{ single.mp3_file.url }}'); return false;">
                                 <img src="{% if single.cover_image_file %}{{ single.cover_image_file.url }}{% else %}{% static 'images/default_cover.png' %}{% endif %}" alt="{{ single.title }} Album Cover" style="width:100px; height:auto;">
                             </a>
+                            
+                            <div>
+                                <!-- Add to Queue button -->
+                                <button class="add-to-queue" data-url="{{ single.mp3_file.url }}">Add to Queue</button>
+
+                                <div class="media-info">
+                                    <p class="body-header">{{ single.title }}</p>
+                                    <p class="body">{{ user_profile.user.username }}</p>
+                                    <p class="body">Likes: {{ single.likes_count }}</p>
+                                </div>
 
                             <div class="media-info">
                                 <p class="body-header">{{ single.title }}</p>
                                 <p class="body">{{ user_profile.user.username }}</p>
                                 <p class="body">Likes: {{ single.likes_count }}</p>
                             </div>
-                                        <!-- <img src="/media/cover_art/{{ single.title }}.jpg" alt="{{ single.title }} Album Cover" style="width:100px; height:auto;">
-                                        <a href="#" onclick="playAudio('{{ single.mp3_file.url }}'); return false;">{{ single.title }}</a> -->
-
 
                             <!-- Delete or Report Button -->
                             <div class="button">
