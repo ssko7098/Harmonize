@@ -38,25 +38,25 @@
                             <div>
                                 <!-- Add to Queue button -->
                                 <button class="add-to-queue" data-url="{{ single.mp3_file.url }}">Add to Queue</button>
-                            </div>
+
                             <!-- View Lyrics Button -->
-                            <div>
                                 {% if not show_lyrics %}
-                                <a href="?show_lyrics=true" id="button" class="btn btn-info">View Lyrics</a>
-                            {% else %}
-                                <a href="?show_lyrics=false" id="button"class="btn btn-secondary">Hide Lyrics</a>
-                            {% endif %}
+                                    <a href="?show_lyrics=true" id="button" class="btn btn-info">View Lyrics</a>
+                                {% else %}
+                                    <a href="?show_lyrics=false" id="button"class="btn btn-secondary">Hide Lyrics</a>
+                                {% endif %}
 
                             <!-- Display Lyrics Conditionally -->
-                            {% if show_lyrics %}
-                                <div class="lyrics-section">
-                                    {% if single.lyrics %}
-                                        <pre>{{ single.lyrics }}</pre>
-                                    {% else %}
-                                        <p>No lyrics available.</p>
-                                    {% endif %}
-                                </div>
-                            {% endif %}
+                                {% if show_lyrics %}
+                                    <div class="lyrics-section">
+                                        {% if single.lyrics %}
+                                            <pre>{{ single.lyrics }}</pre>
+                                        {% else %}
+                                            <p>No lyrics available.</p>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+
                             <!-- Delete or Report Button -->
                             <div class="button">
                                 {% if is_own_profile or request.user.is_admin %}
@@ -104,26 +104,34 @@
                             </a>
                             
                             <div>
-                                <!-- Add to Queue button -->
-                                <button class="add-to-queue" data-url="{{ single.mp3_file.url }}">Add to Queue</button>
-
                                 <div class="media-info">
                                     <p class="body-header">{{ single.title }}</p>
                                     <p class="body">{{ user_profile.user.username }}</p>
                                     <p class="body">Likes: {{ single.likes_count }}</p>
                                 </div>
+                                                      
+                                <!-- Add to Queue button -->
+                                <button class="add-to-queue" data-url="{{ single.mp3_file.url }}">Add to Queue</button>
+                            
+                                <!-- View Lyrics Button -->
+                                    {% if not show_lyrics %}
+                                    <a href="?show_lyrics=true" id="button" class="btn btn-info">View Lyrics</a>
+                                {% else %}
+                                    <a href="?show_lyrics=false" id="button"class="btn btn-secondary">Hide Lyrics</a>
+                                {% endif %}
 
-                            <div class="media-info">
-                                <p class="body-header">{{ single.title }}</p>
-                                <p class="body">{{ user_profile.user.username }}</p>
-                                <p class="body">Likes: {{ single.likes_count }}</p>
-                            </div>
-                                        <!-- <img src="/media/cover_art/{{ single.title }}.jpg" alt="{{ single.title }} Album Cover" style="width:100px; height:auto;">
-                                        <a href="#" onclick="playAudio('{{ single.mp3_file.url }}'); return false;">{{ single.title }}</a> -->
-
+                                <!-- Display Lyrics Conditionally -->
+                                {% if show_lyrics %}
+                                    <div class="lyrics-section">
+                                        {% if single.lyrics %}
+                                            <pre>{{ single.lyrics }}</pre>
+                                        {% else %}
+                                            <p>No lyrics available.</p>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
 
                             <!-- Delete or Report Button -->
-                            <div class="button">
                                 {% if is_own_profile or request.user.is_admin %}
                                     <form method="post" id="custom-form">
                                         {% csrf_token %}
@@ -148,13 +156,6 @@
                     {% endfor %}
                 </ul>
                 {% endif %}
-
-                <h2>Albums</h2>
-                <ul>
-                    {% for album in albums %}
-                        <li>{{ album.title }} - <a href="#">Listen</a></li>
-                    {% endfor %}
-                </ul>
 
                 <!-- Include the comment section here -->
                 {% include "comments/comments.html" %}
@@ -186,4 +187,25 @@
             </div>
         </div>
     </div>
+
+    <style>
+        .lyrics-section {
+            max-height: 200px;          /* Set a maximum height for the lyrics box */
+            overflow-y: auto;           /* Enables vertical scrolling for long lyrics */
+            white-space: pre-wrap;      /* Ensures text wraps while preserving newlines */
+            word-wrap: break-word;      /* Breaks long words to fit within the container */
+            padding: 10px;              /* Adds padding around the lyrics */
+            background-color: #f9f9f9;  /* Optional: background for readability */
+            border: 1px solid #ddd;     /* Optional: Adds a border */
+            border-radius: 5px;         /* Optional: Rounded corners */
+        }
+
+        /* Adjust pre formatting for better appearance */
+        .lyrics-section pre {
+            white-space: pre-wrap;      /* Ensures that <pre> content wraps properly */
+            word-wrap: break-word;      /* Ensures long words break correctly */
+            max-width: 100%;            /* Ensures the content doesn’t exceed container width */
+            overflow-x: hidden;         /* Prevents horizontal scrolling within the pre tag */
+        }
+    </style>
 {% endblock %}
