@@ -92,8 +92,12 @@ def delete_user(request, user_id):
         user.set_unusable_password()
         email_address = EmailAddress.objects.filter(user=user).first()
         if email_address:
-            email_address.verified = False
-            email_address.save()
+            email_address.delete()
+
+        # Delete the social account associated with this user
+        social_account = SocialAccount.objects.filter(user=user).first()
+        if social_account:
+            social_account.delete() 
 
         user.email = f"deactivated_user_{user_id}_{user.email}"
         user.save()
