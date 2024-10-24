@@ -796,6 +796,40 @@ h2 {
   color: var(--primary-color);
 }
 
+#upload-page input#id_mp3_file.form-control-file {
+  background-color: transparent;
+  border: transparent;
+  font-family: "Montserrat", sans-serif;
+}
+
+#upload-page input#cover_image_file.form-control {
+  background-color: transparent;
+  border: transparent;
+  font-family: "Montserrat", sans-serif;
+}
+
+#upload-page .submit-button {
+  width: 100%;
+  align-items: center;
+  border-radius: var(--border-radius-button);
+  background-color: var(--primary-color);
+  color: white;
+  padding: 12px;
+  cursor: pointer;
+  font-family: "Montserrat", sans-serif;
+  font-size: var(--font-size-medium);
+  border: none;
+  margin-top: 10px;
+  transition: .3s;
+  font-weight: 600;
+}
+
+#upload-page .submit-button:hover {
+  background-color: white;
+  color: var(--primary-color);
+  font-size: calc(var(--font-size-medium) * 1.2);
+}
+
 #upload-page .upload-btn:last-child {
   margin-right: 0; /* Ensure no extra margin on the last button */
 }
