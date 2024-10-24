@@ -47,6 +47,8 @@ def admin_dashboard(request):
     else:
         users = User.objects.filter(is_active=True, is_admin=False).select_related('profile')
 
+    users = users.order_by('-profile__report_count')
+
     total_users = User.objects.filter(is_active=True, is_admin=False).count()  # Count total users not including admins and inactive
     total_songs = Song.objects.count()  # Count total songs
 
@@ -112,9 +114,9 @@ def manage_songs(request):
     search_query = request.GET.get('search', '')
 
     if search_query:
-        songs = Song.objects.filter(title__icontains=search_query)
+        songs = Song.objects.filter(title__icontains=search_query).order_by('-report_count')
     else:
-        songs = Song.objects.all()
+        songs = Song.objects.all().order_by('-report_count')
     
     if request.method == 'POST':
         # Handle song deletion

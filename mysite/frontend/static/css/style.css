@@ -901,10 +901,6 @@ p {
   margin-right: auto;
 }
 
-
-/* ---------------------------------------------------------------- */
-/* ! Styling for My Profile Elements */
-
 .profile-box {
   width: 100%; /* Ensure full width of the form inside container */
   text-align: left;
@@ -1255,10 +1251,12 @@ textarea {
   margin: 20px 0;
 }
 
+
 .cover-image {
-  width: 150px;   /* Adjust the size of the image */
-  height: auto;
-  margin-right: 20px;
+  width: 150px;
+  height: 150px; 
+  object-fit: cover;
+  border-radius: 8px; 
 }
 
 .song-info {

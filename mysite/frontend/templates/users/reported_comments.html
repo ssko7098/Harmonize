@@ -8,15 +8,15 @@
     <h1>Reported Comments</h1>
 
     {% if reported_comments %}
-        <table class="table table-striped">
+        <table class="user-table">
             <thead>
                 <tr>
                     <th>Commenter</th>
                     <th>Comment</th>
                     <th>Profile</th>
                     <th>Report Count</th>
-                    <th>Delete</th>
                     <th>Clear Reports</th>
+                    <th>Delete</th>
                 </tr>
             </thead>
             <tbody>
@@ -27,16 +27,16 @@
                     <td><a href="{% url 'profile' comment.profile.user.username %}">{{ comment.profile.user.username }}</a></td>
                     <td>{{ comment.report_count }}</td>
                     <td>
-                        <form method="post" action="{% url 'delete_comment' comment.comment_id %}" style="display:inline;">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this comment?');">Delete</button>
-                        </form>
-                    </td>
-                    <td>
                         <form method="post" style="display:inline;">
                             {% csrf_token %}
                             <input type="hidden" name="comment_id" value="{{ comment.comment_id }}">
                             <button type="submit" name="clear_reports" onclick="return confirm('Are you sure you want to clear reports for this comment?');">Clear</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form method="post" action="{% url 'delete_comment' comment.comment_id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-delete" onclick="return confirm('Are you sure you want to delete this comment?');">Delete</button>
                         </form>
                     </td>
                 </tr>
