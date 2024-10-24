@@ -976,6 +976,81 @@ li {
   margin-left: auto;
 }
 
+.profile-info .body {
+  word-wrap: break-word; /* Ensures long words break to the next line */
+  max-height: 150px;     /* Set a maximum height */
+  overflow-y: auto;      /* Add vertical scrolling if content exceeds max height */
+}
+
+/* Add word wrapping for comments and replies */
+.comments-list .comment-text, 
+.replies-list .reply-text {
+    word-wrap: break-word;
+    word-break: break-word;  /* Ensures long words break properly */
+}
+
+/* Add word wrapping for comments and replies */
+.comments-list .comment-text, 
+.replies-list .reply-text {
+    word-wrap: break-word;
+    word-break: break-word;  /* Ensures long words break properly */
+    padding: 5px 0;          /* Adds spacing between the username and the comment */
+}
+
+/* Styling for the comment list */
+.comments-list {
+    max-height: 400px;  /* Adjust the height as needed */
+    overflow-y: auto;   /* Enable vertical scrolling */
+    padding: 10px;
+    list-style-type: none;
+}
+
+.comments-list .comment-item {
+    padding: 10px;                /* More padding to create space */
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;          /* Adds space between comments */
+    display: flex;
+    flex-direction: column;       /* Ensure proper stacking of elements */
+    gap: 10px;                    /* Add space between elements inside the comment */
+}
+
+.comment-item small {
+    margin-top: 5px;
+}
+
+/* Align buttons horizontally and add space between them */
+.comment-actions {
+    display: flex;
+    gap: 10px;  /* Add spacing between action buttons */
+    margin-top: 10px;
+}
+
+/* Styling for replies */
+.replies-list {
+    margin-top: 10px;
+    padding-left: 20px;
+    max-height: 200px;  /* Set a max height for replies if needed */
+    overflow-y: auto;   /* Enable scrolling if replies overflow */
+}
+
+/* Styling for comment and reply textareas */
+.comment-form textarea, 
+.reply-form textarea {
+    width: 100%;
+    height: 100px;  /* Adjust height as needed */
+    word-wrap: break-word;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-top: 10px;  /* Adds space between the form and the previous element */
+}
+
+.comment-form button:hover, 
+.reply-form button:hover {
+    background-color: #0056b3;
+}
 .delete-icon {
   width: 24px;
   height: 24px;

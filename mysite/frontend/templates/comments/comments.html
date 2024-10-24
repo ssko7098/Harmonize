@@ -10,11 +10,12 @@
 </form>
 
 {% if comments %}
-    <ul>
+    <ul class="comments-list">
         {% for comment in comments %}
             {% if not comment.parent_comment %}
-                <li>
-                    <strong>{{ comment.user.username }}:</strong> {{ comment.message }}
+                <li class="comment-item">
+                    <strong>{{ comment.user.username }}:</strong> 
+                    <div class="comment-text">{{ comment.message }}</div>
                     <br>
                     <small>{{ comment.created_at }}</small>
 
@@ -22,11 +23,13 @@
                     {% include "comments/comment_actions.html" with comment=comment %}
 
                     <!-- Include replies for this comment -->
-                    {% include "comments/replies.html" with comment=comment %}
+                    <ul class="replies-list">
+                        {% include "comments/replies.html" with comment=comment %}
+                    </ul>
 
                     <!-- Reply Form (for top-level comments) -->
                     {% if is_verified %}
-                    <form method="post" id="custom-form" action="{% url 'add_comment' user_profile.user.username %}">
+                    <form method="post" class="reply-form" action="{% url 'add_comment' user_profile.user.username %}">
                         {% csrf_token %}
                         <textarea name="message" placeholder="Write a reply" required></textarea>
                         <input type="hidden" name="parent_comment_id" value="{{ comment.comment_id }}">
@@ -42,7 +45,7 @@
 {% endif %}
 
 {% if not is_own_profile and is_verified %}
-    <form method="post" id="custom-form" action="{% url 'add_comment' user_profile.user.username %}">
+    <form method="post" class="comment-form" action="{% url 'add_comment' user_profile.user.username %}">
         {% csrf_token %}
         <textarea name="message" placeholder="Add a comment" required></textarea>
         <button type="submit">Comment</button>
