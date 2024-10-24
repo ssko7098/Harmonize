@@ -112,9 +112,9 @@ def manage_songs(request):
     search_query = request.GET.get('search', '')
 
     if search_query:
-        songs = Song.objects.filter(title__icontains=search_query)
+        songs = Song.objects.filter(title__icontains=search_query).order_by('-report_count')
     else:
-        songs = Song.objects.all()
+        songs = Song.objects.all().order_by('-report_count')
     
     if request.method == 'POST':
         # Handle song deletion
