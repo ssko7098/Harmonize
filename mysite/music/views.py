@@ -68,9 +68,9 @@ def delete_playlist(request, playlist_id):
         playlist.delete()
         return redirect('view_playlists', username=request.user.username)
 
-    return render(request, 'music/confirm_delete_playlist.html', {'playlist': playlist})
-
+    return redirect('view_playlists', username=request.user.username)
   
+
 @login_required
 @user_passes_test(is_verified)
 def upload_song(request):

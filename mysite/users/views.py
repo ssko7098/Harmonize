@@ -337,6 +337,17 @@ def profile_view(request, username):
     })
 
 
+@login_required
+@user_passes_test(is_verified)
+def delete_song(request, song_id):
+    song = get_object_or_404(Song, pk=song_id, user=request.user)
+
+    if request.method == 'POST':
+        song.delete()
+        return redirect('profile', username=request.user.username)
+
+    return redirect('profile', username=request.user.username)
+
 
 @login_required
 def profile_settings_view(request):
