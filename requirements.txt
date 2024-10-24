@@ -4,3 +4,4 @@ mutagen==1.47.0
 djangorestframework
 djangorestframework-simplejwt
 requests
+cryptography
