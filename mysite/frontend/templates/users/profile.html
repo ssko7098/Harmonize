@@ -39,7 +39,24 @@
                                 <!-- Add to Queue button -->
                                 <button class="add-to-queue" data-url="{{ single.mp3_file.url }}">Add to Queue</button>
                             </div>
+                            <!-- View Lyrics Button -->
+                            <div>
+                                {% if not show_lyrics %}
+                                <a href="?show_lyrics=true" id="button" class="btn btn-info">View Lyrics</a>
+                            {% else %}
+                                <a href="?show_lyrics=false" id="button"class="btn btn-secondary">Hide Lyrics</a>
+                            {% endif %}
 
+                            <!-- Display Lyrics Conditionally -->
+                            {% if show_lyrics %}
+                                <div class="lyrics-section">
+                                    {% if single.lyrics %}
+                                        <pre>{{ single.lyrics }}</pre>
+                                    {% else %}
+                                        <p>No lyrics available.</p>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
                             <!-- Delete or Report Button -->
                             <div class="button">
                                 {% if is_own_profile or request.user.is_admin %}
@@ -101,6 +118,9 @@
                                 <p class="body">{{ user_profile.user.username }}</p>
                                 <p class="body">Likes: {{ single.likes_count }}</p>
                             </div>
+                                        <!-- <img src="/media/cover_art/{{ single.title }}.jpg" alt="{{ single.title }} Album Cover" style="width:100px; height:auto;">
+                                        <a href="#" onclick="playAudio('{{ single.mp3_file.url }}'); return false;">{{ single.title }}</a> -->
+
 
                             <!-- Delete or Report Button -->
                             <div class="button">

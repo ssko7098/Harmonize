@@ -8,6 +8,7 @@ from django.contrib import messages
 from users.views import is_verified
 from .models import Playlist, PlaylistSong, Song
 from django.shortcuts import get_object_or_404
+from .external_api import upload_mp3_to_assemblyai, get_transcription 
 
 
 def album_list(request):
@@ -79,6 +80,15 @@ def upload_song(request):
             song = form.save(commit=False)
             song.user = request.user
             song.save()
+            mp3_file_path = song.mp3_file.path
+            upload_url = upload_mp3_to_assemblyai(mp3_file_path)
+            lyrics = get_transcription(upload_url)
+
+            # Store the lyrics in the song model
+            if lyrics:
+                song.lyrics = lyrics
+                song.save()
+
             return redirect('song_details', song_id=song.song_id)
     else:
         form = SongForm()
