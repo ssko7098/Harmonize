@@ -15,6 +15,8 @@ from music.models import Song, Album, Playlist
 from django.core.exceptions import ValidationError
 import users.urls
 from django.http import JsonResponse
+import os
+from django.conf import settings
 
 # Create your views here.
 def home(request):
@@ -327,16 +329,24 @@ def profile_view(request, username):
 def profile_settings_view(request):
     profile = request.user.profile  # Get the profile of the logged-in user
     user = request.user  # Get the current logged-in user
+    old_avatar = profile.avatar_file
 
     # if the user wants to change the profile, check if this is valid and save 
     if request.method == 'POST':
         form = ProfileForm(request.POST, request.FILES, instance=profile)
 
         if form.is_valid():
+            # Check if a new profile picture is uploaded
+            if 'avatar_file' in request.FILES:
+                # If there is an old avatar, delete it from the file system
+                if os.path.isfile(old_avatar.path):
+                    os.remove(old_avatar.path)
+
             form.save()
             
             # Check if it's an AJAX request
             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+
                 # Return JSON response for AJAX
                 return JsonResponse({'status': 'success', 'message': 'Profile updated successfully!'})
             else:
