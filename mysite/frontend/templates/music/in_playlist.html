@@ -1,5 +1,7 @@
 {% extends '../base.html' %}
 
+{% load static %}
+
 {% block title %}Songs in "{{ playlist.name }}"{% endblock %}
 
 {% block content %}
@@ -51,37 +53,49 @@
         </form>
     </div>
 
-
-     {% if filtered_songs.exists %}
+    <div class="song-table-container">
+        {% if filtered_songs.exists %}
         <!-- Table structure for displaying songs -->
         <table class="song-table">
             <thead>
                 <tr>
                     <!-- Sortable column headers -->
-                    <th>
+                    <th class="single-cover"> </th> 
+                    <th class="single-name">
                         <a href="?sort_by=title&order={{ next_order }}&search={{ search_query }}">Title {% if sort_by == 'title' %}({{ order }}){% endif %}</a>
                     </th>
-                    <th>
-                        <a href="?sort_by=user&order={{ next_order }}&search={{ search_query }}">User {% if sort_by == 'user' %}({{ order }}){% endif %}</a>
+                    <th class="single-artist">
+                        <a href="?sort_by=user&order={{ next_order }}&search={{ search_query }}">Artist {% if sort_by == 'user' %}({{ order }}){% endif %}</a>
                     </th>
-                    <th></th>
+                    <th class="remove-button"></th>
                 </tr>
             </thead>
             <tbody>
                 {% for playlist_song in filtered_songs %}
                 <tr>
+                    <!-- Display song cover image with click to play -->
+                    <td class="single-cover">
+                        <a href="#" onclick="playAudio('{{ playlist_song.song.mp3_file.url }}'); return false;">
+                            <img src="{% if playlist_song.song.cover_image_file %}{{ playlist_song.song.cover_image_file.url }}{% else %}{% static 'images/default_cover.png' %}{% endif %}" 
+                                alt="{{ playlist_song.song.title }} Cover" class="song-cover" width="50" height="50">
+                        </a>
+                    </td>
                     <!-- Clicking on the song title plays the song -->
-                    <td>
+                    <td class="single-name">
                         <a href="#" onclick="playAudio('{{ playlist_song.song.mp3_file.url }}'); return false;">
                             {{ playlist_song.song.title }}
                         </a>
                     </td>
-                    <td>{{ playlist_song.song.user.username }}</td>
-                    <td>
+                    <td class="single-artist">
+                        <a href="{% url 'profile' playlist_song.song.user.username %}">{{ playlist_song.song.user.username }}</a>
+                    </td>
+                    <td class="remove-button">
                         <!-- Form to delete the song from the playlist -->
                         <form method="post" action="{% url 'delete_song_from_playlist' playlist.pk playlist_song.song.pk %}" class="inline-form">
                             {% csrf_token %}
-                            <button type="submit" class="btn-delete">Remove</button>
+                            <button type="submit" class="btn-delete" style="background: none; border: none; padding: 0;">
+                                <img src="{% static 'images/trashcan.png' %}" alt="Delete" class="delete-icon" />
+                            </button>
                         </form>
                     </td>
                 </tr>
@@ -91,6 +105,8 @@
     {% else %}
         <p>No songs in this playlist yet.</p>
     {% endif %}
+    </div>
+
 </div>
 
 <!-- <style>

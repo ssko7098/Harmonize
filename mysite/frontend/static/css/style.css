@@ -1369,16 +1369,92 @@ a#button.btn-view-liked:hover {
 
 .songs-in-playlist-search .search-form {
   display: flex;
-  flex-direction: column; /* Stack elements vertically */
-  gap: 10px; /* Add some space between the elements */
+  flex-direction: column;
+  gap: 10px;
 }
 
 .songs-in-playlist-search .button-row {
   margin-top: 0px;
 }
 
+.song-table {
+  width: 100%; 
+  background-color: transparent; 
+  color: var(--soft-white); 
+  margin-top: 20px;
+}
 
+.song-table th, .song-table td {
+  text-align: left;
+}
 
+.song-table tr th a{
+  font-family: "Montserrat", sans-serif;
+  text-align: left;
+  font-size: var(--font-size-medium);
+  color: var(--soft-white);
+  
+}
+
+.song-table th {
+  background-color: transparent; 
+  color: var(--soft-white) !important; 
+  font-weight: 500;
+  font-size: var(--font-size-medium);
+  font-family: "Montserrat", sans-serif;
+  transition: font-size 0.3s, ease 0.3s;
+}
+
+/* if time try to figure out how to add a margin within the th of 
+the table so that the animation doesnt shift all the text down */
+/* .song-table th.single-name a{
+  transition: font-size 0.3s, ease 0.3s;
+}
+
+.song-table th.single-artist a{
+  transition: font-size 0.3s, ease 0.3s;
+}
+
+.song-table th.single-name a:hover{
+  font-size: calc(var(--font-size-medium) * 1.2);
+}
+
+.song-table th.single-artist a:hover{
+  font-size: calc(var(--font-size-medium) * 1.2);
+} */
+
+.song-table tr {
+  margin-top: 10px;
+}
+
+.song-table tbody tr {
+  height: 50px !important;
+}
+
+.song-table .single-cover {
+  width: 50px;
+  padding-right: 10px;
+}
+
+.song-table .single-name {
+  width: 275px;
+}
+
+/* .song-table tbody tr:hover {
+  background-color: #333; 
+} */
+
+.song-table td a {
+  font-family: "Montserrat", sans-serif;
+  font-size: var(--font-size-medium); 
+  color: var(--soft-white);
+  text-decoration: underline; 
+  font-weight: 500;
+}
+
+.song-table td form.inline-form {
+  text-align: right;
+}
 
 /* ---------------------------------------------------------------- */
 

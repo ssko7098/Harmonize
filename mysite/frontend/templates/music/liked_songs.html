@@ -48,7 +48,7 @@
             {% for song in filtered_liked_songs %}
                 <li class="liked-songs-list">
                     <!-- Hyperlink to play song -->
-                    <a href="#" onclick="playAudio('{{ song.mp3_file.url }}'); return false;" class="cover-play-button">
+                    <a href="#" onclick="playAudio('{{ song.mp3_file.url }}'); return false;" class="cover-play-button"></a>
                         <img src="{% if song.cover_image_file %}{{ song.cover_image_file.url }}{% else %}{% static 'images/default_cover.png' %}{% endif %}" 
                              alt="{{ song.title }} Album Cover" class="song-cover-image">
                     </a>
