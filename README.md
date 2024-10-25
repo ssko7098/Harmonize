@@ -421,6 +421,7 @@ Here are some key considerations for API design:
 ## Known Issues
 ### Current Issues
 * __Song Upload Time:__ Upload song time currently longer than wanted, will be fixed in planned features (not in MVP).
+* __Song Upload Music Pause:__ Music will be paused upon a song uploaded (not in MVP).
 * __Skipping Within Song:__ Skipping to a certain part of a song doesn't always work (not in MVP).
 * __Window Width:__ In changing window width, HTML elements are not resized and overlap (not in MVP).
 
