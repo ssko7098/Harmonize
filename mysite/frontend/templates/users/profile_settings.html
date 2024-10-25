@@ -35,7 +35,7 @@
                                 <div class="avatar-container">
                                     {% if user.profile.avatar_file %}
                                         <!-- Show the current avatar if available -->
-                                        <img src="{{ user.profile.avatar_file.url }}" id="avatar-preview" alt="Profile Picture" class="avatar-preview">
+                                        <img src="{% if user.profile.avatar_file %}{{ user.profile.avatar_file.url }}{% else %}{% static 'images/default_cover.png' %}{% endif %}"  id="avatar-preview" alt="Profile Picture" class="avatar-preview">
                                     {% else %}
                                         <p>No avatar uploaded</p>
                                     {% endif %}
