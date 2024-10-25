@@ -1,91 +1,118 @@
 {% extends '../base.html' %}
 
+{% load static %}
+
 {% block title %}Search Results{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1>Search Results for "{{ query }}"</h1>
+<div class="container-alt">
+    <h5>Search Results for "{{ query }}"</h5>
 
+    <div class="songs-list">
     {% if singles.exists %}
-    <h2>Songs</h2>
+    <h4>Singles</h4>
     <ul>
         {% for single in singles %}
             <li>
                 <div class="song-details">
-                    <span>
-                        <a href="#" onclick="playAudio('{{ single.mp3_file.url }}'); return false;">{{ single.title }}</a> 
-                        - <a href="{% url 'profile' single.user.username %}" class="nav-link">{{ single.user.username }}</a>
-                    </span>
+                    <div class="topbar">
+                        <div class="cover-art-title">
+                                <a href="#" onclick="playAudio('{{ single.mp3_file.url }}'); return false;">
+                                    <img src="{% if single.cover_image_file %}{{ single.cover_image_file.url }}{% else %}{% static 'images/default_cover.png' %}{% endif %}" 
+                                        alt="{{ single.title }} Cover" class="song-cover" width="50" height="50">
+                                </a>
+                                <div class="text-infomation">
+                                    <a href="#" onclick="playAudio('{{ single.mp3_file.url }}'); return false;">{{ single.title }}</a> 
+                                    <a href="{% url 'profile' single.user.username %}" class="nav-link">{{ single.user.username }}</a>
+                                </div>
+                        </div>
 
-                    <!-- Add to Liked Songs Button -->
-                    <form method="post" id="custom-form" action="{% url 'add_to_liked_songs' single.pk %}">
-                        {% csrf_token %}
-                        <button type="submit" id="button" class="btn-submit" style="margin-top: 10px; padding: 5px 15px; background-color: #28a745; color: white; border: none; border-radius: 5px;">
-                            Add to Liked Songs
-                        </button>
-                    </form>
+                        
+                        <div class="like-song-button-container">
+                            <!-- Add to Liked Songs Button -->
+                            <form method="post" id="custom-form" action="{% url 'add_to_liked_songs' single.pk %}">
+                                {% csrf_token %}
+                                <div class="liked-song-button">
+                                    <button type="submit" class="btn-submit" style=" padding: 5px 15px; background-color: transparent: white; border: none; border-radius: 5px;">
+                                        Add to Liked Songs
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
 
-                    <!-- Add to Queue button -->
-                    <button class="add-to-queue" data-url="{{ single.mp3_file.url }}">Add to Queue</button>
+                        <!-- Add to Queue button -->
+                        <button class="add-to-queue" data-url="{{ single.mp3_file.url }}">Add to Queue</button>
 
-                    {% if request.user != single.user %}
-                    <!-- Report Button -->
-                    <form method="post" action="{% url 'report_song' single.pk %}" style="display:inline;">
-                        {% csrf_token %}
-                        <input type="hidden" name="song_id" value="{{ single.pk }}">
-                        <button type="submit" class="btn-report">Report</button>
-                    </form>
-                    {% endif %}
+                        <div class="report-button-container">
+                            {% if request.user != single.user %}
+                            <!-- Report Button -->
+                            <form method="post" action="{% url 'report_song' single.pk %}" style="display:inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="song_id" value="{{ single.pk }}">
+                                <button type="submit" class="btn-report">Report</button>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </div>
 
+                    <div class="add-to-playlist-container">
+                        <!-- Inline dropdown form to add to playlist -->
+                        <form method="post" id="custom-form" action="{% url 'add_to_playlist' %}">
+                            {% csrf_token %}
+                            <select name="playlist" id="playlist-{{ single.pk }}" required>
+                                <option value="" disabled selected>Select Playlist</option>
+                                {% for playlist in playlists %}
+                                    <option value="{{ playlist.pk }}">{{ playlist.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <input type="hidden" name="song_id" value="{{ single.pk }}">
+
+                            <button type="submit" id="button" class="btn-submit">Add to Playlist</button>
+                        </form>
+                    </div>
                 </div>
-
-                <!-- Inline dropdown form to add to playlist -->
-                <form method="post" id="custom-form" action="{% url 'add_to_playlist' %}">
-                    {% csrf_token %}
-                    <select name="playlist" id="playlist-{{ single.pk }}" required>
-                        <option value="" disabled selected>Select a Playlist</option>
-                        {% for playlist in playlists %}
-                            <option value="{{ playlist.pk }}">{{ playlist.name }}</option>
-                        {% endfor %}
-                    </select>
-                    <input type="hidden" name="song_id" value="{{ single.pk }}">
-
-                    <button type="submit" id="button" class="btn-submit">Add to Playlist</button>
-                </form>
-                
             </li>
         {% endfor %}
     </ul>
-{% endif %}
+    {% endif %}
+    </div>
 
+    <div class="users-list">
+        {% if users.exists %}
+            <h4>Artists</h4>
+            <ul>
+                {% for user in users %}
+                    <li>
+                        <div class="artist-container">
+                            <img src="{{ user.profile.avatar_file.url }}" alt="{{ user.username }}'s avatar" class="user-avatar">
+                            <a href="{% url 'profile' user.username %}" class="nav-link">{{ user.username }}</a>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
 
-    {% if users.exists %}
-        <h2>Artists</h2>
-        <ul>
-            {% for user in users %}
-                <li>
-                    <a href="{% url 'profile' user.username %}" class="nav-link">{{ user.username }}</a>
-                </li>
+    <div class="albums-list">
+        {% if albums.exists %}
+            <h4>Albums</h4>
+            <ul>
+                {% for album in albums %}
+                    <li><a href="#" class="nav-link">{{ album.title }}</a></li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+
+    <div class="messages-list">
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
             {% endfor %}
         </ul>
-    {% endif %}
-
-    {% if albums.exists %}
-        <h2>Albums</h2>
-        <ul>
-            {% for album in albums %}
-                <li><a href="#" class="nav-link">{{ album.title }}</a></li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-
-    {% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
+        {% endif %}
+    </div>
 </div>
 
 {% endblock %}

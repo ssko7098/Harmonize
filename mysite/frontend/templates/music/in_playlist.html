@@ -1,18 +1,24 @@
 {% extends '../base.html' %}
 
+{% load static %}
+
 {% block title %}Songs in "{{ playlist.name }}"{% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="container-alt">
     <!-- Back Button -->
-    <a href="{% url 'view_playlists' request.user.username %}" id="button" class="btn-back">← Back to My Playlists</a>
-
-    <h1>Songs in "{{ playlist.name }}"</h1>
-    <p>{{ playlist.description }}</p>
+    <div class="back-to-playlist-buffer">
+        <div class="back-to-playlist">
+            <a href="{% url 'view_playlists' request.user.username %}" id="button" class="btn-back">← Back to My Playlists</a>
+        </div>
+    </div>
 
     <div>
-        <!-- Search bar for filtering songs in this playlist -->
-        <form method="get" id="search-bar" action="{% url 'view_playlist_songs' user.username playlist.pk %}">
+        <h2>{{ playlist.name }}</h2>
+        <p class="playlist-description">{{ playlist.description }}</p>
+    </div>
+    <!-- <div>
+        <form method="get" action="{% url 'view_playlist_songs' user.username playlist.pk %}">
             <input type="text" name="search" placeholder="Search Songs in Playlist" value="{{ request.GET.search|default:'' }}">
             <button type="submit">Search</button>
             <a id="button" href="{% url 'view_playlist_songs' user.username playlist.pk %}">
@@ -20,38 +26,76 @@
             </a>
         </form>
 
+    </div> -->
+
+    <div class="songs-in-playlist-search">
+        <!-- Search bar for filtering songs in this playlist -->
+        <form method="get" action="{% url 'view_playlist_songs' user.username playlist.pk %}" class="search-form" autocomplete="off">
+            <div class="input-wrapper">
+                <span class="search-icon">
+                    <i class="fas fa-search"></i>
+                </span>
+                <input
+                    type="text"
+                    name="search"
+                    placeholder="Search Songs in Playlist"
+                    value="{{ request.GET.search|default:'' }}"
+                    required
+                />
+            </div>
+            
+            <div class="button-row">
+                <!-- ENTER IS NOW USED MAKES IT LOOK A LOT CLEANER -->
+                <a href="{% url 'view_playlist_songs' user.username playlist.pk %}">
+                    <button type="button" class="clear-button">Clear Search</button>
+                </a>
+            </div>
+        </form>
     </div>
 
-     {% if filtered_songs.exists %}
+    <div class="song-table-container">
+        {% if filtered_songs.exists %}
         <!-- Table structure for displaying songs -->
         <table class="song-table">
             <thead>
                 <tr>
                     <!-- Sortable column headers -->
-                    <th>
+                    <th class="single-cover"> </th> 
+                    <th class="single-name">
                         <a href="?sort_by=title&order={{ next_order }}&search={{ search_query }}">Title {% if sort_by == 'title' %}({{ order }}){% endif %}</a>
                     </th>
-                    <th>
-                        <a href="?sort_by=user&order={{ next_order }}&search={{ search_query }}">User {% if sort_by == 'user' %}({{ order }}){% endif %}</a>
+                    <th class="single-artist">
+                        <a href="?sort_by=user&order={{ next_order }}&search={{ search_query }}">Artist {% if sort_by == 'user' %}({{ order }}){% endif %}</a>
                     </th>
-                    <th></th>
+                    <th class="remove-button"></th>
                 </tr>
             </thead>
             <tbody>
                 {% for playlist_song in filtered_songs %}
                 <tr>
+                    <!-- Display song cover image with click to play -->
+                    <td class="single-cover">
+                        <a href="#" onclick="playAudio('{{ playlist_song.song.mp3_file.url }}'); return false;">
+                            <img src="{% if playlist_song.song.cover_image_file %}{{ playlist_song.song.cover_image_file.url }}{% else %}{% static 'images/default_cover.png' %}{% endif %}" 
+                                alt="{{ playlist_song.song.title }} Cover" class="song-cover" width="50" height="50">
+                        </a>
+                    </td>
                     <!-- Clicking on the song title plays the song -->
-                    <td>
+                    <td class="single-name">
                         <a href="#" onclick="playFromPlaylist('{{ playlist_song.song.mp3_file.url }}'); return false;">
                             {{ playlist_song.song.title }}
                         </a>
                     </td>
-                    <td>{{ playlist_song.song.user.username }}</td>
-                    <td>
+                    <td class="single-artist">
+                        <a href="{% url 'profile' playlist_song.song.user.username %}">{{ playlist_song.song.user.username }}</a>
+                    </td>
+                    <td class="remove-button">
                         <!-- Form to delete the song from the playlist -->
                         <form method="post" action="{% url 'delete_song_from_playlist' playlist.pk playlist_song.song.pk %}" class="inline-form">
                             {% csrf_token %}
-                            <button type="submit" class="btn-delete">Remove</button>
+                            <button type="submit" class="btn-delete" style="background: none; border: none; padding: 0;">
+                                <img src="{% static 'images/trashcan.png' %}" alt="Delete" class="delete-icon" />
+                            </button>
                         </form>
                     </td>
                 </tr>
@@ -61,9 +105,11 @@
     {% else %}
         <p>No songs in this playlist yet.</p>
     {% endif %}
+    </div>
+
 </div>
 
-<style>
+<!-- <style>
     .btn-back {
         display: inline-block;
         margin-bottom: 20px;
@@ -77,8 +123,6 @@
     .btn-back:hover {
         background-color: #e0e0e0;
     }
-    .inline-form {
-        display: inline;
-    }
-</style>
+
+</style> -->
 {% endblock %}

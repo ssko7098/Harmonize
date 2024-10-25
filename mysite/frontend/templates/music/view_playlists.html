@@ -1,84 +1,121 @@
 {% extends '../base.html' %}
 
+{% load static %}
+
 {% block title %}Library{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1>{{ user.username }}'s Library</h1>
+<div class="container-alt">
+    <h2>Your Library</h2>
 
-    <!-- Link to view Liked Songs -->
-    <div style="margin-top: 30px; margin-bottom: 30px;">
-        <a href="{% url 'liked_songs' user.username %}" id="button" class="btn-view-liked">View Liked Songs</a>
+    <div class="to-liked-songs-buffer">
+        <!-- Link to view Liked Songs -->
+        <div class="to-liked-songs">
+            <a href="{% url 'liked_songs' user.username %}" id="button" class="btn-view-liked">View Liked Songs →</a>
+        </div>
     </div>
 
     <!-- Search bar for filtering playlists -->
-    <form method="get" id="search-bar" action="{% url 'view_playlists' user.username %}">
+    <!-- <form method="get" id="search-bar" action="{% url 'view_playlists' user.username %}" autocomplete="off">
         <input type="text" name="search_query" placeholder="Search Playlists" value="{{ request.GET.search_query|default:'' }}">
         <button type="submit">Search</button>
         <a id="button" href="{% url 'view_playlists' user.username %}">
             <button id="button" type="button">Clear</button>
         </a>
-    </form>
+    </form> -->
 
+    <!-- Search bar for filtering playlists -->
+    <form method="get" id="search-bar" action="{% url 'view_playlists' user.username %}" class="search-form" autocomplete="off">
+        <div class="input-wrapper">
+            <span class="search-icon">
+                <i class="fas fa-search"></i>
+            </span>
+            <input
+                type="text"
+                name="search_query"
+                placeholder="Search Playlists"
+                value="{{ request.GET.search_query|default:'' }}"
+                required
+            />
+        </div>
+
+        <div class="button-row">
+            <!-- ENTER IS NOW USED MAKES IT LOOK A LOT CLEANER -->
+            <a id="button" href="{% url 'view_playlists' user.username %}">
+                <button type="button" class="clear-button">Clear Search</button>
+            </a>
+        </div>
+    </form>
 
     <!-- Form for creating a new playlist -->
-    <form method="post" id="custom-form" action="{% url 'view_playlists' user.username %}">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" id="button" class="btn-submit">Create Playlist</button>
-    </form>
+    <!-- <div class="create-new-playlist">
+        <h4>Create Playlist</h4>
+        <form method="post" id="custom-form" action="{% url 'view_playlists' user.username %}" autocomplete="off">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" id="button" class="btn-submit">Create</button>
+        </form>
+    </div> -->
 
-    {% if playlists %}
-        {% for playlist in playlists %}
-            <div class="playlist">
-                <h2>{{ playlist.name }}</h2>
-                <!-- Link to view songs in a playlist -->
-                <a href="{% url 'view_playlist_songs' user.username playlist.pk %}" id="button" >View Songs</a>
-
-                {% if playlist.playlistsong_set.exists %}
-                    <h3> Songs: {{ playlist.playlistsong_set.count }} </h3>
-                {% else %}
-                    <p>No songs in this playlist yet.</p>
-                {% endif %}
-            
-
-                <!-- Form to Delete Playlist -->
-                <form method="post" id="custom-form" action="{% url 'delete_playlist' playlist.pk %}">
-                    {% csrf_token %}
-                    <button type="submit" id="button" class="btn-delete" onclick="return confirm('Are you sure you want to delete this playlist?');">Delete Playlist</button>
-                </form>
+    <div class="create-new-playlist">
+        <h4>Create Playlist</h4>
+        <!-- Form for creating a new playlist -->
+        <form method="post" id="custom-form" action="{% url 'view_playlists' user.username %}" autocomplete="off">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.name }} <!-- Renders the input for 'name' with a placeholder -->
             </div>
-            <hr>
-        {% endfor %}
-    {% else %}
-        <p>No current playlists available.</p>
-    {% endif %}
+            <div class="form-group">
+                {{ form.description }} <!-- Renders the textarea for 'description' with a placeholder -->
+            </div>
+            <div class="button-container">
+                <button type="submit" id="button" class="btn-submit">Create</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="playlists-list">
+        <h4>Playlists</h4>
+        {% if playlists %}
+            {% for playlist in playlists %}
+                <div class="playlist">
+                    <div class="playlist-name">
+                        <p>{{ playlist.name }}</p>
+                    </div>
+                    <div class="playlist-songs">
+                        <div class="number-of-songs">
+                            {% if playlist.playlistsong_set.exists %}
+                                <p> No. of Songs: {{ playlist.playlistsong_set.count }} </p>
+                            {% else %}
+                                <p>No songs in this playlist yet.</p>
+                            {% endif %}
+                        </div>
+                        <div class="view-songs">
+                            <a href="{% url 'view_playlist_songs' user.username playlist.pk %}" id="button" >View Songs</a>
+                        </div>
+                    </div>
+                    
+                    <!-- <div class="playlist-songs">
+                        <div class="view-songs">
+                            <a href="{% url 'view_playlist_songs' user.username playlist.pk %}" id="button" >View {{ playlist.playlistsong_set.count }} Songs</a>
+                        </div>
+                    </div> -->
+
+                    <div class="delete-playlist">
+                        <!-- Form to Delete Playlist -->
+                        <form method="post" id="custom-form" action="{% url 'delete_playlist' playlist.pk %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-delete" onclick="return confirm('Are you sure you want to delete this playlist?');" style="background: none; border: none; padding: 0;">
+                                <img src="{% static 'images/trashcan.png' %}" alt="Delete" class="delete-icon" />
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No current playlists available.</p>
+        {% endif %}
+    </div>
 </div>
-<style>
-    .btn-view-liked {
-        padding: 10px 20px;
-        background-color: #007BFF;
-        color: white;
-        text-decoration: none;
-        border-radius: 5px;
-        border: none;
-    }
-
-    .btn-view-liked:hover {
-        background-color: #0056b3;
-    }
-
-    .btn-delete {
-        background-color: red;
-        color: white;
-        border: none;
-        padding: 5px 10px;
-        border-radius: 5px;
-    }
-
-    .btn-delete:hover {
-        background-color: darkred;
-    }
-</style>
 
 {% endblock %}
