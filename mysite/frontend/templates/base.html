@@ -53,7 +53,9 @@
         {% endif %}
 
         <div class="nav-links">
-        
+          <!-- Home Link -->
+          <a href="{% url 'home' %}" class="nav-link {% if request.path == '/' or request.path == '/users/' or request.path == '/users/admin_dashboard/' %}active{% endif %}">Harmonize</a>
+
           {% if user.is_authenticated %}
             {% if not user.is_admin %}
               {% if user.is_verified %}
@@ -73,11 +75,6 @@
                 <!-- Check if '/view_playlists' is contained in the current URL -->
                 <a href="{% url 'view_playlists' user.username %}" class="nav-link {% if '/music/playlists' in request.path %}active{% endif %}">Library</a>
               {% endif %}
-            {% endif %}
-
-            <!-- Admin Dashboard -->
-            {% if user.is_admin %}
-            <a href="{% url 'home' %}" class="nav-link {% if request.path == '/' or request.path == '/users/' or request.path == '/users/admin_dashboard/' %}active{% endif %}">Admin Dashboard</a>
             {% endif %}
             
             <!-- Logout Link -->
@@ -108,13 +105,13 @@
     {% if user.is_authenticated %}
     <!-- Persistent Audio Player (only loaded once) -->
     <div class="audio-player-container">
+      <button  class="control-button" id="prev-button"><<</button>
       <audio id="audio-player" controls>
         <source id="audio-source" src="" type="audio/mpeg" />
         Your browser does not support the audio element.
       </audio>
+      <button class="control-button" id="next-button">>></button>
       <!-- Playback control buttons -->
-      <button  id="prev-button"><<</button>
-      <button id="next-button">>></button>
     </div>
     {% endif %}
 
