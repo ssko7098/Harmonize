@@ -233,6 +233,10 @@ def login_view(request):
                 if SocialAccount.objects.filter(user=user).exists():
                     # If the user logged in via a social account, bypass email verification
                     login(request, user)
+
+                    if user.username == 'admin':
+                        return redirect('admin_dashboard')
+                
                     return redirect('home')
 
                 # Check if the email address is verified for non-social users
@@ -362,9 +366,9 @@ def profile_settings_view(request):
         if form.is_valid():
             # Check if a new profile picture is uploaded
             if 'avatar_file' in request.FILES:
-                # If there is an old avatar, delete it from the file system
-                if os.path.isfile(old_avatar.path):
-                    os.remove(old_avatar.path)
+                if old_avatar and old_avatar.name:
+                    if os.path.isfile(old_avatar.path):
+                        os.remove(old_avatar.path)
 
             form.save()
             
