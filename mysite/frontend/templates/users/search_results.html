@@ -27,22 +27,24 @@
                                 </div>
                         </div>
 
-                        
+                        {% if user.is_verified %}
                         <div class="like-song-button-container">
                             <!-- Add to Liked Songs Button -->
                             <form method="post" id="custom-form" action="{% url 'add_to_liked_songs' single.pk %}">
                                 {% csrf_token %}
                                 <div class="liked-song-button">
-                                    <button type="submit" class="btn-submit" style=" padding: 5px 15px; background-color: transparent: white; border: none; border-radius: 5px;">
+                                    <button type="submit" class="btn-submit" style=" padding: 5px 15px; background-color: transparent white; border: none; border-radius: 5px;">
                                         Add to Liked Songs
                                     </button>
                                 </div>
                             </form>
                         </div>
+                        {% endif %}
 
                         <!-- Add to Queue button -->
                         <button class="add-to-queue" data-url="{{ single.mp3_file.url }}">Add to Queue</button>
 
+                        {% if user.is_verified %}
                         <div class="report-button-container">
                             {% if request.user != single.user %}
                             <!-- Report Button -->
@@ -53,8 +55,10 @@
                             </form>
                             {% endif %}
                         </div>
+                        {% endif %}
                     </div>
-
+                    
+                    {% if user.is_verified %}
                     <div class="add-to-playlist-container">
                         <!-- Inline dropdown form to add to playlist -->
                         <form method="post" id="custom-form" action="{% url 'add_to_playlist' %}">
@@ -70,6 +74,7 @@
                             <button type="submit" id="button" class="btn-submit">Add to Playlist</button>
                         </form>
                     </div>
+                    {% endif %}
                 </div>
             </li>
         {% endfor %}
@@ -84,21 +89,10 @@
                 {% for user in users %}
                     <li>
                         <div class="artist-container">
-                            <img src="{{ user.profile.avatar_file.url }}" alt="{{ user.username }}'s avatar" class="user-avatar">
+                            <img src="{% if user.profile.avatar_file %}{{ user.profile.avatar_file.url }}{% else %}{% static 'images/default_cover.png' %}{% endif %}" alt="{{ user.username }}'s avatar" class="user-avatar">
                             <a href="{% url 'profile' user.username %}" class="nav-link">{{ user.username }}</a>
                         </div>
                     </li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    </div>
-
-    <div class="albums-list">
-        {% if albums.exists %}
-            <h4>Albums</h4>
-            <ul>
-                {% for album in albums %}
-                    <li><a href="#" class="nav-link">{{ album.title }}</a></li>
                 {% endfor %}
             </ul>
         {% endif %}
