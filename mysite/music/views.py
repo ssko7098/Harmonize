@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Album, Song, Playlist, User, PlaylistSong
+from .models import Song, Playlist, User, PlaylistSong
 from .forms import SongForm, PlaylistForm
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, redirect, get_object_or_404
@@ -10,10 +10,6 @@ from .models import Playlist, PlaylistSong, Song
 from django.shortcuts import get_object_or_404
 from .external_api import upload_mp3_to_assemblyai, get_transcription 
 
-
-def album_list(request):
-    albums = Album.objects.all()
-    return render(request, 'music/album_list.html', {'albums': albums})
 
 @login_required
 @user_passes_test(is_verified)
