@@ -108,13 +108,12 @@
     {% if user.is_authenticated %}
     <!-- Persistent Audio Player (only loaded once) -->
     <div class="audio-player-container">
-      <button  class="control-button" id="prev-button"><<</button>
+      <button  class="control-button"id="prev-button"><<</button>
       <audio id="audio-player" controls>
         <source id="audio-source" src="" type="audio/mpeg" />
         Your browser does not support the audio element.
       </audio>
       <button class="control-button" id="next-button">>></button>
-      <!-- Playback control buttons -->
     </div>
     {% endif %}
 
