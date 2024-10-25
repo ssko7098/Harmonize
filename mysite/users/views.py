@@ -30,6 +30,7 @@ def home(request):
             'total_users': total_users,
             'total_songs': total_songs
         })
+    
     return redirect('profile_settings')
 
 def is_admin(user):
