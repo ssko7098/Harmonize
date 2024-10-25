@@ -3,7 +3,6 @@ __pycache__/
 *.sqlite3
 *.sql
 *.csv
-.env
 .DS_Store
 
 # Ignore the virtual environment folder
