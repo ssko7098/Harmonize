@@ -10,7 +10,7 @@ from .models import Playlist, PlaylistSong, Song
 from django.shortcuts import get_object_or_404
 from django.http import Http404
 from django.shortcuts import render, redirect
-from .models import Album, Song, Playlist, User, PlaylistSong
+from .models import Song, Playlist, User, PlaylistSong
 
 # ------------------------- REST API FUNCTIONS ------------------------- #
 def get_csrf(request):

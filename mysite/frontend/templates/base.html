@@ -37,7 +37,7 @@
         </div>
 
         {% if user.is_authenticated %}
-        <form id="search-form" action="{% url 'search' %}" method="GET" class="search-form" autocomplete="off">
+        <form id="search-form" action="{% url 'search' %}" method="GET" class="search-form">
           <div class="input-wrapper">
             <span class="search-icon">
               <i class="fas fa-search"></i>
@@ -64,10 +64,10 @@
               <!-- Check if '/profile' is contained in the current URL -->
               <a href="{% url 'profile' user.username %}" class="nav-link {% if '/profile/' in request.path %}active{% endif %}">My Profile</a>
 
-              {% if user.is_verified %}
-                <!-- Check if '/profile_settings' is contained in the current URL -->
-                <a href="{% url 'profile_settings' %}" class="nav-link {% if '/profile_settings/' in request.path %}active{% endif %}">Profile Settings</a>
-              {% endif %}
+              
+              <!-- Check if '/profile_settings' is contained in the current URL -->
+              <a href="{% url 'profile_settings' %}" class="nav-link {% if '/profile_settings/' in request.path %}active{% endif %}">Profile Settings</a>
+              
 
               {% if user.is_verified %}
                 <!-- Check if '/view_playlists' is contained in the current URL -->
@@ -113,7 +113,6 @@
         <source id="audio-source" src="" type="audio/mpeg" />
         Your browser does not support the audio element.
       </audio>
-      <!-- Playback control buttons -->
       <button class="control-button" id="next-button">>></button>
     </div>
     {% endif %}

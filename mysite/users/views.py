@@ -11,7 +11,7 @@ from comments.forms import CommentForm
 from django.db.models import Count
 from .forms import RegisterForm, ProfileForm
 from django.contrib.auth.decorators import user_passes_test, login_required
-from music.models import Song, Album, Playlist
+from music.models import Song, Playlist
 from django.core.exceptions import ValidationError
 import users.urls
 from django.http import JsonResponse
@@ -30,6 +30,7 @@ def home(request):
             'total_users': total_users,
             'total_songs': total_songs
         })
+    
     return redirect('profile_settings')
 
 def is_admin(user):
@@ -78,14 +79,12 @@ def delete_user(request, user_id):
     if request.method == 'POST':
         user = get_object_or_404(User, id=user_id)
 
-        # delete all songs, albums and playlists associated with the user
+        # delete all songs and playlists associated with the user
         songs_to_delete = Song.objects.filter(user=user)
-        albums_to_delete = Album.objects.filter(user=user)
         playlists_to_delete = Playlist.objects.filter(user=user)
         comments_to_delete = Comment.objects.filter(user=user)
 
         songs_to_delete.delete()
-        albums_to_delete.delete()
         playlists_to_delete.delete()
         comments_to_delete.delete()
     
@@ -271,12 +270,10 @@ def search_view(request):
                                 & Q(is_active=True)  & Q(is_admin=False))  # Search for active users by username
     
     singles = Song.objects.filter(Q(title__icontains=query))
-    albums = Album.objects.filter(Q(title__icontains=query))
     user_playlists = Playlist.objects.filter(user=request.user)
     return render(request, 'users/search_results.html', {'users': users, 
                                                          'query': query,
                                                          'singles': singles,
-                                                         'albums': albums,
                                                          'playlists': user_playlists})
 
 
@@ -286,7 +283,6 @@ def profile_view(request, username):
     user = get_object_or_404(User, username=username)
     profile = Profile.objects.get(user=user)
     singles = Song.objects.filter(user=user)
-    albums = Album.objects.filter(user=user)
     show_all = request.GET.get('show_all', 'false') == 'true'
     show_lyrics = request.GET.get('show_lyrics', 'false') == 'true'
 
@@ -331,7 +327,6 @@ def profile_view(request, username):
         'top_singles': top_singles,
         'show_all': show_all,         
         'singles': singles,
-        'albums': albums,
         'is_own_profile': is_own_profile,
         'is_admin': is_admin,
         'comments': comments,

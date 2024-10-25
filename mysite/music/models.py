@@ -6,19 +6,9 @@ from django.core.exceptions import ValidationError
 import os
 
 # Create your models here.
-class Album(models.Model):
-    album_id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.CharField(max_length=30)
-    report_count = models.PositiveIntegerField(default=0)
-
-    def __str__(self):
-        return self.title
-
 class Song(models.Model):
     song_id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    album = models.ForeignKey(Album, on_delete=models.CASCADE, null=True)
     title = models.CharField(max_length=30)
     duration = models.DurationField(editable=False, null=True)
     mp3_file = models.FileField(upload_to='songs/', null=True)
