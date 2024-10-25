@@ -35,7 +35,7 @@ window.playAudio = playAudio;
 export function playFromPlaylist(url) {
     const audioPlayer = document.getElementById('audio-player');
     const audioSource = document.getElementById('audio-source');
-    const songElements = document.querySelectorAll('.song-table tbody tr a');  // Get all song links in the playlist
+    const songElements = document.querySelectorAll('.song-table tbody tr .single-name a');  // Get all song links in the playlist
 
     const songUrls = Array.from(songElements).map(songElement => songElement.getAttribute('onclick').match(/'(.*?)'/)[1]);
     
