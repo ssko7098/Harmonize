@@ -34,10 +34,10 @@
 body {
   font-family: "Montserrat", sans-serif;
   /* background-color: #f3f4f6; */
-  color: #333;
+  /* color: #333;
   margin: 0;
   padding: 0;
-  line-height: 1.6;
+  line-height: 1.6; */
 }
 
 /* Background */
@@ -310,18 +310,6 @@ background-attachment: fixed;
   backdrop-filter: blur(15px); /* Optional blur effect */
 }
 
-.admin-container-alt {
-  max-width: auto;
-  min-width: auto;
-  margin: 50px auto;
-  padding: 30px;
-  background: rgba(255, 255, 255, 0.1);; /* Slight transparent gray background */
-  border-radius: 10px;
-  border: 2px solid rgba(255, 255, 255, 0.2); /* Light border for definition */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-  backdrop-filter: blur(15px); /* Optional blur effect */
-}
-
 h1 {
   font-family: "Montserrat", sans-serif;
   font-size: var(--font-size-header);
@@ -522,10 +510,10 @@ h2 {
 }
 
 /* Adjust margins and center text in paragraphs */
-p {
+/* p {
   margin: 10px 0;
   text-align: center;
-}
+} */
 
 /* Styling the checkbox with label */
 .checkbox-group {
@@ -588,11 +576,6 @@ p {
   background-color: #f0f0f0;
 }
 
-.admin-stats {
-  color: var(--soft-white);
-}
-
-
 /* Admin content next to sidebar */
 .admin-content {
   margin-left: 250px; /* Space for sidebar */
@@ -627,18 +610,15 @@ p {
 /* Table styling for user management */
 .user-table {
   width: 100%; /* Ensure table takes full width */
-  border-collapse: separate; /* Ensures rounded corners apply properly */
+  border-collapse: collapse;
   margin-top: 20px;
   text-align: left;
-  border-radius: 10px; /* Adjust the radius value as needed */
-  overflow: hidden; /* Ensures contents stay within the rounded corners */
-  border-spacing: 0; /* Ensure no gaps between cells */
 }
 
 .user-table th,
 .user-table td {
   padding: 12px 15px;
-  border-bottom: 1px solid #ddd; /* Horizontal lines only */
+  border: 1px solid #eaeaea;
   text-align: left;
 }
 
@@ -648,35 +628,12 @@ p {
 }
 
 .user-table tr:nth-child(even) {
-  background-color: #fff;
-}
-
-.user-table td:nth-child(3),
-.user-table th:nth-child(3) {
-  text-align: center; /* Center horizontally */
-  vertical-align: middle; /* Center vertically */
-}
-
-.user-table tr:nth-child(odd) {
-  background-color: #ffffff; /* Alternate the color for odd rows */
+  background-color: #f9f9f9;
 }
 
 .user-table td {
-  width: 20%; /* Set column width */
+  width: 33%;
 }
-
-.user-table th:first-child,
-.user-table td:first-child {
-  border-left: none; /* No left border */
-}
-
-.user-table th:last-child,
-.user-table td:last-child {
-  border-right: none; /* No right border */
-}
-
-
-
 
 /* Full-width buttons */
 .btn {
@@ -705,34 +662,6 @@ p {
 
 .btn-delete:hover {
   background-color: #e60000;
-}
-
-.btn-clear {
-  background-color: #bc98ff;
-  color: white;
-  border: none;
-  padding: 8px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.btn-clear:hover {
-  background-color: var(--primary-color);
-}
-
-.btn-search {
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  padding: 5px 10px 5px 10px;
-  /* border-radius: 5px; */
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.btn-search:hover {
-  background-color: #bc98ff;
 }
 
 .confirmation-message {
@@ -867,6 +796,40 @@ p {
   color: var(--primary-color);
 }
 
+#upload-page input#id_mp3_file.form-control-file {
+  background-color: transparent;
+  border: transparent;
+  font-family: "Montserrat", sans-serif;
+}
+
+#upload-page input#cover_image_file.form-control {
+  background-color: transparent;
+  border: transparent;
+  font-family: "Montserrat", sans-serif;
+}
+
+#upload-page .submit-button {
+  width: 100%;
+  align-items: center;
+  border-radius: var(--border-radius-button);
+  background-color: var(--primary-color);
+  color: white;
+  padding: 12px;
+  cursor: pointer;
+  font-family: "Montserrat", sans-serif;
+  font-size: var(--font-size-medium);
+  border: none;
+  margin-top: 10px;
+  transition: .3s;
+  font-weight: 600;
+}
+
+#upload-page .submit-button:hover {
+  background-color: white;
+  color: var(--primary-color);
+  font-size: calc(var(--font-size-medium) * 1.2);
+}
+
 #upload-page .upload-btn:last-child {
   margin-right: 0; /* Ensure no extra margin on the last button */
 }
@@ -972,6 +935,327 @@ p {
   margin-right: auto;
 }
 
+
+
+/* ---------------------------------------------------------------- */
+/* ! Styling for Search Elements */
+
+
+h5{
+  font-family: "Montserrat", sans-serif;
+  font-size: 24px;
+  color: var(--soft-white) !important;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 10px;
+} 
+
+.song-details .topbar {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center; 
+  width: 100%;
+}
+
+.song-details {
+  width: 100%
+}
+
+.cover-art-title {
+  display: flex;
+  flex-direction: row;
+}
+
+.cover-art-title .text-infomation {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.cover-art-title a img.song-cover {
+  margin-right: 20px;
+  height: 100px;
+  width: 100px;
+}
+
+.cover-art-title span a{
+  font-family: "Montserrat", sans-serif;
+  font-size: var(--font-size-medium);
+  color: var(--soft-white);
+  font-weight: 500;
+}
+
+.topbar {
+  margin-bottom: 10px;
+}
+
+.like-song-button {
+  margin-left: auto;
+}
+
+.songs-list li,
+.users-list li,
+.albums-list li {
+  margin-top: 10px;
+  margin-bottom: 20px; 
+}
+
+.cover-art-title .text-infomation a.nav-link,
+.cover-art-title .text-infomation a {
+  font-family: "Montserrat", sans-serif;
+  font-size: var(--font-size-medium);
+  color: var(--soft-white);
+  font-weight: 500;
+}
+
+.users-list ul li a.nav-link,
+.albums-list ul li a.nav-link,
+.messages-list .messages li {
+  font-family: "Montserrat", sans-serif;
+  font-size: var(--font-size-medium);
+  color: var(--soft-white);
+  font-weight: 500;
+}
+
+.cover-art-title {
+  flex-grow: 1;
+}
+
+.like-song-button-container {
+  margin-left: auto;
+}
+
+.text-infomation {
+  max-height: 100px;
+}
+
+.sort-comments-label {
+  font-family: "Montserrat", sans-serif;
+  font-size: var(--font-size-medium);
+  color: var(--soft-white);
+  font-weight: 500;
+  align-items: right;
+  align-content: right;
+}
+
+.add-to-playlist-container form select {
+  background: transparent;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  width: 120px;
+  cursor: pointer;
+  color: var(--soft-white);
+  font-size: var(--font-size-small);
+  border-radius: var(--border-radius-textbox);
+  border: 1px solid var(--soft-white);
+  padding: 2px 2px;
+  align-items: right;
+  margin-bottom: 20px;
+}
+
+.artist-container img.user-avatar {
+  height: 100px;
+  width: 100px;
+  margin-right: 20px;
+  border-radius: 50%; 
+  border: 1px solid var(--soft-white);
+}
+
+.artist-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+}
+
+.artist-container a.nav-link {
+  text-align: center;
+  font-weight: 500;
+  font-size: var(--font-size-base) !important;
+}
+
+
+/* ---------------------------------------------------------------- */
+
+
+/* ---------------------------------------------------------------- */
+/* ! Styling for Comments Elements */
+
+.sort-comments-label {
+  font-family: "Montserrat", sans-serif;
+  font-size: var(--font-size-base);
+  color: var(--soft-white);
+  font-weight: 500;
+  align-items: right;
+  align-content: right;
+}
+
+select#filter {
+  background: transparent;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  width: 120px;
+  cursor: pointer;
+  color: var(--soft-white);
+  font-size: var(--font-size-small);
+  border-radius: var(--border-radius-textbox);
+  border: 1px solid var(--soft-white);
+  padding: 2px 2px;
+  align-items: right;
+  margin-bottom: 20px;
+}
+
+option {
+  color: var(--accent-color);
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: var(--font-size-small);
+}
+
+.comments-placeholder {
+  font-family: "Montserrat", sans-serif;
+  text-align: left;
+  font-size: var(--font-size-medium);
+  color: var(--soft-white);
+}
+
+.comments-section li {
+
+}
+
+.individual-comment {
+  display: flex;
+  flex-direction: column;
+  margin-top: 5px;
+  width: 100%
+}
+
+.individual-comment-top-line {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.individual-comment-top-line p{
+  font-family: "Montserrat", sans-serif;
+  font-size: var(--font-size-medium);
+  color: var(--soft-white);
+  width: 100%;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.commenter p{
+  font-weight: 600;
+}
+
+.timestamp p{
+  font-size: var(--font-size-small) !important;
+}
+
+.comment-line {
+  font-family: "Montserrat", sans-serif;
+  font-size: var(--font-size-medium);
+  color: var(--soft-white);
+  width: 100%;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.individual-comment-react-line {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.like-icon,
+.dislike-icon,
+.delete-icon-comments,
+.report-icon-comments {
+  height: 20px;
+  width: 20px;
+  cursor: pointer;
+}
+
+.like-and-dislike-comment {
+  container: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+span.like-counter,
+span.dislike-counter {
+    display: inline-block; /* Ensures counts are inline with the button */
+    margin-left: 5px; /* Optional: Space between button and count */
+    text-align: center;
+    font-family: "Montserrat", sans-serif;
+    font-size: var(--font-size-medium);
+    color: var(--soft-white);
+    margin-right: 10px;
+}
+
+.individual-comment-react-line .delete-or-report-comment {
+  margin-left: auto;
+}
+
+.individual-comment-reply-line {
+  display: flex;
+  flex-direction: row;
+}
+
+.new-comment {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+textarea.new-comment-textbox{
+  background: var(--soft-white);
+  width: 100%;
+  outline: 1px solid var(--soft-white);
+  border-radius: var(--border-radius-button);
+  border: 1px solid var(--soft-white);
+  font-family: "Montserrat", sans-serif;
+  padding: 10px 10px;
+  color: var(--accent-color);
+  min-height: 35px !important;
+}
+
+.button-container {
+  text-align: right;
+  margin-bottom: 20px;
+}
+
+.submit-comment {
+  background: transparent;
+  font-family: "Montserrat", sans-serif;
+  border: transparent;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: underline;
+  color: var(--soft-white);
+  transition: all 0.4s ease;
+}
+
+.submit-comment:hover {
+  font-size: calc(var(--font-size-medium) * 1.2);
+}
+
+
+
+/* ---------------------------------------------------------------- */
+
+
+
+/* ---------------------------------------------------------------- */
+/* ! Styling for Profile Elements */
+
 .profile-box {
   width: 100%; /* Ensure full width of the form inside container */
   text-align: left;
@@ -982,7 +1266,7 @@ h3 { /* style elements for profile name */
   text-align: left;
   font-size: var(--font-size-profile-name);
   margin-top: 0px;
-  margin-bottom: -7.5px;
+  margin-bottom: 5px;
   color: var(--soft-white);
 }
 
@@ -997,7 +1281,9 @@ h3 { /* style elements for profile name */
 .profile-box .profile-picture {
   margin-top: 30px;
   margin-bottom: 30px;
+  border: 2px solid var(--soft-white);
 }
+
 
 .profile-box .body-header {
   text-align: left;
@@ -1018,19 +1304,19 @@ h3 { /* style elements for profile name */
 
 .profile-box h2 {
   text-align: left !important; 
-  margin-bottom: 0px !important;
+  margin-bottom: 10px !important;
 } 
 
 ul {
-  list-style-type: none; /* Removes bullet points */
-  padding: 0; /* Removes padding */
-  margin: 0; /* Removes margin */
+  list-style-type: none; 
+  padding: 0; 
+  margin: 0; 
 }
 
 li {
-  display: flex; /* Makes items horizontal */
-  align-items: center; /* Centers items vertically */
-  margin-bottom: 10px; /* Space between items */
+  display: flex; 
+  align-items: center; 
+  margin-bottom: 10px; 
 
 }
 
@@ -1046,27 +1332,61 @@ li {
 .delete-icon {
   width: 24px;
   height: 24px;
-}
-
-.delete-icon:hover {
   cursor: pointer;
 }
 
 .report-icon {
   width: 24px;
   height: 24px;
-}
-
-.report-icon:hover {
   cursor: pointer;
 }
 
-/* ---------------------------------------------------------------- */
+#button.btn.btn-secondary {
+  background-color: transparent;
+  color: var(--soft-white); 
+  border: none; 
+  text-decoration: underline; 
+  font-size: var(--font-size-medium); 
+  cursor: pointer;
+  padding: 0 0;
+  border: 0 0;
+  transition: all 0.3s ease;
+}
 
+#button.btn.btn-secondary:hover {
+  font-size: calc(var(--font-size-medium) * 1.1);
+}
+
+.toggle-singles {
+  align-items: right;
+  text-align: right;
+  margin-top: 10px;
+}
+
+.profile-info .btn.btn-report {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  color: var(--soft-white);
+  background-color: rgb(202, 81, 81);
+}
+
+.profile-info .btn.btn-delete {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  color: var(--soft-white);
+  background-color: rgb(202, 81, 81);
+}
+
+.profile-info .btn.btn-report:hover {
+  background-color: red;
+}
+
+/* ---------------------------------------------------------------- */
 
 
 /* ---------------------------------------------------------------- */
 /* ! Styling for Profile Settings Elements */
+
 .profile-settings-box {
   width: 100%; /* Ensure full width of the form inside container */
   text-align: left;
@@ -1134,6 +1454,12 @@ li {
   display: block;
 }
 
+input#avatar_file {
+  background-color: transparent;
+  border: transparent;
+  font-family: "Montserrat", sans-serif;
+}
+
 .form-group.bio label{
   min-width: 120px !important;
   margin-right: 0px !important;
@@ -1152,11 +1478,15 @@ li {
   outline: 1px solid var(--soft-white);
   align-items: left;
   width: 75% !important;
+  transition: all 0.3s ease;
 }
 
 #id_bio:focus {
-  outline: 2px solid var(--soft-white);
+  background-color: var(--soft-white);
+  color: var(--accent-color);
 }
+
+
 
 /* Update profile info button */
 #profile-settings-page .submit-button {
@@ -1182,6 +1512,410 @@ li {
 }
 
 /* ---------------------------------------------------------------- */
+
+
+
+/* ---------------------------------------------------------------- */
+/* ! Styling for Liked Songs Elements */
+
+#search-bar {
+  display: flex;  /* Aligns child elements in a row */
+  flex-direction: column;
+  align-items: center; 
+  /* margin-top: -20px; */
+  padding: 10px;  
+  border-radius: var(--border-radius-button);  
+}
+
+#search-bar input {
+  border-radius: var(--border-radius-button);
+  background: transparent; 
+  outline: none;
+  width: 100%; 
+  font-size: var(--font-size-medium);
+  font-family: "Montserrat", sans-serif;
+  color: var(--soft-white); 
+  height: 30px;
+  flex-grow: 1;
+  transition: all 0.3s ease;
+}
+
+#search-bar:hover input,
+#search-bar:focus-within input {
+  color: var(--accent-color);
+}
+
+.button-row {
+  display: flex;
+  justify-content: right;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.search-button, .clear-button {
+  background: transparent;
+  font-family: "Montserrat", sans-serif;
+  color: var(--soft-white);
+  border: 0;
+  font-size: var(--font-size-medium);
+  text-decoration: underline;
+  transition: font-size 0.3s, transform 0.3s;
+  cursor: pointer;
+  text-align: right;
+}
+
+.clear-button:hover {
+  font-size: calc(var(--font-size-medium) * 1.1);
+}
+
+.back-to-playlist-buffer {
+  display: flex;
+  margin-bottom: 10px;
+  justify-content: right;
+}
+
+.back-to-playlist {
+  text-align: right;
+}
+
+a#button.btn-back {
+  background: transparent;
+  color: var(--soft-white);
+  border: 0;
+  font-size: var(--font-size-medium);
+  text-decoration: underline;
+  margin-top: -30px;
+  margin-bottom: 0px;
+  transition: font-size 0.3s, ease 0.3s;
+  padding: 0 15px;
+}
+
+#button.btn-back:hover {
+  font-size: calc(var(--font-size-medium) * 1.1);
+}
+
+.liked-songs-list {
+  margin-top: 10px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.song-info {
+  max-height: 50px;
+  padding: 0 10px;
+}
+
+.liked-songs-list .song-title-single a {
+  font-family: "Montserrat", sans-serif;
+  font-size: var(--font-size-medium);
+  color: var(--soft-white) !important;
+  font-weight: 500;
+}
+
+.liked-songs-list .artist-name-single a {
+  font-family: "Montserrat", sans-serif;
+  font-size: var(--font-size-medium);
+  color: var(--soft-white) !important;
+  /* font-weight: 500; */
+}
+
+a.cover-play-button {
+  max-width: 50px;
+  max-height: 50px;
+}
+
+img.song-cover-image {
+  height: 50px;
+  width: 50px;
+}
+
+.remove-liked-song {
+  margin-left: auto;
+}
+
+.no-songs-found {
+  font-family: "Montserrat", sans-serif;
+  font-size: var(--font-size-medium);
+  color: var(--soft-white) !important;
+}
+
+/* ---------------------------------------------------------------- */
+
+
+
+
+/* ---------------------------------------------------------------- */
+/* ! Styling for Library Elements */
+
+.to-liked-songs-buffer {
+  display: flex;
+  margin-bottom: 10px;
+  justify-content: right;  
+}
+
+.to-liked-songs {
+  text-align: right;
+}
+
+a#button.btn-view-liked {
+  background: transparent;
+  color: var(--soft-white);
+  border: 0;
+  font-size: var(--font-size-medium);
+  text-decoration: underline;
+  margin-top: -30px;
+  margin-bottom: 0px;
+  transition: font-size 0.3s, ease 0.3s;
+  padding: 0 15px;
+}
+
+a#button.btn-view-liked:hover {
+  font-size: calc(var(--font-size-medium) * 1.1);
+}
+
+.create-new-playlist {
+  max-width: 400px; 
+  margin: 0 auto; 
+  border-radius: 5px;
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+}
+
+.form-group {
+  width: 100%; 
+  display: flex; 
+  justify-content: center; 
+}
+
+.form-control {
+  box-sizing: border-box;
+} 
+
+.create-new-playlist input#id_name.form-control {
+  width: 100%;
+  background: transparent;
+  outline: 1px solid var(--soft-white);
+  border-radius: var(--border-radius-button);
+  border: 1px solid var(--soft-white);
+  transition: all 0.4s ease;
+}
+
+.create-new-playlist input#id_name.form-control::placeholder {
+  color: var(--soft-white);
+}
+
+.create-new-playlist input#id_name.form-control:focus {
+  background: var(--soft-white);
+  color: var(--accent-color);
+}
+.create-new-playlist textarea#id_description.form-control {
+  width: 100%;
+  background: transparent;
+  outline: 1px solid var(--soft-white);
+  border-radius: var(--border-radius-button);
+  border: 1px solid var(--soft-white);
+  transition: all 0.4s ease;
+}
+
+.create-new-playlist textarea#id_description.form-control::placeholder {
+  color: var(--soft-white);
+}
+
+.create-new-playlist textarea#id_description.form-control:focus {
+  background: var(--soft-white);
+  color: var(--accent-color);
+}
+
+button.btn-submit {
+  background-color: transparent; 
+  font-family: "Montserrat", sans-serif;
+  color: var(--soft-white); 
+  padding: 0px 0px;
+  border: none; 
+  cursor: pointer; 
+  font-size: var(--font-size-medium); 
+  transition: font-size 0.3s, ease 0.3s;
+  text-decoration: underline;
+}
+
+.btn-submit:hover {
+  font-size: calc(var(--font-size-medium) * 1.1);
+}
+
+h4{
+  font-family: "Montserrat", sans-serif;
+  font-size: var(--font-size-large);
+  color: var(--soft-white) !important;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.playlist-list  {
+  width: 100%;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+.playlist {
+  display: flex;
+  flex-direction: row;
+  height: 50px;
+  margin-bottom: 10px;
+}
+
+.playlist-name {
+  font-family: "Montserrat", sans-serif;
+  font-size: var(--font-size-medium);
+  color: var(--soft-white) !important;
+  font-weight: 600;
+  text-align: left !important;
+  width: 300px;
+  margin: 0 0 !important;
+}
+
+.playlist-songs {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  
+}
+
+.playlist-songs p{
+  margin: 0 0;
+  font-family: "Montserrat", sans-serif;
+  font-size: var(--font-size-medium);
+  color: var(--soft-white);
+}
+.view-songs a#button{
+  font-family: "Montserrat", sans-serif;
+  font-size: var(--font-size-medium);
+  color: var(--soft-white);
+  transition: font-size 0.3s, ease 0.3s;
+  font-weight: 500;
+}
+
+.view-songs a#button:hover{
+  font-size: calc(var(--font-size-medium) * 1.1);
+}
+
+.delete-playlist {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+.song-table-container p{
+  font-family: "Montserrat", sans-serif;
+  font-size: var(--font-size-medium);
+  color: var(--soft-white);
+}
+
+/* ---------------------------------------------------------------- */
+
+
+
+/* ---------------------------------------------------------------- */
+/* ! Styling for In Playlist Elements */
+
+.playlist-description {
+  font-family: "Montserrat", sans-serif;
+  font-size: var(--font-size-medium);
+  color: var(--soft-white) !important;
+  font-weight: 500;
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.songs-in-playlist-search .search-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.songs-in-playlist-search .button-row {
+  margin-top: 0px;
+}
+
+.song-table {
+  width: 100%; 
+  background-color: transparent; 
+  color: var(--soft-white); 
+  margin-top: 20px;
+}
+
+.song-table th, .song-table td {
+  text-align: left;
+}
+
+.song-table tr th a{
+  font-family: "Montserrat", sans-serif;
+  text-align: left;
+  font-size: var(--font-size-medium);
+  color: var(--soft-white);
+  
+}
+
+.song-table th {
+  background-color: transparent; 
+  color: var(--soft-white) !important; 
+  font-weight: 500;
+  font-size: var(--font-size-medium);
+  font-family: "Montserrat", sans-serif;
+  transition: font-size 0.3s, ease 0.3s;
+}
+
+/* if time try to figure out how to add a margin within the th of 
+the table so that the animation doesnt shift all the text down */
+/* .song-table th.single-name a{
+  transition: font-size 0.3s, ease 0.3s;
+}
+
+.song-table th.single-artist a{
+  transition: font-size 0.3s, ease 0.3s;
+}
+
+.song-table th.single-name a:hover{
+  font-size: calc(var(--font-size-medium) * 1.2);
+}
+
+.song-table th.single-artist a:hover{
+  font-size: calc(var(--font-size-medium) * 1.2);
+} */
+
+.song-table tr {
+  margin-top: 10px;
+}
+
+.song-table tbody tr {
+  height: 50px !important;
+}
+
+.song-table .single-cover {
+  width: 50px;
+  padding-right: 10px;
+}
+
+.song-table .single-name {
+  width: 275px;
+}
+
+.song-table td a {
+  font-family: "Montserrat", sans-serif;
+  font-size: var(--font-size-medium); 
+  color: var(--soft-white);
+  text-decoration: underline; 
+  font-weight: 500;
+}
+
+.song-table td form.inline-form {
+  text-align: right;
+}
+
+/* ---------------------------------------------------------------- */
+
 
 
 /* Messages Styling */
@@ -1386,77 +2120,4 @@ textarea {
 /* Text styling */
 .google-login-btn span {
   color: #3c4043;
-}
-
-
-/* Ensure the audio player stays fixed at the bottom of the viewport */
-/* Main wrapper for the entire audio player */
-.audio-player-wrapper {
-  display: flex;
-  justify-content: flex-start; /* Buttons and player side by side */
-  align-items: center;
-  position: fixed;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: auto;
-  padding: 10px;
-  background-color: transparent; /* Transparent for the wrapper */
-  z-index: 999;
-}
-
-/* Container for the control buttons only */
-.audio-player-buttons {
-  background-color: rgba(0, 0, 0, 0.8); /* Background only for buttons */
-  padding: 10px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-right: 10px; /* Space between buttons and audio player */
-}
-
-/* Control buttons */
-.control-button {
-  background-color: #F1F3F4;
-  color: #A8AAAA;
-  border: none;
-  height: 50px;
-  width: 50px;
-  border-radius: 50%;
-  margin: 0 1px;
-  margin-top: 10px; /* Move the buttons down */
-  cursor: pointer;
-  font-size: 16px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-
-/* Audio player customization */
-.audio-player-wrapper audio {
-  width: 100%;
-  max-width: 300px; /* Adjust max width for the audio element */
-  border-radius: 5px;
-}
-
-
-
-/* Style for the audio element itself */
-.audio-player-container audio {
-  width: 100%;
-  max-width: 600px; /* Keep it sleek */
-  border-radius: 5px;
-  margin-top: 10px;
-  align-items: center;
-  /* background-color: ; */
-}
-
-
-/* Style the play button if needed */
-#prev-button,
-#next-button {
-  font-size: 18px;
-  padding: 10px;
 }

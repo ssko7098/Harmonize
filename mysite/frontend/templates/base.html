@@ -37,7 +37,7 @@
         </div>
 
         {% if user.is_authenticated %}
-        <form id="search-form" action="{% url 'search' %}" method="GET" class="search-form">
+        <form id="search-form" action="{% url 'search' %}" method="GET" class="search-form" autocomplete="off">
           <div class="input-wrapper">
             <span class="search-icon">
               <i class="fas fa-search"></i>
@@ -105,13 +105,13 @@
     {% if user.is_authenticated %}
     <!-- Persistent Audio Player (only loaded once) -->
     <div class="audio-player-container">
-      <button  class="control-button" id="prev-button"><<</button>
       <audio id="audio-player" controls>
         <source id="audio-source" src="" type="audio/mpeg" />
         Your browser does not support the audio element.
       </audio>
-      <button class="control-button" id="next-button">>></button>
       <!-- Playback control buttons -->
+      <button  id="prev-button"><<</button>
+      <button id="next-button">>></button>
     </div>
     {% endif %}
 

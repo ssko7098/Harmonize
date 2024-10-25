@@ -3,59 +3,62 @@
 {% block title %}Reported Songs{% endblock %}
 
 {% block admin_content %}
-<h2>Manage Songs</h2>
+<div class="admin-dashboard">
+    <h1>Manage Songs</h1>
 
-<!-- Search Form -->
-<form method="GET" action="{% url 'manage_songs' %}" class="search">
-    <input type="text" name="search" placeholder="Search for a song..." value="{{ request.GET.search }}">
-    <button type="submit">Search</button>
-</form>
+    <!-- Search Form -->
+    <form method="GET" action="{% url 'manage_songs' %}" class="search">
+        <input type="text" name="search" placeholder="Search for a song..." value="{{ request.GET.search }}">
+        <button type="submit">Search</button>
+    </form>
 
-<table class="user-table">
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Artist</th>
-            <th>Clear Reports</th>
-            <th>Reports</th>
-            <th>Delete</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for song in songs %}
-        <tr>
-            <td><a href="#" onclick="playAudio('{{ song.mp3_file.url }}'); return false;">{{ song.title }}</a></td>
-            <td>{{ song.user.username }}</td>
-            {% if song.report_count > 0 %}
-            <td>{{ song.report_count }}</td>
-            <td>
-                <form method="post" style="display:inline;">
-                    {% csrf_token %}
-                    <input type="hidden" name="song_id" value="{{ song.pk }}">
-                    <button class="btn btn-clear" type="submit" name="clear_reports" onclick="return confirm('Are you sure you want to clear reports for this song?');">Clear</button>
-                </form>
-            </td>
-            {% else %}
-            <td> </td>
-            <td> </td>
-            {% endif %}
-            <td>
-                <form method="post" style="display:inline;">
-                    {% csrf_token %}
-                    <input type="hidden" name="song_id" value="{{ song.pk }}">
-                    <button type="submit" class="btn btn-delete"name="delete_song" onclick="return confirm('Are you sure you want to delete this song?');">Delete</button>
-                </form>
-            </td>
-        </tr>
+    <table class="user-table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Artist</th>
+                <th>Clear Reports</th>
+                <th>Reports</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for song in songs %}
+            <tr>
+                <td><a href="#" onclick="playAudio('{{ song.mp3_file.url }}'); return false;">{{ song.title }}</a></td>
+                <td>{{ song.user.username }}</td>
+                {% if song.report_count > 0 %}
+                <td>{{ song.report_count }}</td>
+                <td>
+                    <form method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="song_id" value="{{ song.pk }}">
+                        <button type="submit" name="clear_reports" onclick="return confirm('Are you sure you want to clear reports for this song?');">Clear</button>
+                    </form>
+                </td>
+                {% else %}
+                <td> </td>
+                <td> </td>
+                {% endif %}
+                <td>
+                    <form method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="song_id" value="{{ song.pk }}">
+                        <button type="submit" class="btn btn-delete"name="delete_song" onclick="return confirm('Are you sure you want to delete this song?');">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
         {% endfor %}
-    </tbody>
-</table>
+    </ul>
+    {% endif %}
 
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
+</div>
 {% endblock %}

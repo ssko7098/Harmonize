@@ -1,5 +1,7 @@
+{% load static %}
+
 <!-- Like/Dislike buttons -->
-<div style="margin-top: 5px;">
+<!-- <div style="margin-top: 5px;">
     <form method="post" id="custom-form" action="{% url 'like_comment' comment.comment_id %}" style="display:inline;">
         {% csrf_token %}
         <button type="submit"
@@ -17,24 +19,65 @@
         </button>
         <span>{{ comment.disliked_by.count }}</span>
     </form>
+</div> -->
+
+<div class="like-and-dislike-comment">
+        <!-- Like Button -->
+        <form method="post" id="custom-form" action="{% url 'like_comment' comment.comment_id %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" style="background: none; border: none; padding: 0;">
+                <img src="{% static 'images/like.png' %}" 
+                    alt="Like" 
+                    class="like-icon"
+                    style="filter: {% if request.user in comment.liked_by.all %} invert(47%) sepia(95%) saturate(366%) 
+                    hue-rotate(69deg) brightness(97%) contrast(96%) {% else %}none{% endif %};">
+            </button>
+            <span class="like-counter">{{ comment.liked_by.count }}</span>
+        </form>
+
+        <!-- Dislike Button -->
+        <form method="post" id="custom-form" action="{% url 'dislike_comment' comment.comment_id %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" style="background: none; border: none; padding: 0;">
+                <img src="{% static 'images/dislike.png' %}" 
+                    alt="Dislike" 
+                    class="dislike-icon"
+                    style="filter: {% if request.user in comment.disliked_by.all %} invert(32%) sepia(88%) saturate(6099%) 
+                    hue-rotate(356deg) brightness(91%) contrast(119%) {% else %}none{% endif %};">
+            </button>
+            <span class="dislike-counter">{{ comment.disliked_by.count }}</span>
+        </form>
+</div>  
+
+<div class="delete-or-report-comment">
+    <!-- Delete Comment (if allowed) -->
+    {% if request.user == comment.user or request.user == user_profile.user or request.user.is_admin %}
+        <form method="post" id="custom-form" action="{% url 'delete_comment' comment.comment_id %}" style="display:inline;">
+            {% csrf_token %}
+            <!-- <button type="submit" class="btn-delete" style="background-color: red; color: white; border: none; padding: 5px 10px; border-radius: 5px;" onclick="return confirm('Are you sure you want to delete this comment?');">
+                Delete
+            </button> -->
+
+            <button type="submit" class="btn-delete" name="delete_comment" onclick="return confirm('Are you sure you want to delete this comment?');"
+            style="background: none; border: none; padding: 0;">
+                <img src="{% static 'images/trashcan.png' %}" alt="Delete " class="delete-icon-comments" />
+            </button>
+        </form>
+    {% endif %}
+
+
+    <!-- Report Comment (if allowed) -->
+    {% if request.user != comment.user and request.user != user_profile.user and request.user.is_admin != True %}
+        <form method="post" id="custom-form" action="{% url 'report_comment' comment.comment_id %}" style="display:inline;">
+            {% csrf_token %}
+            <!-- <button type="submit" class="btn-report" style="background-color: orange; color: white; border: none; padding: 5px 10px; border-radius: 5px;">
+                Report Comment
+            </button> -->
+
+            <button type="submit" class="btn-report" onclick="return confirm('Are you sure you want to report this comment?');"
+            style="background: none; border: none; padding: 0;">
+                <img src="{% static 'images/reportflag.png' %}" alt="Report" class="report-icon-comments" />
+            </button>
+        </form>
+    {% endif %}
 </div>
-
-<!-- Delete Comment (if allowed) -->
-{% if request.user == comment.user or request.user == user_profile.user or request.user.is_admin %}
-    <form method="post" id="custom-form" action="{% url 'delete_comment' comment.comment_id %}" style="display:inline;">
-        {% csrf_token %}
-        <button type="submit" class="btn-delete" style="background-color: red; color: white; border: none; padding: 5px 10px; border-radius: 5px;" onclick="return confirm('Are you sure you want to delete this comment?');">
-            Delete
-        </button>
-    </form>
-{% endif %}
-
-<!-- Report Comment (if allowed) -->
-{% if request.user != comment.user and request.user != user_profile.user and request.user.is_admin != True %}
-    <form method="post" id="custom-form" action="{% url 'report_comment' comment.comment_id %}" style="display:inline;">
-        {% csrf_token %}
-        <button type="submit" class="btn-report" style="background-color: orange; color: white; border: none; padding: 5px 10px; border-radius: 5px;">
-            Report Comment
-        </button>
-    </form>
-{% endif %}

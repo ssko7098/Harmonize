@@ -2,49 +2,78 @@
 
 <!-- Filter switch: Sort by Timestamp or Likes -->
 <form method="get" action="{% url 'profile' user_profile.user.username %}">
-    <label for="filter">Sort comments by:</label>
+    <label for="filter" class="sort-comments-label"></label>
+    <!-- <label for="filter" class="sort-comments-label">Sort Comments By:</label> -->
     <select name="filter" id="filter">
         <option value="timestamp" {% if request.GET.filter == "timestamp" %}selected{% endif %}>Most Recent</option>
         <option value="likes" {% if request.GET.filter == "likes" %}selected{% endif %}>Most Liked</option>
     </select>
 </form>
 
-{% if comments %}
-    <ul>
-        {% for comment in comments %}
-            {% if not comment.parent_comment %}
-                <li>
-                    <strong>{{ comment.user.username }}:</strong> {{ comment.message }}
-                    <br>
-                    <small>{{ comment.created_at }}</small>
+<div class="comments-section">
+    {% if comments %}
+        <ul>
+            {% for comment in comments %}
+                {% if not comment.parent_comment %}
+                    
+                        <li>
+                            <div class="individual-comment">
+                                <div class="individual-comment-top-line">
+                                    <div class="commenter">
+                                        <p>{{ comment.user.username }} </p>
+                                    </div>
 
-                    <!-- Like, Dislike, Delete, Report, etc. -->
-                    {% include "comments/comment_actions.html" with comment=comment %}
+                                    <div class="timestamp">
+                                        <p>{{ comment.created_at }}</p>
+                                    </div>
+                                </div>
 
-                    <!-- Include replies for this comment -->
-                    {% include "comments/replies.html" with comment=comment %}
+                                <div class="comment-line">
+                                    <p>{{ comment.message }} </p>
+                                </div>
+                                
+                                <div class="individual-comment-react-line">
+                                    <!-- Like, Dislike, Delete, Report, etc. -->
+                                    {% include "comments/comment_actions.html" with comment=comment %}
+                                </div>
 
-                    <!-- Reply Form (for top-level comments) -->
-                    {% if is_verified %}
-                    <form method="post" id="custom-form" action="{% url 'add_comment' user_profile.user.username %}">
-                        {% csrf_token %}
-                        <textarea name="message" placeholder="Write a reply" required></textarea>
-                        <input type="hidden" name="parent_comment_id" value="{{ comment.comment_id }}">
-                        <button type="submit">Reply</button>
-                    </form>
-                    {% endif %}
-                </li>
-            {% endif %}
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>No comments yet!</p>
-{% endif %}
+                                <div class="reply-comments">
+                                    <!-- Include replies for this comment -->
+                                    {% include "comments/replies.html" with comment=comment %}
+                                </div>
 
-{% if not is_own_profile and is_verified %}
-    <form method="post" id="custom-form" action="{% url 'add_comment' user_profile.user.username %}">
-        {% csrf_token %}
-        <textarea name="message" placeholder="Add a comment" required></textarea>
-        <button type="submit">Comment</button>
-    </form>
-{% endif %}
+                                <!-- Reply Form (for top-level comments) -->
+                                <div class="new-comment">
+                                    {% if is_verified %}
+                                    <form method="post" id="custom-form" action="{% url 'add_comment' user_profile.user.username %}">
+                                        {% csrf_token %}
+                                        <textarea class="new-comment-textbox" name="message" placeholder="Reply" required></textarea>
+                                        <input type="hidden" name="parent_comment_id" value="{{ comment.comment_id }}">
+                                        <div class="button-container">
+                                            <button class="submit-comment" type="submit">Reply</button>
+                                        </div>
+                                    </form>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </li>
+                    <hr>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="comments-placeholder">No comments yet!</p>
+    {% endif %}
+</div>
+
+<div class="new-comment">
+    {% if not is_own_profile and is_verified %}
+        <form method="post" id="custom-form" action="{% url 'add_comment' user_profile.user.username %}">
+            {% csrf_token %}
+            <textarea class="new-comment-textbox" name="message" placeholder="Comment" required></textarea>
+            <div class="button-container">
+                <button class="submit-comment "type="submit">Comment</button>
+            </div>
+        </form>
+    {% endif %}
+</div>
