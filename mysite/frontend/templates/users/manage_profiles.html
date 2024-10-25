@@ -1,67 +1,63 @@
 {% extends './admin_dashboard.html' %}
 
 {% block admin_content %}
-<div class="admin-dashboard">
-    <div class="admin-header">
-        <h2 class="page-title">Admin Dashboard</h2>
+<h2>Admin Dashboard</h2>
 
-                    <!-- Admin statistics -->
-                    <div class="admin-stats">
-                        <p><strong>Total Users:</strong> {{ total_users }}</p>
-                        <p><strong>Total Songs:</strong> {{ total_songs }}</p>
-                    </div>
-                    
-        <h3>All Active Users</h3>
-    </div>
-
-    <!-- Search Form -->
-    <form method="GET" action="{% url 'admin_dashboard' %}" class="search">
-        <input type="text" name="search" placeholder="Search for a user..." value="{{ request.GET.search }}">
-        <button type="submit">Search</button>
-    </form>
-
-    <!-- User table -->
-    <table class="user-table">
-        <thead>
-            <tr>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Reports</th>
-                <th>Clear Reports</th>
-                <th>Delete</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for user in users %}
-                <tr>
-                    <td>{{ user.username }}</td>
-                    <td>{{ user.email }}</td>
-                    {% if user.profile.report_count > 0 %}
-                    <td>{{ user.profile.report_count }}</td>
-                    <td>
-                        <form method="post" style="display:inline;">
-                            {% csrf_token %}
-                            <input type="hidden" name="profile_id" value="{{ user.profile.id }}">
-                            <button type="submit" name="clear_reports" onclick="return confirm('Are you sure you want to clear reports for this profile?');">Clear</button>
-                        </form>
-                    </td>
-                    {% else %}
-                    <td></td>
-                    <td></td>
-                    {% endif %}
-                    <td>
-                        <form method="post" action="{% url 'delete_user' user.id %}">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-delete">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-            {% empty %}
-            <tr>
-                <td colspan="3">No active users found.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<!-- Admin statistics -->
+<div class="admin-stats">
+    <p><strong>Total Users:</strong> {{ total_users }}</p>
+    <p><strong>Total Songs:</strong> {{ total_songs }}</p>
 </div>
+            
+<h2>All Active Users</h2>
+
+<!-- Search Form -->
+<form method="GET" action="{% url 'admin_dashboard' %}" class="search">
+    <input type="text" name="search" placeholder="Search for a user..." value="{{ request.GET.search }}">
+    <button class="btn btn-search" type="submit">Search</button>
+</form>
+
+<!-- User table -->
+<table class="user-table">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Reports</th>
+            <th>Clear Reports</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+            <tr>
+                <td><a href="{% url 'profile' user.username %}" class="nav-link">{{ user.username }}</a></td>
+                <td>{{ user.email }}</td>
+                {% if user.profile.report_count > 0 %}
+                <td>{{ user.profile.report_count }}</td>
+                <td>
+                    <form method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="profile_id" value="{{ user.profile.id }}">
+                        <button class="btn btn-clear" type="submit" name="clear_reports" onclick="return confirm('Are you sure you want to clear reports for this profile?');">Clear</button>
+                    </form>
+                </td>
+                {% else %}
+                <td></td>
+                <td></td>
+                {% endif %}
+                <td>
+                    <form method="post" action="{% url 'delete_user' user.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-delete">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        {% empty %}
+        <tr>
+            <td colspan="3">No active users found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 {% endblock %}
