@@ -420,8 +420,13 @@ Here are some key considerations for API design:
 
 ## Known Issues
 ### Current Issues
-* __Auto Fill Styling Issue:__ When the user auto-fills forms like the login page, it causes a styling issue where the form turns white.
+* __Song Upload Time:__ Upload song time currently longer than wanted, will be fixed in planned features (not in MVP).
+* __Song Upload Music Pause:__ Music will be paused upon a song uploaded (not in MVP).
+* __Skipping Within Song:__ Skipping to a certain part of a song doesn't always work (not in MVP).
+* __Window Width:__ In changing window width, HTML elements are not resized and overlap (not in MVP).
 
 ### Planned Features
-* __Offline Listening:__ Ability for users to download songs and listen offline.
-* __Music Recommendations:__ Suggest songs to users based on their location and what others around them are listening to.
+* __Asynchronous Lyric Fetching:__ Have external API work in background during song upload, decreasing upload time (not in MVP).
+* __Music Recommendations:__ Suggest songs to users based on their location and what others around them are listening to (not in MVP).
+* __Showing Queue:__ Users ability to view the queue based on the songs they have added (not in MVP).
+* __Minimum Screen Size:__ Implement minimum screen size so HTML elements do not overlap (not in MVP).
