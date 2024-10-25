@@ -73,10 +73,14 @@ sqlite3 db.sqlite3
 
 ## Configuration and Environment Setup
 ### Environment Variables
-Create a `.env` file in the project root directory to store sensitive environment variables:
-* `SECRET_KEY`: A unique key for Django security.
-* `DEBUG`: Set to True for local development.
-* `ALLOWED_HOSTS`: Specify the domain names allowed to access the app.
+| Environment Variable   | Description                                                                                          |
+|------------------------|------------------------------------------------------------------------------------------------------|
+| `DJANGO_SECRET_KEY`     | This is the secret key Django uses for cryptographic signing. |
+| `DJANGO_DEBUG`          | A boolean flag that controls whether Django runs in debug mode.                                      |
+| `EMAIL_HOST_USER`       | The email address used for sending emails.                                                          |
+| `EMAIL_HOST_PASSWORD`   | The password for the email address used to send emails.                                             |
+| `GOOGLE_CLIENT_ID`      | The client ID from our Google OAuth app, used to allow users to log in with their Google accounts.   |
+| `GOOGLE_CLIENT_SECRET`  | The secret key associated with the Google OAuth app for authentication and authorization.            |
 
 
 ## Usage Instructions
