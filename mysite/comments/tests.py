@@ -127,13 +127,15 @@ class ReplyCommentTest(TestCase):
         # Add a reply to the original comment
         response = self.client.post(reverse('add_comment', args=[self.user.username]), {
             'message': 'Reply to Comment',
-            'parent_comment': self.comment.comment_id  # Send the original comment's ID as parent
+            'parent_comment_id': self.comment.comment_id  # Send the original comment's ID as parent
         })
         self.assertEqual(response.status_code, 302)  # Ensure redirection after success
+        
         
         self.assertEqual(Comment.objects.count(), 2) # Should be 2 comments in total, parent and reply
 
         # Ensure the reply exists and is linked to the original comment
+        self.assertTrue(Comment.objects.filter(message='Reply to Comment').exists())
         reply = Comment.objects.get(message='Reply to Comment')
         self.assertEqual(reply.parent_comment, self.comment)  # Ensure reply is linked to the parent
 
