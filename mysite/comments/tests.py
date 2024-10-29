@@ -112,3 +112,67 @@ class CommentViewsTestCase(TestCase):
         comment.refresh_from_db()
         self.assertEqual(comment.report_count, 1)  # Report count should still be 1
 
+
+class ReplyCommentTest(TestCase):
+    def setUp(self):
+        # Create a user and log them in
+        self.user = User.objects.create_user(username='testuser', email='test@example.com', password='password')
+        
+        # Create a profile and a comment
+        self.profile = Profile.objects.create(user=self.user, bio='Bio of User')
+        self.comment = Comment.objects.create(user=self.user, profile=self.profile, message='Original Comment')
+        self.client.login(username='testuser', password='password')
+    
+    def test_add_reply_to_comment(self):
+        # Add a reply to the original comment
+        response = self.client.post(reverse('add_comment', args=[self.user.username]), {
+            'message': 'Reply to Comment',
+            'parent_comment': self.comment.comment_id  # Send the original comment's ID as parent
+        })
+        self.assertEqual(response.status_code, 302)  # Ensure redirection after success
+        
+        self.assertEqual(Comment.objects.count(), 2) # Should be 2 comments in total, parent and reply
+
+        # Ensure the reply exists and is linked to the original comment
+        reply = Comment.objects.get(message='Reply to Comment')
+        self.assertEqual(reply.parent_comment, self.comment)  # Ensure reply is linked to the parent
+
+    def test_view_comment_with_replies(self):
+        # Add a reply to the original comment
+        reply = Comment.objects.create(user=self.user, profile=self.profile, message='Reply to Comment', parent_comment=self.comment)
+        
+        # View the profile to check if the comment and reply are displayed
+        response = self.client.get(reverse('profile', args=[self.user.username]))
+        self.assertEqual(response.status_code, 200)
+        
+        # Check that the original comment and reply are displayed
+        self.assertContains(response, 'Original Comment')
+        self.assertContains(response, 'Reply to Comment')
+        
+        # Ensure the reply is correctly nested under the original comment
+        comment_with_reply = Comment.objects.get(comment_id=self.comment.comment_id)
+        self.assertIn(reply, comment_with_reply.replies.all())  # Check if the reply exists in the original comment's replies
+
+    def test_delete_reply_to_comment(self):
+        # Create a reply to the original comment
+        reply = Comment.objects.create(user=self.user, profile=self.profile, message='Reply to Comment', parent_comment=self.comment)
+        
+        # Delete the reply
+        response = self.client.post(reverse('delete_comment', args=[reply.comment_id]))
+        self.assertEqual(response.status_code, 302)  # Ensure redirection after success
+        
+        # Ensure the reply no longer exists
+        self.assertFalse(Comment.objects.filter(comment_id=reply.comment_id).exists())
+
+    def test_delete_comment_with_replies(self):
+        # Add a reply to the original comment
+        reply = Comment.objects.create(user=self.user, profile=self.profile, message='Reply to Comment', parent_comment=self.comment)
+        
+        # Delete the original comment (which has replies)
+        response = self.client.post(reverse('delete_comment', args=[self.comment.comment_id]))
+        self.assertEqual(response.status_code, 302)  # Ensure redirection after success
+        
+        # Ensure the original comment and its replies no longer exist
+        self.assertFalse(Comment.objects.filter(comment_id=self.comment.comment_id).exists())
+        self.assertFalse(Comment.objects.filter(comment_id=reply.comment_id).exists())
+
