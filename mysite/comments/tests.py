@@ -58,14 +58,44 @@ class CommentViewsTestCase(TestCase):
         self.assertIn(self.user1, comment.liked_by.all())  # User1 should like the comment
         self.assertEqual(comment.likes, 1)  # Likes should be 1
 
+    def test_double_like_comment(self):
+        comment = Comment.objects.create(message='A comment', user=self.user2, profile=self.profile)
+        self.client.post(reverse('like_comment', args=[comment.comment_id]))
+        response = self.client.post(reverse('like_comment', args=[comment.comment_id]))
+        self.assertEqual(response.status_code, 302)  # Check redirect
+        comment.refresh_from_db()
+        self.assertNotIn(self.user1, comment.liked_by.all())  # User1 shouldnt like the comment
+        self.assertEqual(comment.likes, 0)  # Likes should be 0, since like was pressed again
+
     def test_dislike_comment(self):
         comment = Comment.objects.create(message='A comment', user=self.user2, profile=self.profile)
-        self.client.post(reverse('like_comment', args=[comment.comment_id]))  # Like first
         response = self.client.post(reverse('dislike_comment', args=[comment.comment_id]))
         self.assertEqual(response.status_code, 302)  # Check redirect
         comment.refresh_from_db()
         self.assertIn(self.user1, comment.disliked_by.all())  # User1 should dislike the comment
         self.assertEqual(comment.dislikes, 1)  # Dislikes should be 1
+
+    def test_double_dislike_comment(self):
+        comment = Comment.objects.create(message='A comment', user=self.user2, profile=self.profile)
+        self.client.post(reverse('dislike_comment', args=[comment.comment_id]))
+        response = self.client.post(reverse('dislike_comment', args=[comment.comment_id]))
+        self.assertEqual(response.status_code, 302)  # Check redirect
+        comment.refresh_from_db()
+        self.assertNotIn(self.user1, comment.disliked_by.all())  # User1 shouldnt dislike the comment
+        self.assertEqual(comment.dislikes, 0)  # Likes should be 1
+
+    def test_switch_like_comment(self):
+        comment = Comment.objects.create(message='A comment', user=self.user2, profile=self.profile)
+        self.client.post(reverse('like_comment', args=[comment.comment_id]))  # Like first
+        response = self.client.post(reverse('dislike_comment', args=[comment.comment_id]))
+        self.assertEqual(response.status_code, 302)  # Check redirect
+        comment.refresh_from_db()
+        self.assertNotIn(self.user1, comment.liked_by.all())  # User1 shouldnt like the comment
+        self.assertEqual(comment.likes, 0)  # likes should be 0
+        self.assertIn(self.user1, comment.disliked_by.all())  # User1 should dislike the comment
+        self.assertEqual(comment.dislikes, 1)  # Dislikes should be 1
+
+
 
     def test_report_comment(self):
         comment = Comment.objects.create(message='A comment', user=self.user2, profile=self.profile)
