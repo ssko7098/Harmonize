@@ -50,3 +50,35 @@ class CommentViewsTestCase(TestCase):
         self.assertEqual(response.status_code, 302)  # Check redirect
         self.assertEqual(Comment.objects.count(), 1)  # Comment should still exist
 
+    def test_like_comment(self):
+        comment = Comment.objects.create(message='A comment', user=self.user2, profile=self.profile)
+        response = self.client.post(reverse('like_comment', args=[comment.comment_id]))
+        self.assertEqual(response.status_code, 302)  # Check redirect
+        comment.refresh_from_db()
+        self.assertIn(self.user1, comment.liked_by.all())  # User1 should like the comment
+        self.assertEqual(comment.likes, 1)  # Likes should be 1
+
+    def test_dislike_comment(self):
+        comment = Comment.objects.create(message='A comment', user=self.user2, profile=self.profile)
+        self.client.post(reverse('like_comment', args=[comment.comment_id]))  # Like first
+        response = self.client.post(reverse('dislike_comment', args=[comment.comment_id]))
+        self.assertEqual(response.status_code, 302)  # Check redirect
+        comment.refresh_from_db()
+        self.assertIn(self.user1, comment.disliked_by.all())  # User1 should dislike the comment
+        self.assertEqual(comment.dislikes, 1)  # Dislikes should be 1
+
+    def test_report_comment(self):
+        comment = Comment.objects.create(message='A comment', user=self.user2, profile=self.profile)
+        response = self.client.post(reverse('report_comment', args=[comment.comment_id]))
+        self.assertEqual(response.status_code, 302)  # Check redirect
+        comment.refresh_from_db()
+        self.assertEqual(comment.report_count, 1)  # Report count should be 1
+
+    def test_report_comment_already_reported(self):
+        comment = Comment.objects.create(message='A comment', user=self.user2, profile=self.profile)
+        self.client.post(reverse('report_comment', args=[comment.comment_id]))  # First report
+        response = self.client.post(reverse('report_comment', args=[comment.comment_id]))  # Second report
+        self.assertEqual(response.status_code, 302)  # Check redirect
+        comment.refresh_from_db()
+        self.assertEqual(comment.report_count, 1)  # Report count should still be 1
+
