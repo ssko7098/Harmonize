@@ -37,4 +37,16 @@ class CommentViewsTestCase(TestCase):
         })
         self.assertEqual(response.status_code, 302)  # Check redirect
         self.assertEqual(Comment.objects.count(), 0)  # No new comments should be added
+    
+    def test_delete_comment(self):
+        comment = Comment.objects.create(message='A comment', user=self.user1, profile=self.user2.profile)
+        response = self.client.post(reverse('delete_comment', args=[comment.comment_id]))
+        self.assertEqual(response.status_code, 302)  # Check redirect
+        self.assertEqual(Comment.objects.count(), 0)  # Comment should be deleted
+
+    def test_delete_comment_not_owner(self):
+        comment = Comment.objects.create(message='A comment', user=self.user2, profile=self.profile)
+        response = self.client.post(reverse('delete_comment', args=[comment.comment_id]))
+        self.assertEqual(response.status_code, 302)  # Check redirect
+        self.assertEqual(Comment.objects.count(), 1)  # Comment should still exist
 
