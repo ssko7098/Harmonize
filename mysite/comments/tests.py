@@ -319,3 +319,52 @@ class CommentFormTest(TestCase):
         form = CommentForm()
         self.assertIsInstance(form.fields['message'].widget, forms.Textarea)
         self.assertEqual(form.fields['message'].widget.attrs['rows'], 3)  # Check if the custom widget has 3 rows
+    
+class ProfileTemplateTest(TestCase):
+    def setUp(self):
+        # Create a user, profile, and comments for testing
+        self.user = User.objects.create_user(username='testuser', password='password', email='testuser@example.com')
+        self.profile = Profile.objects.create(user=self.user, bio="This is a test user's profile.")
+        self.comment1 = Comment.objects.create(profile=self.profile, user=self.user, message="This is the first comment.")
+        self.comment2 = Comment.objects.create(profile=self.profile, user=self.user, message="This is the second comment.")
+
+        self.client.login(username='testuser', password='password')
+
+    def test_profile_template_used(self):
+        """Test if the correct template (profile.html) is used for the profile page."""
+        response = self.client.get(reverse('profile', kwargs={'username': self.user.username}))
+        self.assertEqual(response.status_code, 200)  # Ensure the page loads successfully
+
+        # Check that the correct templates are used
+        self.assertTemplateUsed(response, 'users/profile.html')
+        self.assertTemplateUsed(response, 'comments/comments.html')
+        self.assertTemplateUsed(response, 'comments/comment_actions.html')
+        self.assertTemplateUsed(response, 'comments/replies.html')
+
+
+    def test_profile_comments_displayed(self):
+        """Test if the profile page displays user comments."""
+        response = self.client.get(reverse('profile', kwargs={'username': self.user.username}))
+        self.assertContains(response, self.comment1.message)  # Check if the first comment is displayed
+        self.assertContains(response, self.comment2.message)  # Check if the second comment is displayed
+
+    def test_no_comments_message(self):
+        """Test if a message is displayed when there are no comments."""
+        # Create a new profile with no comments
+        new_user = User.objects.create_user(username='newuser', password='password', email='newuser@example.com')
+        new_profile = Profile.objects.create(user=new_user, bio="New user's profile")
+        
+        response = self.client.get(reverse('profile', kwargs={'username': new_user.username}))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "No comments yet!") 
+
+    def test_profile_comment_likes_dislikes_displayed(self):
+        """Test if the comment likes and dislikes are displayed properly."""
+        # Add likes and dislikes to the comments
+        self.comment1.likes = 5
+        self.comment1.dislikes = 2
+        self.comment1.save()
+
+        response = self.client.get(reverse('profile', kwargs={'username': self.user.username}))
+        self.assertContains(response, '5')  # Check if likes are displayed for the first comment
+        self.assertContains(response, '2')  # Check if dislikes are displayed for the first comment
