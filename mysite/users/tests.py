@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from django.db.utils import IntegrityError
 from django.utils import timezone
 from .models import User, Profile
+from .forms import RegisterForm, ProfileForm
 from comments.models import Comment
 from music.models import Song, Playlist, PlaylistSong
 from django.urls import reverse
@@ -182,3 +183,103 @@ class UserViewsTest(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'users/profile_settings.html')
+
+class RegisterFormTest(TestCase):
+    
+    def test_valid_registration_form(self):
+        form_data = {
+            'full_name': 'Test User',
+            'username': 'testuser',
+            'email': 'testuser@example.com',
+            'password1': 'securePassword123',
+            'password2': 'securePassword123'
+        }
+        form = RegisterForm(data=form_data)
+        self.assertTrue(form.is_valid())
+    
+    def test_missing_email(self):
+        form_data = {
+            'full_name': 'Test User',
+            'username': 'testuser',
+            'password1': 'securePassword123',
+            'password2': 'securePassword123'
+        }
+        form = RegisterForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertIn('email', form.errors)
+        
+    def test_invalid_email_format(self):
+        form_data = {
+            'full_name': 'Test User',
+            'username': 'testuser',
+            'email': 'invalid-email-format',
+            'password1': 'securePassword123',
+            'password2': 'securePassword123'
+        }
+        form = RegisterForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertIn('email', form.errors)
+    
+    def test_email_already_exists(self):
+        User.objects.create_user(username='existinguser', email='existing@example.com', password='password123')
+        form_data = {
+            'full_name': 'New User',
+            'username': 'newuser',
+            'email': 'existing@example.com',
+            'password1': 'securePassword123',
+            'password2': 'securePassword123'
+        }
+        form = RegisterForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertIn('email', form.errors)
+    
+    def test_password_mismatch(self):
+        form_data = {
+            'full_name': 'Test User',
+            'username': 'testuser',
+            'email': 'testuser@example.com',
+            'password1': 'securePassword123',
+            'password2': 'differentPassword123'
+        }
+        form = RegisterForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertIn('password2', form.errors)
+
+class ProfileFormTest(TestCase):
+    
+    def setUp(self):
+        self.user = User.objects.create_user(username='testuser', email='test@example.com',  password='password123')
+        self.profile = Profile.objects.create(user=self.user)
+    
+    def test_valid_profile_form(self):
+        form_data = {
+            'bio': 'This is a test bio',
+        }
+        form = ProfileForm(data=form_data, instance=self.profile)
+        self.assertTrue(form.is_valid())
+    
+    def test_avatar_file_upload_optional(self):
+        form_data = {
+            'bio': 'Another test bio',
+        }
+        form = ProfileForm(data=form_data, instance=self.profile)
+        self.assertTrue(form.is_valid())
+    
+    def test_empty_bio(self):
+        form_data = {
+            'bio': '',
+        }
+        form = ProfileForm(data=form_data, instance=self.profile)
+        self.assertTrue(form.is_valid())
+    
+    def test_invalid_avatar_file_type(self):
+        # Simulating invalid file type by passing non-image data
+        form_data = {
+            'bio': 'Valid bio',
+        }
+        form_files = {
+            'avatar_file': 'not_an_image.txt'  # Simulating a non-image file input
+        }
+        form = ProfileForm(data=form_data, files=form_files, instance=self.profile)
+        self.assertFalse(form.is_valid())
+        self.assertIn('avatar_file', form.errors)
