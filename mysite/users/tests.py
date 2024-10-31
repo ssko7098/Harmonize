@@ -1,8 +1,12 @@
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.core.exceptions import ValidationError
 from django.db.utils import IntegrityError
 from django.utils import timezone
 from .models import User, Profile
+from comments.models import Comment
+from music.models import Song, Playlist, PlaylistSong
+from django.urls import reverse
+from django.contrib.messages import get_messages
 
 class UserModelTest(TestCase):
     
@@ -63,3 +67,118 @@ class ProfileModelTest(TestCase):
         self.profile.reported_by.add(reporting_user)
         self.assertIn(reporting_user, self.profile.reported_by.all())
 
+class UserViewsTest(TestCase):
+    def setUp(self):
+        # Create a user and admin user
+        self.client = Client()
+        self.admin_user = User.objects.create_superuser(username='admin', password='adminpass', email='admin@example.com')
+        self.user = User.objects.create_user(username='testuser', password='userpass', email='user@example.com')
+        self.profile=Profile.objects.create(user=self.user)
+        Profile.objects.create(user=self.admin_user)
+
+    def test_home_view_as_admin(self):
+        # Log in as admin
+        self.client.login(username='admin', password='adminpass')
+        response = self.client.get(reverse('home'))
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'users/admin_dashboard.html')
+        self.assertIn('users', response.context)
+        self.assertIn('total_users', response.context)
+        self.assertIn('total_songs', response.context)
+
+    def test_home_view_as_regular_user(self):
+        # Log in as regular user
+        self.client.login(username='testuser', password='userpass')
+        response = self.client.get(reverse('home'))
+        
+        # Regular users should be redirected to their profile settings
+        self.assertRedirects(response, reverse('profile_settings'))
+
+    def test_admin_dashboard_search(self):
+        self.client.login(username='admin', password='adminpass')
+        response = self.client.get(reverse('admin_dashboard') + '?search=testuser')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['users'].count(), 1)  # Only 'testuser' should match search
+
+    def test_delete_user_view(self):
+        self.client.login(username='admin', password='adminpass')
+        response = self.client.post(reverse('delete_user', args=[self.user.id]))
+
+        self.user.refresh_from_db()
+        self.assertFalse(self.user.is_active)
+        self.assertEqual(self.user.username, f'deactivated_user_{self.user.id}')
+        self.assertRedirects(response, reverse('admin_dashboard'))
+
+    def test_manage_songs_view(self):
+        # Test GET request with no songs added
+        self.client.login(username='admin', password='adminpass')
+        response = self.client.get(reverse('manage_songs'))
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'users/manage_songs.html')
+        self.assertEqual(response.context['songs'].count(), 0)  # No songs added yet
+
+    def test_manage_reported_comments_view(self):
+        # Create a reported comment and test admin access to reported comments
+        comment = Comment.objects.create(user=self.user, profile=self.profile, message="Reported comment", report_count=2)
+        self.client.login(username='admin', password='adminpass')
+        response = self.client.get(reverse('reported_comments'))
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'users/reported_comments.html')
+        self.assertEqual(response.context['reported_comments'].count(), 1)
+
+    def test_register_view(self):
+        response = self.client.post(reverse('register'), {
+            'username': 'newuser',
+            'password1': 'newpass123',
+            'password2': 'newpass123',
+            'email': 'newuser@example.com',
+            'full_name': 'new user'
+        })
+
+        self.assertEqual(response.status_code, 200)  # Success
+        new_user = User.objects.filter(username='newuser').exists()
+        self.assertTrue(new_user)
+
+    def test_login_view_with_valid_credentials(self):
+        response = self.client.post(reverse('login'), {
+            'username': 'testuser',
+            'password': 'userpass'
+        })
+
+        self.assertEqual(response.status_code, 302) 
+
+    def test_login_view_with_invalid_credentials(self):
+        response = self.client.post(reverse('login'), {
+            'username': 'testuser',
+            'password': 'wrongpassword'
+        })
+
+        self.assertEqual(response.status_code, 200)
+        messages = list(get_messages(response.wsgi_request))
+        self.assertTrue(any("Invalid login details." in str(msg) for msg in messages))
+
+    def test_search_view(self):
+        self.client.login(username='testuser', password='userpass')
+        response = self.client.get(reverse('search') + '?query=testuser')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'users/search_results.html')
+        self.assertEqual(response.context['users'].count(), 1)
+
+    def test_profile_view(self):
+        self.client.login(username='testuser', password='userpass')
+        response = self.client.get(reverse('profile', args=['testuser']))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'users/profile.html')
+        self.assertEqual(response.context['user_profile'].user.username, 'testuser')
+
+    def test_profile_settings_view(self):
+        self.client.login(username='testuser', password='userpass')
+        response = self.client.get(reverse('profile_settings'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'users/profile_settings.html')
