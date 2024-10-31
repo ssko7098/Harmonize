@@ -8,6 +8,9 @@ from comments.models import Comment
 from music.models import Song, Playlist, PlaylistSong
 from django.urls import reverse
 from django.contrib.messages import get_messages
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.contrib.auth import get_user_model
+from unittest.mock import patch
 
 class UserModelTest(TestCase):
     
@@ -283,3 +286,121 @@ class ProfileFormTest(TestCase):
         form = ProfileForm(data=form_data, files=form_files, instance=self.profile)
         self.assertFalse(form.is_valid())
         self.assertIn('avatar_file', form.errors)
+
+class AdminDashboardTemplateTests(TestCase):
+    def setUp(self):
+        self.admin_user = User.objects.create_superuser(username="adminuser", password="adminpassword", email="admin@example.com")
+        self.client.login(username="adminuser", password="adminpassword")
+        self.user1 = User.objects.create_user(username="user1", email="user1@example.com")
+        self.user2 = User.objects.create_user(username="user2", email="user2@example.com")
+        
+        self.user1.profile = Profile.objects.create(user=self.user1, report_count=3)
+        self.user2.profile = Profile.objects.create(user=self.user2)
+
+    def test_admin_dashboard_template_rendering(self):
+        url = reverse("admin_dashboard")
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Admin Dashboard")
+        self.assertContains(response, "Total Users")
+        self.assertContains(response, "Total Songs")
+        self.assertContains(response, "All Active Users")
+        self.assertTemplateUsed(response, "users/admin_dashboard.html")
+        self.assertTemplateUsed(response, "base.html")
+
+    def test_user_table_content_display(self):
+        url = reverse("admin_dashboard")
+        response = self.client.get(url)
+
+        self.assertContains(response, self.user1.username)
+        self.assertContains(response, self.user1.email)
+        self.assertContains(response, self.user1.profile.report_count)
+        self.assertContains(response, self.user2.username)
+        self.assertContains(response, self.user2.email)
+
+    def test_no_users_message_display(self):
+        User.objects.exclude(username="adminuser").delete()
+
+        url = reverse("admin_dashboard")
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "No active users found.")
+    
+    def test_reported_comments_template_rendering(self):
+        response = self.client.get(reverse("reported_comments"))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "users/admin_dashboard.html")
+        self.assertTemplateUsed(response, "users/reported_comments.html")
+        self.assertContains(response, "Reported Comments")
+        self.assertContains(response, "Comment")
+        self.assertContains(response, "Profile")
+
+
+class ProfileSettingsTemplateTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username="testuser", password="password", email="test@example.com")
+        self.profile = Profile.objects.create(user=self.user)
+        self.client.login(username="testuser", password="password")
+
+    def test_profile_settings_template_rendering(self):
+        response = self.client.get(reverse("profile_settings"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.user.username)
+        self.assertContains(response, "My Profile Information")
+        self.assertTemplateUsed(response, "users/profile_settings.html")
+
+
+
+class ProfileTemplateTests(TestCase):
+    @patch("mutagen.mp3.MP3")  
+    def setUp(self, mock_mp3):
+        self.user = User.objects.create_user(username="testuser", password="password", email="test@example.com")
+        self.profile = Profile.objects.create(user=self.user, bio="User biography")
+        self.client.login(username="testuser", password="password")
+
+        # Load the actual file from 'music/mp3/test.mp3' as mp3_file
+        with open("music/mp3/test.mp3", "rb") as mp3_file:
+            self.mock_mp3_file = SimpleUploadedFile("test.mp3", mp3_file.read(), content_type="audio/mpeg")
+        
+        # Create a song for the user with the mp3 file
+        self.song = Song.objects.create(user=self.user, title="Test Song", mp3_file=self.mock_mp3_file)
+
+    def test_profile_template_rendering(self):
+        response = self.client.get(reverse("profile", kwargs={"username": self.user.username}))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "users/profile.html")
+        self.assertContains(response, self.user.username)  
+        self.assertContains(response, "User biography")    
+        self.assertContains(response, "Top 5 Most Liked Singles")  
+    
+
+    def test_register_template_rendering(self):
+        response = self.client.get(reverse("register"))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "users/register.html")
+        self.assertContains(response, "Full Name")
+        self.assertContains(response, "Username")
+        self.assertContains(response, "Email")
+        self.assertContains(response, "Password")
+        self.assertContains(response, "Confirm Password")
+        self.assertContains(response, "terms and conditions")
+
+
+User = get_user_model()
+
+class SearchResultsTemplateTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username="testuser", password="password", email="test@example.com")
+        self.user.is_verified = True
+        self.user.save()
+        self.client.login(username="testuser", password="password")
+
+    def test_search_results_template_rendering_with_singles(self):
+        response = self.client.get(reverse('search') + "?query=Sample")
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'users/search_results.html')
+        self.assertTemplateUsed(response, 'base.html')
