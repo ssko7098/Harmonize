@@ -59,7 +59,7 @@ def admin_dashboard(request):
 
             if not profile_id:
                 messages.error(request, 'No Profile selected for clearing.')
-                return redirect('reported_profiles')
+                return redirect('admin_dashboard')
             
             profile = get_object_or_404(Profile, pk=profile_id)
 
