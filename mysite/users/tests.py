@@ -11,6 +11,7 @@ from django.contrib.messages import get_messages
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.contrib.auth import get_user_model
 from unittest.mock import patch
+import tempfile
 
 class UserModelTest(TestCase):
     
@@ -186,6 +187,158 @@ class UserViewsTest(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'users/profile_settings.html')
+
+    def test_post_valid_profile_update(self):
+        self.client.login(username='testuser', password='userpass')
+        url = reverse('profile_settings')
+        # Simulate POST request with valid data
+        with tempfile.NamedTemporaryFile(suffix=".jpg") as temp_image:
+            temp_image.write(b'sample image content')
+            temp_image.seek(0)
+            data = {'bio': 'Updated bio'}
+            files = {'avatar_file': temp_image}
+            response = self.client.post(url, data, files=files, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        
+        # Check that the profile bio is updated and avatar is set
+        self.profile.refresh_from_db()
+        self.assertEqual(self.profile.bio, 'Updated bio')
+        
+        # Check for AJAX JSON response
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['status'], 'success')
+        self.assertEqual(response.json()['message'], 'Profile updated successfully!')
+
+    def test_manage_songs_view_no_permission(self):
+        # Regular user tries to access admin-only view
+        self.client.login(username='testuser', password='userpass')
+        response = self.client.get(reverse('manage_songs'))
+        self.assertEqual(response.status_code, 302)  # redirect
+    
+    def test_clear_profile_reports(self):
+        reported_user = User.objects.create_user(username='reporteduser', password='userpass', email='reported@example.com')
+        profile = Profile.objects.create(user=reported_user, report_count=3)
+
+        self.client.login(username='admin', password='adminpass')
+        response = self.client.post(reverse('admin_dashboard'), {'clear_reports': 'true', 'profile_id': self.profile.id})
+       
+        # Refresh the profile and check that the report count is cleared
+        self.profile.refresh_from_db()
+        self.assertEqual(self.profile.report_count, 0)
+        self.assertEqual(self.profile.reported_by.count(), 0)
+        self.assertEqual(response.status_code, 200)
+        
+        # Check success message
+        messages = list(get_messages(response.wsgi_request))
+        self.assertTrue(any("Profile reports have been cleared" in str(msg) for msg in messages))
+
+    def test_clear_reports_no_profile_id(self):
+        self.client.login(username='admin', password='adminpass')
+        response = self.client.post(reverse('admin_dashboard'), {'clear_reports': 'true'})
+        messages = list(get_messages(response.wsgi_request))
+        self.assertTrue(any("No Profile selected for clearing." in str(msg) for msg in messages))
+        self.assertRedirects(response, reverse('admin_dashboard'))
+
+    def test_clear_song_reports(self):
+        # Load the actual file from 'music/mp3/test.mp3' as mp3_file
+        with open("music/mp3/test.mp3", "rb") as mp3_file:
+            mock_mp3_file = SimpleUploadedFile("test.mp3", mp3_file.read(), content_type="audio/mpeg")
+        
+        song = Song.objects.create(user=self.user, title='Test Song', mp3_file=mock_mp3_file, report_count=2)
+
+        # Log in as admin and clear song reports
+        self.client.login(username='admin', password='adminpass')
+        response = self.client.post(reverse('manage_songs'), {'clear_reports': 'true', 'song_id': song.song_id})
+
+        # Refresh the song and check that the report count is cleared
+        song.refresh_from_db()
+        self.assertEqual(song.report_count, 0)
+        self.assertEqual(song.reported_by.count(), 0)
+        self.assertEqual(response.status_code, 200)
+        
+        # Check success message
+        messages = list(get_messages(response.wsgi_request))
+        self.assertTrue(any("Song reports have been cleared" in str(msg) for msg in messages))
+
+    def test_delete_song_as_admin(self):
+        with open("music/mp3/test.mp3", "rb") as mp3_file:
+            mock_mp3_file = SimpleUploadedFile("test.mp3", mp3_file.read(), content_type="audio/mpeg")
+        
+        song = Song.objects.create(user=self.user, title='Test Song', mp3_file=mock_mp3_file, report_count=2)
+
+        # Log in as admin and delete the song
+        self.client.login(username='admin', password='adminpass')
+        response = self.client.post(reverse('manage_songs'), {'delete_song': True, 'song_id': song.song_id})
+    
+        # Check that the song has been deleted
+        with self.assertRaises(Song.DoesNotExist):
+            Song.objects.get(song_id=song.song_id)
+        
+        # Confirm the response redirected to the appropriate page after deletion
+        self.assertEqual(response.status_code, 302)
+        
+        # Check success message for deletion
+        messages = list(get_messages(response.wsgi_request))
+        self.assertTrue(any("Song deleted successfully." in str(msg) for msg in messages))
+
+    def test_clear_comment_reports(self):
+        comment = Comment.objects.create(user=self.user, profile=self.profile, message="Reported comment", report_count=4)
+
+        # Log in as admin and clear comment reports
+        self.client.login(username='admin', password='adminpass')
+        response = self.client.post(reverse('reported_comments'), {'clear_reports': 'true', 'comment_id': comment.comment_id})
+
+        # Refresh the comment and check that the report count is cleared
+        comment.refresh_from_db()
+        self.assertEqual(comment.report_count, 0)
+        self.assertEqual(comment.reported_by.count(), 0)
+        self.assertEqual(response.status_code, 200)
+        
+        # Check success message
+        messages = list(get_messages(response.wsgi_request))
+        self.assertTrue(any("Comment reports have been cleared" in str(msg) for msg in messages))
+
+    def test_admin_dashboard_empty_search(self):
+        self.client.login(username='admin', password='adminpass')
+        response = self.client.get(reverse('admin_dashboard') + '?search=nonexistentuser')
+        self.assertEqual(response.context['users'].count(), 0)  # No users should match
+        self.assertEqual(response.status_code, 200)
+
+    def test_profile_view_nonexistent_user(self):
+        # Access profile view with a username that does not exist
+        self.client.login(username='testuser', password='userpass')
+        response = self.client.get(reverse('profile', args=['nonexistentuser']))
+        self.assertEqual(response.status_code, 404)  # Page not found
+    
+    def test_report_other_profile(self):
+        reported_user = User.objects.create_user(username='reporteduser', email='reported@example.com', password='password')
+        profile=Profile.objects.create(user=reported_user)
+        profile_url = reverse('profile', args=[reported_user.username])
+        
+
+        self.client.login(username='testuser', password='userpass')
+
+        # Simulate reporting another user's profile
+        response = self.client.post(profile_url, {'report_profile': True})
+        
+        # Refresh the profile and check the report count and reported_by field
+        reported_profile = Profile.objects.get(user=reported_user)
+        self.assertEqual(reported_profile.report_count, 1)
+        self.assertIn(self.user, reported_profile.reported_by.all())
+        
+    def test_logout_view(self):
+        url = reverse('logout')
+        # Log the user in
+        self.client.login(username='testuser', password='password')
+        
+        # Check user is logged in before calling logout
+        self.assertTrue(self.user.is_authenticated)
+        
+        # Call logout view
+        response = self.client.get(url)
+
+        # Check that the user is logged out
+        response = self.client.get(reverse('profile_settings'))
+        self.assertNotIn('_auth_user_id', self.client.session)
 
 class RegisterFormTest(TestCase):
     
