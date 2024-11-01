@@ -434,3 +434,35 @@ Here are some key considerations for API design:
 * __Music Recommendations:__ Suggest songs to users based on their location and what others around them are listening to (not in MVP).
 * __Showing Queue:__ Users ability to view the queue based on the songs they have added (not in MVP).
 * __Minimum Screen Size:__ Implement minimum screen size so HTML elements do not overlap (not in MVP).
+
+
+## Testing
+
+This guide will walk you through the process of testing our project, including running tests and checking code coverage.
+### Running Tests
+
+To run tests in the project, we use Django's built-in testing framework. You can run the test suite with the following commands:
+
+1. **Standard Test Command:**
+   ```bash
+   python3 manage.py test
+
+1. **Getting Coverage Report**
+   ```bash
+   coverage run manage.py test
+   coverage html
+
+1. **Test Specific Parts of Project:**
+   ```bash
+   python3 manage.py test users
+   python3 manage.py test comments
+   python3 manage.py test music
+
+
+1. **Coverage Report on Specific Parts of Project:**
+   ```bash
+   coverage run manage.py test users
+   coverage run manage.py test comments
+   coverage run manage.py test music
+
+

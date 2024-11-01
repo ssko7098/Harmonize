@@ -6,3 +6,4 @@ djangorestframework-simplejwt
 requests
 cryptography
 django-environ
+coverage
